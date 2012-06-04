@@ -42,7 +42,7 @@
  */
 
 /**
- * @file hardware.h
+ * @file niftyled-hardware.h
  * @brief LedHardware API to organize hardware adapters that interface to LEDs
  */
 

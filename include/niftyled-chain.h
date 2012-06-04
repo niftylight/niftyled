@@ -43,7 +43,7 @@
 
 
 /**
- * @file chain.h
+ * @file niftyled-chain.h
  * @brief LedChain API to organize a serial chain of LEDs
  */
 

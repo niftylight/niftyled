@@ -42,7 +42,7 @@
  */
 
 /**
- * @file settings_tile.c
+ * @file prefs_tile.c
  */
 
 

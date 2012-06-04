@@ -42,7 +42,7 @@
  */
 
 /**
- * @file settings_hardware.c
+ * @file prefs_hardware.c
  */
 
 

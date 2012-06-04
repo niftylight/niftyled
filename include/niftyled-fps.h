@@ -43,7 +43,7 @@
 
 
 /**
- * @file fps.h
+ * @file niftyled-fps.h
  * @brief small API for framerate calculation
  */
 

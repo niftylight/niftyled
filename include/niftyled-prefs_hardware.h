@@ -43,7 +43,7 @@
 
 
 /**
- * @file settings_hardware.h
+ * @file niftyled-prefs_hardware.h
  * @brief API to organize LedHardware settings
  */
 

@@ -42,7 +42,7 @@
  */
 
 /**
- * @file frame.h
+ * @file niftyled-frame.h
  * @brief LedFrame API to organize raster pixmaps
  */
 

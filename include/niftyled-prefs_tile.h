@@ -43,7 +43,7 @@
 
 
 /**
- * @file settings_tile.h
+ * @file niftyled-prefs_tile.h
  * @brief API to organize LedTile settings
  */
 

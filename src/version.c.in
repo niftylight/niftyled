@@ -41,6 +41,16 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * @file version.c
+ */
+
+
+/**
+ * @addtogroup version
+ * @{
+ */
+
 #include <niftylog.h>
 #include "niftyled-version.h"
 #include "niftyled-prefs.h"
@@ -90,3 +100,6 @@ const char *led_version_long()
     	return tmp;
 }
 
+/**
+ * @}
+ */

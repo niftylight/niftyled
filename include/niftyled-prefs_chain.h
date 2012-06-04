@@ -43,7 +43,7 @@
 
 
 /**
- * @file settings_chain.h
+ * @file niftyled-prefs_chain.h
  * @brief API to organize LedChain settings
  */
 

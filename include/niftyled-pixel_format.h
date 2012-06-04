@@ -42,7 +42,7 @@
  */
 
 /**
- * @file pixel_format.h
+ * @file niftyled-pixel_format.h
  * @brief LedPixelFormat API to organize various colorspaces
  */
 

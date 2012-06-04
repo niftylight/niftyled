@@ -43,7 +43,7 @@
 
 
 /**
- * @file tile.h
+ * @file niftyled-tile.h
  * @brief LedTile API to define arrangements of chains or child tiles
  */
 

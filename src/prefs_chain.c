@@ -42,7 +42,7 @@
  */
 
 /**
- * @file settings_chain.c
+ * @file prefs_chain.c
  */
 
 
