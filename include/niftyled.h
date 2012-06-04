@@ -48,17 +48,18 @@
 /**
  * @mainpage libniftyled API documentation
  *
- * <h2>A library designed to provide an abstract interface to use LED hardware.</h2>
+ * <h2>library designed to provide an abstract interface for LED/lighting hardware.</h2>
  *
  * For hardware-plugin developers - Use your LED device with libniftyled:
- * - check the dummy plugin as example (lib/niftyled-plugins/example)
+ * - check the dummy plugin as example
  * - check documentation of a @ref LedHardwarePlugin
  *
  * For LED-controlling application developers:
+ * - check ledcat/ledcap sources as example 
  * - check @ref LedChain to define a chain of serially arranged @ref Led's
  * - check @ref LedTile to see how to associate a @ref LedChain to a tile and build larger tiles from groups of tiles
  * - check @ref LedHardware for interfacing with hardware
- * - check @ref LedSettings for loading, saving & handling LED-Setup configurations
+ * - check @ref LedPrefs for loading, saving & handling LED-Setup configurations
  *
  * @todo check if all loglevels are appropriate to message
  */

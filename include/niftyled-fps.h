@@ -49,6 +49,8 @@
 
 
 /**      
+ * @addtogroup frame
+ * @{ 
  * @defgroup fps Framerate
  * @brief Framerate timing functions
  *
@@ -75,5 +77,6 @@ int             led_fps_get();
 #endif /* _FPS_H */
 
 /**
+ * @}
  * @}
  */

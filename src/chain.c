@@ -129,7 +129,7 @@ struct _LedChain
  * set parent hardware of this chain
  *
  * @param c LedChain descriptor
- * @param t LedHardware descriptor of parent hardware
+ * @param h LedHardware descriptor of parent hardware
  * @result NFT_SUCCESS or NFT_FAILURE
  */
 NftResult chain_set_parent_hardware(LedChain *c, LedHardware *h)
