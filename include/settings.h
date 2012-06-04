@@ -57,7 +57,7 @@
 #ifndef _LED_SETTINGS_H
 #define _LED_SETTINGS_H
 
-#include <niftysettings.h>
+#include <niftyprefs.h>
 
 
 

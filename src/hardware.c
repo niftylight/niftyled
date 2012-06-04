@@ -235,18 +235,19 @@ static LedHardware *_load_plugin(const char *name, const char *family)
 
         
         /* check plugin API major-version */
-	if(plugin->api_version/100000 != LED_HARDWARE_API/100000)
+	if(plugin->api_major != HW_PLUGIN_API_MAJOR_VERSION)
 	{
-		NFT_LOG(L_ERROR, "Plugin has been compiled against version %d of %s, we are version %d. Not loading plugin.", 
-		        plugin->api_version/100000, PACKAGE_NAME, LED_HARDWARE_API/100000);
+		NFT_LOG(L_ERROR, "Plugin has been compiled against major version %d of %s, we are version %d. Not loading plugin.", 
+		        plugin->api_major, PACKAGE_NAME, HW_PLUGIN_API_MAJOR_VERSION);
 		dlclose(handle);
 		return NULL;
 	}
 
 	/* check plugin API minor-version */
-        if(plugin->api_version/100 > LED_HARDWARE_API/100)
+        if(plugin->api_minor != HW_PLUGIN_API_MINOR_VERSION)
         {
-                NFT_LOG(L_WARNING, "Plugin compiled against %d of %s, we are version %d. Continue at own risk.", plugin->api_version, PACKAGE_NAME, LED_HARDWARE_API);
+                NFT_LOG(L_WARNING, "Plugin compiled against %d of %s, we are version %d. Continue at own risk.", 
+                        plugin->api_minor, PACKAGE_NAME, HW_PLUGIN_API_MINOR_VERSION);
         }
 
                 
@@ -363,11 +364,11 @@ LedHardware *led_hardware_new(const char *name, const char *plugin_name)
         }
         
         /* register to current LedConfCtxt */
-        if(!led_settings_hardware_register(h))
-        {
-                _unload_plugin(h);
-                return NULL;
-        }
+        //~ if(!led_settings_hardware_register(h))
+        //~ {
+                //~ _unload_plugin(h);
+                //~ return NULL;
+        //~ }
         
         return h;
 }
@@ -387,7 +388,7 @@ void led_hardware_destroy(LedHardware *h)
         NFT_LOG(L_DEBUG, "Destroying hardware \"%s\" (family: \"%s\" id: \"%s\")", h->props.name, h->plugin->family, h->props.id);
 
         /* unregister from config context */
-        led_settings_hardware_unregister(h);       
+        //~ led_settings_hardware_unregister(h);       
 
         /* unlink from linked-list of siblings */
 	if(h->relation.next)
@@ -1156,7 +1157,7 @@ void led_hardware_plugin_print(LedHardwarePlugin *p, NftLoglevel l)
         NFT_LOG(l,
                 "Hardware %p\n"
                 "\t\033[1mPlugin family:\033[0m %s\n"
-                "\t\033[1mAPI version:\033[0m %d\n"
+                "\t\033[1mAPI version:\033[0m %d.%d.%d\n"
                 "\t\033[1mPlugin version:\033[0m %d.%d.%d\n"
                 "\t\033[1mLicense:\033[0m %s\n"
                 "\t\033[1mAuthor:\033[0m %s\n"
@@ -1164,10 +1165,8 @@ void led_hardware_plugin_print(LedHardwarePlugin *p, NftLoglevel l)
                 "\t\033[1mURL:\033[0m %s",
                 p,
                 p->family,
-                p->api_version, 
-                p->major_version,
-                p->minor_version,
-                p->micro_version, 
+                p->api_major, p->api_minor, p->api_micro, 
+                p->major_version, p->minor_version, p->micro_version, 
                 (p->license ? p->license : 
 	                 "check documentation or sourcecode"),
                 (p->author ? p->author : "-"), 

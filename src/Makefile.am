@@ -15,11 +15,8 @@ lib@PACKAGE@_la_SOURCES = \
 	hardware.c \
 	frame.c \
 	pixel_format.c \
-	fps.c \
-	settings.c \
-	settings_tile.c \
-	settings_chain.c \
-	settings_hardware.c
+	fps.c 
+
 
 
 # compile for debugging ?

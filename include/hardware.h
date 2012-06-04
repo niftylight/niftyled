@@ -167,8 +167,12 @@ typedef struct LedHardwarePlugin
 {
         /** family name of the plugin (lib{family}-hardware.so) */
         const char *family;
-        /** api version */
-        int api_version;
+        /** api major version */
+        int api_major;
+    	/** api minor version */
+        int api_minor;
+    	/** api micro version */
+        int api_micro;
         /** plugin major version */
         int major_version;
         /** plugin minor version */

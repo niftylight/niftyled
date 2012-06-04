@@ -370,11 +370,11 @@ LedTile *led_tile_new()
         }
 
         /* register to current LedConfCtxt */
-        if(!led_settings_tile_register(m))
-        {
-                free(m);
-                return NULL;
-        }
+        //~ if(!led_settings_tile_register(m))
+        //~ {
+                //~ free(m);
+                //~ return NULL;
+        //~ }
         
         return m;
 }
@@ -425,7 +425,7 @@ void led_tile_destroy(LedTile *m)
 
         
         /* unregister from config context */
-        led_settings_tile_unregister(m);
+        //~ led_settings_tile_unregister(m);
         
         /* free chain of this tile */
         if(m->relation.chain)

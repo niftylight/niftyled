@@ -80,12 +80,13 @@
 
 
 /** macro to check version-compatibility */
-#define LED_CHECK_VERSION led_check_version(@PACKAGE_API_VERSION@);
+#define LED_CHECK_VERSION led_version_check(NFT_LED_GIT_VERSION);
 
 
 
-void led_check_version(int version);
-
+void 		led_version_check(const char *version);
+const char *	led_version_git();
+const char *    led_version_long();
 
 
 #endif /** _LED_VERSION */

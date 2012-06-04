@@ -134,6 +134,7 @@ AC_CONFIG_FILES([
 	Makefile \
 	include/Makefile \
 	include/niftyled_version.h \
+	src/version.c \
 	src/Makefile \
 	tests/Makefile \
         ${PACKAGE}.pc          

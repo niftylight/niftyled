@@ -93,7 +93,7 @@ typedef enum
 
 
 #include <niftylog.h>
-#include <niftysettings.h>
+#include <niftyprefs.h>
 #include "niftyled_version.h"
 #include "pixel_format.h"
 #include "frame.h"
@@ -101,10 +101,10 @@ typedef enum
 #include "hardware.h"
 #include "tile.h"
 #include "fps.h"
-#include "settings.h"
+/*#include "settings.h"
 #include "settings_chain.h"
 #include "settings_hardware.h"
-#include "settings_tile.h"
+#include "settings_tile.h"*/
 
 
 

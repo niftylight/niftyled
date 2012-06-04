@@ -179,7 +179,7 @@ void chain_destroy(LedChain *c)
         }
         
         /* unregister from config context */
-        led_settings_chain_unregister(c);
+        //~ led_settings_chain_unregister(c);
         
         
 	/* free LED descriptor array */
@@ -280,8 +280,8 @@ LedChain *led_chain_new(LedCount ledcount, const char *pixelformat)
            
         /* register to current LedConfCtxt to create an XML config
            of this chain */
-        if(!led_settings_chain_register(c))
-                goto _lcn_error;
+        //~ if(!led_settings_chain_register(c))
+                //~ goto _lcn_error;
                 
         led_chain_print(c, L_DEBUG);
         
