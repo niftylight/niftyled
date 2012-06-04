@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+plugindir=@libdir@/@GENERIC_LIBRARY_NAME@-plugins
+includedir=@includedir@
+
+Name: @GENERIC_LIBRARY_NAME@
+Version: @VERSION@
+Description: niftylight LED-hardware interface library
+Libs: -L${libdir} -l@GENERIC_LIBRARY_NAME@ @niftysettings_LIBS@ @babl_LIBS@ -ldl
+Libs.private: 
+Cflags: -I@includedir@/lib@GENERIC_LIBRARY_NAME@-@GENERIC_RELEASE@ @niftysettings_CFLAGS@ @babl_CFLAGS@

@@ -1,0 +1,67 @@
+please s. http://wiki.niftylight.de/libniftyled first
+
+
+
+============
+Requirements
+============
+
+To compile libniftyled from source, you need the following:
+
+* automake
+* autoconf
+* libtool
+* gcc
+* pkg-config
+
+
+
+============================
+Example compile instructions
+============================
+
+To prepare build, run the following commands in the release directory:
+
+$ autoreconf -i
+$ ./configure --prefix=/usr
+
+To compile, run:
+$ make
+
+To install, run:
+$ su
+[Password]
+$ make check
+$ make install
+
+
+==========
+Developers
+==========
+
+Configure options
+-----------------
+
+--disable-debug  - use to not compile for debugging
+--disable-tests  - use to not compile tests
+
+
+------------
+Make targets
+------------
+
+make check      - run tests
+make distcheck  - create tarball-archive after successfull checks
+make indent     - indent sources according to the conventions in .indent.pro
+
+
+
+========
+See also
+========
+
+* INSTALL.fsf on more generic installation-instructions
+* http://wiki.niftylight.de
+
+
+END
