@@ -43,45 +43,56 @@
 
 
 /**
- * @file settings.h
- * @brief LedSettings API to organize all settings of an LED setup
+ * @file niftyled-prefs.h
+ * @brief LedPrefs API to organize all preferences of an LED setup
  */
 
 /**      
- * @defgroup settings LedSettings
+ * @defgroup prefs LedPrefs
  * @brief XML configuration
  *
  * @{
  */
 
-#ifndef _LED_SETTINGS_H
-#define _LED_SETTINGS_H
+#ifndef _LED_PREFS_H
+#define _LED_PREFS_H
 
 #include <niftyprefs.h>
+#include "niftyled-frame.h"
 
 
 
-/** LedSettings model */
-typedef NftSettings LedSettings;
-typedef NftSettingsCtxt LedSettingsCtxt;
+/** LedPrefs model */
+typedef NftPrefs LedPrefs;
+
+/* integer representation of niftyled elements */
+typedef enum
+{
+        T_LED_HARDWARE = 1,
+        T_LED_TILE,
+        T_LED_CHAIN,
+        T_LED,
+        T_LED_INVALID,
+}NIFTYLED_TYPE;
 
 
-LedSettingsCtxt *       led_settings_context();
-NftResult               led_settings_default_filename(char *dst, size_t size, const char *filename);
-
-LedSettings *           led_settings_new();
-void                    led_settings_destroy(LedSettings *c);
-
-LedSettings *           led_settings_load(const char *filename);
-NftResult               led_settings_save(LedSettings *c, const char *filename);
-
-LedFrameCord            led_settings_get_width(LedSettings *s);
-LedFrameCord            led_settings_get_height(LedSettings *s);
-
-NIFTYLED_TYPE           led_settings_node_get_type(const char *xml);
 
 
-#endif  /* _LED_SETTINGS_H */
+NftResult               led_prefs_default_filename(char *dst, size_t size, const char *filename);
+
+LedPrefs *           	led_prefs_new();
+void                    led_prefs_destroy(LedPrefs *c);
+
+LedPrefs *           	led_prefs_load(const char *filename);
+NftResult               led_prefs_save(LedPrefs *c, const char *filename);
+
+LedFrameCord            led_prefs_get_width(LedPrefs *s);
+LedFrameCord            led_prefs_get_height(LedPrefs *s);
+
+NIFTYLED_TYPE           led_prefs_node_get_type(const char *xml);
+
+
+#endif  /* _LED_PREFS_H */
 
 /**
  * @}

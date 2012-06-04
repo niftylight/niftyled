@@ -43,7 +43,8 @@
 
 #include <niftylog.h>
 #include "niftyled-version.h"
-//#include <niftyled.h>
+#include "niftyled-prefs.h"
+
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -52,17 +53,17 @@
 void led_version_check(const char* version)
 {
     	/* welcome */
-        NFT_LOG(L_INFO, "%s v%s - %s", PACKAGE_NAME, NFT_PREFS_LONG_VERSION, PACKAGE_URL);
+        NFT_LOG(L_INFO, "%s v%s - %s", PACKAGE_NAME, NFT_LED_LONG_VERSION, PACKAGE_URL);
     
         /* check version of dependencies */
-        NFT_LOG_CHECK_VERSION
-        NFT_PREFS_CHECK_VERSION
+        NFT_LOG_CHECK_VERSION;
+	NFT_PREFS_CHECK_VERSION;
                 
-       	if(strcmp(version, NFT_PREFS_GIT_VERSION) == 0)
+       	if(strcmp(version, NFT_LED_GIT_VERSION) == 0)
                 return;
         
         NFT_LOG(L_WARNING, "%s compiled against version %s but currently installed is %s.",
-                PACKAGE_NAME, version, NFT_PREFS_GIT_VERSION);             
+                PACKAGE_NAME, version, NFT_LED_GIT_VERSION);             
         
 }
 

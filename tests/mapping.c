@@ -54,7 +54,7 @@
 
 
 
-static LedTile *_create_subsubmodule(LedSettings *c, LedFrameCord x, LedFrameCord y, double angle)
+static LedTile *_create_subsubmodule(LedPrefs *c, LedFrameCord x, LedFrameCord y, double angle)
 {
         /* create new LED-Chain */
         LedChain *chain;
@@ -94,7 +94,7 @@ _cs_error:
 int main(int argc, char *argv[])
 {
         int result = -1;
-        LedSettings *conf = NULL;
+        LedPrefs *conf = NULL;
         LedTile *m = NULL;
         LedTile *msub1 = NULL;
         LedTile *msub2 = NULL;
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 
 	
 	/* create new config */
-	if(!(conf = led_settings_new()))
+	if(!(conf = led_prefs_new()))
 		goto m_deinit;
 
 
@@ -170,22 +170,22 @@ int main(int argc, char *argv[])
                 goto m_deinit;
         
         /* generate config for all objects (+ their subobjects) */
-        if(!led_settings_create_from_tile(conf, m))
+        if(!led_prefs_create_from_tile(conf, m))
 		goto m_deinit;
-        if(!led_settings_create_from_chain(conf, cm))
+        if(!led_prefs_create_from_chain(conf, cm))
 		goto m_deinit;
 
         /* dump config */
-	if(!led_settings_save(conf, "-"))
+	if(!led_prefs_save(conf, "-"))
 		goto m_deinit;
 
         /* remove tile */
-        if(!led_settings_tile_unlink(conf, m))
+        if(!led_prefs_tile_unlink(conf, m))
                 goto m_deinit;
                 
 
         /* dump config */
-	if(!led_settings_save(conf, "-"))
+	if(!led_prefs_save(conf, "-"))
 		goto m_deinit;
                 
         result = 0;
@@ -197,7 +197,7 @@ m_deinit:
         led_chain_destroy(cm);
         
         /* cleanup config */
-	led_settings_destroy(conf);
+	led_prefs_destroy(conf);
 	        
         return result;
 }

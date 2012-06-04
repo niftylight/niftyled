@@ -15,7 +15,8 @@ lib@PACKAGE@_la_SOURCES = \
 	hardware.c \
 	frame.c \
 	pixel_format.c \
-	fps.c 
+	fps.c \
+	prefs.c
 
 
 
@@ -48,7 +49,7 @@ lib@PACKAGE@_la_LDFLAGS = \
 	-version-info @PACKAGE_API_CURRENT@:@PACKAGE_API_REVISION@:@PACKAGE_API_AGE@ \
 	-release @PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MICRO_VERSION@ \
 	-ldl \
-        -Wall -no-undefined
+	-Wall -no-undefined
 
 # link in modules from subdirectories
 lib@PACKAGE@_la_LIBADD = $(niftyprefs_LIBS) $(babl_LIBS) -lm

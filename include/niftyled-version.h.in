@@ -68,9 +68,9 @@
 /** current API age (libtool) */
 #define NFT_LED_API_AGE        (@PACKAGE_API_AGE@)
 /** current git version hash - defined using -DPACKAGE_GIT_VERSION at compile */
-#define NFT_LED_GIT_VERSION    (nft_prefs_version_git())
+#define NFT_LED_GIT_VERSION    (led_version_git())
 /** nicely composed long version string */
-#define NFT_LED_LONG_VERSION   (nft_prefs_version_long())
+#define NFT_LED_LONG_VERSION   (led_version_long())
 
 
 /** our plugin API version */
@@ -80,7 +80,7 @@
 
 
 /** macro to check version-compatibility */
-#define LED_CHECK_VERSION led_version_check(NFT_LED_GIT_VERSION);
+#define NFT_LED_CHECK_VERSION led_version_check(NFT_LED_GIT_VERSION);
 
 
 

@@ -42,31 +42,31 @@
  */
 
 /**
- * @file settings.c
+ * @file prefs.c
  */
 
 
 /**
- * @addtogroup settings
+ * @addtogroup prefs
  * @{
  */
 
-#include <niftyled.h>
-#include <niftysettings.h>
 #include <errno.h>
+#include "niftyled-hardware.h"
+#include "niftyled-chain.h"
+#include "niftyled-tile.h"
+#include "niftyled-prefs.h"
 #include "config.h"
 
 
 
 
-/* static declarations */
-static NftSettingsCtxt *_cctxt;
 
 /* declare external functions */
-extern LedHardware *_settings_to_hardware(LedSettings *c, NftSettingsNode *node);
-extern LedChain *_settings_to_chain(LedSettings *c, NftSettingsNode *node);
-extern void *_settings_to_led(LedSettings *c, NftSettingsNode *node);
-extern LedTile *_settings_to_tile(LedSettings *c, NftSettingsNode *n);
+extern LedHardware *_prefs_to_hardware(LedPrefs *c, NftPrefsNode *node);
+extern LedChain *_prefs_to_chain(LedPrefs *c, NftPrefsNode *node);
+extern void *_prefs_to_led(LedPrefs *c, NftPrefsNode *node);
+extern LedTile *_prefs_to_tile(LedPrefs *c, NftPrefsNode *n);
 
 
 /******************************************************************************/
@@ -77,23 +77,23 @@ extern LedTile *_settings_to_tile(LedSettings *c, NftSettingsNode *n);
  * deinitialize config-module
  *
  */
-static void _settings_deinit()
+static void _prefs_deinit()
 {
-	nft_settings_deinit(_cctxt);
-        _cctxt = NULL;
+	//~ nft_prefs_deinit(_cctxt);
+        //~ _cctxt = NULL;
 }
 
 
 /**
  * initialize config-module
  */
-static NftResult _settings_init()
+static NftResult _prefs_init()
 {
-	if(!(_cctxt = nft_settings_init(GENERIC_SETTINGS_FILE_VERSION)))
-                return NFT_FAILURE;
+	//~ if(!(_cctxt = nft_prefs_init(GENERIC_SETTINGS_FILE_VERSION)))
+                //~ return NFT_FAILURE;
 
-        atexit(_settings_deinit);
-        return NFT_SUCCESS;
+        //~ atexit(_prefs_deinit);
+        //~ return NFT_SUCCESS;
 }
 
 
@@ -104,58 +104,41 @@ static NftResult _settings_init()
 
 
 /**
- * create new LedSettings model
+ * create new LedPrefs model
  * @note this corresponds to one config-file
  *
- * @result LedSettings descriptor or NULL upon error
+ * @result LedPrefs descriptor or NULL upon error
  */
-LedSettings *led_settings_new()
+LedPrefs *led_prefs_new()
 {
-	LedSettings *c;
+	//~ LedSettings *c;
 
-	/* create fresh config model */
-	if(!(c = nft_settings_new(led_settings_context(), "niftyled")))
-		return NULL;
+	//~ /* create fresh config model */
+	//~ if(!(c = nft_settings_new(led_settings_context(), "niftyled")))
+		//~ return NULL;
 
-	/* register toObj functions for all our LED-config objects */
-	if(!(nft_settings_func_to_obj_set(led_settings_context(), LED_HARDWARE_NAME, (NftSettingsToObjFunc *) _settings_to_hardware, TRUE)))
-		return NULL;
-	if(!(nft_settings_func_to_obj_set(led_settings_context(), LED_CHAIN_NAME, (NftSettingsToObjFunc *) _settings_to_chain, TRUE)))
-		return NULL;
-	if(!(nft_settings_func_to_obj_set(led_settings_context(), LED_LED_NAME, (NftSettingsToObjFunc *) _settings_to_led, TRUE)))
-		return NULL;
-	if(!(nft_settings_func_to_obj_set(led_settings_context(), LED_TILE_NAME, (NftSettingsToObjFunc *) _settings_to_tile, TRUE)))
-                return NULL;
+	//~ /* register toObj functions for all our LED-config objects */
+	//~ if(!(nft_settings_func_to_obj_set(led_settings_context(), LED_HARDWARE_NAME, (NftSettingsToObjFunc *) _settings_to_hardware, TRUE)))
+		//~ return NULL;
+	//~ if(!(nft_settings_func_to_obj_set(led_settings_context(), LED_CHAIN_NAME, (NftSettingsToObjFunc *) _settings_to_chain, TRUE)))
+		//~ return NULL;
+	//~ if(!(nft_settings_func_to_obj_set(led_settings_context(), LED_LED_NAME, (NftSettingsToObjFunc *) _settings_to_led, TRUE)))
+		//~ return NULL;
+	//~ if(!(nft_settings_func_to_obj_set(led_settings_context(), LED_TILE_NAME, (NftSettingsToObjFunc *) _settings_to_tile, TRUE)))
+                //~ return NULL;
         
-	return c;
+	//~ return c;
 }
 
 
 /**
  * destroy setup and all it's resources
  *
- * @param c LedSettings descriptor
+ * @param c LedPrefs descriptor
  */
-void led_settings_destroy(LedSettings *c)
+void led_prefs_destroy(LedPrefs *c)
 {        
-        nft_settings_destroy(c);
-}
-
-
-/**
- * get current config context
- *
- * @result current LedSettingsCtxt
- */
-LedSettingsCtxt *led_settings_context()
-{
-        if(!_cctxt)
-        {
-                if(!_settings_init())
-                        return NULL;
-        }
-        
-        return _cctxt;
+        //~ nft_settings_destroy(c);
 }
 
 
@@ -163,74 +146,74 @@ LedSettingsCtxt *led_settings_context()
  * load & parse config from file
  *
  * @param filename full path to XML config file
- * @result LedSettings -structure or NULL upon error
+ * @result LedPrefs -structure or NULL upon error
  */
-LedSettings *led_settings_load(const char *filename)
+LedPrefs *led_prefs_load(const char *filename)
 {
-	LedSettings *c;
+	//~ LedSettings *c;
 
-	/* create new config */
-	if(!(c = led_settings_new()))
-		return NULL;
+	//~ /* create new config */
+	//~ if(!(c = led_settings_new()))
+		//~ return NULL;
 
-        /* load config */
-	if(!nft_settings_load(c, filename))
-	{
-		led_settings_destroy(c);
-		return NULL;
-	}
+        //~ /* load config */
+	//~ if(!nft_settings_load(c, filename))
+	//~ {
+		//~ led_settings_destroy(c);
+		//~ return NULL;
+	//~ }
 
-        /* check version */
-        if((GENERIC_SETTINGS_FILE_VERSION / 10000) != (nft_settings_get_version(c) / 10000))
-        {
-                NFT_LOG(L_ERROR, "Config file has version %d but we need at least %d. Please upgrade config.",
-                        nft_settings_get_version(c), GENERIC_SETTINGS_FILE_VERSION);
-                return NULL;
-        }
+        //~ /* check version */
+        //~ if((GENERIC_SETTINGS_FILE_VERSION / 10000) != (nft_settings_get_version(c) / 10000))
+        //~ {
+                //~ NFT_LOG(L_ERROR, "Config file has version %d but we need at least %d. Please upgrade config.",
+                        //~ nft_settings_get_version(c), GENERIC_SETTINGS_FILE_VERSION);
+                //~ return NULL;
+        //~ }
 
-        if(GENERIC_SETTINGS_FILE_VERSION != nft_settings_get_version(c))
-        {
-                NFT_LOG(L_WARNING, "Config file has version %d but most recent version is %d. Please upgrade config.",
-                        nft_settings_get_version(c), GENERIC_SETTINGS_FILE_VERSION);
-        }
+        //~ if(GENERIC_SETTINGS_FILE_VERSION != nft_settings_get_version(c))
+        //~ {
+                //~ NFT_LOG(L_WARNING, "Config file has version %d but most recent version is %d. Please upgrade config.",
+                        //~ nft_settings_get_version(c), GENERIC_SETTINGS_FILE_VERSION);
+        //~ }
         
-	/* create & initialize all top-level objects */
-	NftSettingsNode *n;
-	for(n = nft_settings_node_child(nft_settings_root(c));
-	    n;
-	    n = nft_settings_node_next(n))
-	{
-		/* create new object */
-		if(!(nft_settings_func_to_obj_call(c, n, NULL, NULL)))
-		{
-			NFT_LOG(L_WARNING, "Failed to create object \"%s\"",
-			        nft_settings_node_name(n));
-			continue;
-		}
-	}
+	//~ /* create & initialize all top-level objects */
+	//~ NftSettingsNode *n;
+	//~ for(n = nft_settings_node_child(nft_settings_root(c));
+	    //~ n;
+	    //~ n = nft_settings_node_next(n))
+	//~ {
+		//~ /* create new object */
+		//~ if(!(nft_settings_func_to_obj_call(c, n, NULL, NULL)))
+		//~ {
+			//~ NFT_LOG(L_WARNING, "Failed to create object \"%s\"",
+			        //~ nft_settings_node_name(n));
+			//~ continue;
+		//~ }
+	//~ }
 
-        /* debug output currently parsed & regenerated config */
-        /*LedSettings *t = led_settings_new();
-        led_settings_from_hardware(t, led_settings_hardware_first(c));
-        led_settings_from_tile(t, led_settings_tile_first(c));
-        led_settings_save(t, "-");
-        led_settings_destroy(t);*/
+        //~ /* debug output currently parsed & regenerated config */
+        //~ /*LedSettings *t = led_settings_new();
+        //~ led_settings_from_hardware(t, led_settings_hardware_first(c));
+        //~ led_settings_from_tile(t, led_settings_tile_first(c));
+        //~ led_settings_save(t, "-");
+        //~ led_settings_destroy(t);*/
         
-	return c;
+	//~ return c;
 }
 
 
 /**
  * save config to a file
  *
- * @param c LedSettings descriptor of config to save
+ * @param c LedPrefs descriptor of config to save
  * @param filename full path of file to save
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult led_settings_save(LedSettings *c, const char *filename)
+NftResult led_prefs_save(LedPrefs *c, const char *filename)
 {
-	/* write config */
-	return nft_settings_save(c, filename);
+	//~ /* write config */
+	//~ return nft_settings_save(c, filename);
 }
 
 
@@ -245,69 +228,69 @@ NftResult led_settings_save(LedSettings *c, const char *filename)
  * @param filename the filename that should be used to build path if nothing more appropriate is found
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult led_settings_default_filename(char *dst, size_t size, const char *filename)
+NftResult led_prefs_default_filename(char *dst, size_t size, const char *filename)
 {
-        /* try to get environment variable */
-        char *env;
-        if((env = getenv("NIFTY_SETTINGS")))
-        {
-                strncpy(dst, env, size);
-                return NFT_SUCCESS;
-        }
+        //~ /* try to get environment variable */
+        //~ char *env;
+        //~ if((env = getenv("NIFTY_SETTINGS")))
+        //~ {
+                //~ strncpy(dst, env, size);
+                //~ return NFT_SUCCESS;
+        //~ }
         
-        /* build our own default path */
-        if(filename)
-        {
-                if(snprintf(dst, size, "%s/%s", getenv("HOME"), filename) < 0)
-                {
-                        NFT_LOG_PERROR("snprintf");
-                        return NFT_FAILURE;
-                }
-        }
-        /* use our own default filename */
-        else
-        {
-                if(snprintf(dst, size, "%s/.niftyled.xml", getenv("HOME")) < 0)
-                {
-                        NFT_LOG_PERROR("snprintf");
-                        return NFT_FAILURE;
-                }
-        }
+        //~ /* build our own default path */
+        //~ if(filename)
+        //~ {
+                //~ if(snprintf(dst, size, "%s/%s", getenv("HOME"), filename) < 0)
+                //~ {
+                        //~ NFT_LOG_PERROR("snprintf");
+                        //~ return NFT_FAILURE;
+                //~ }
+        //~ }
+        //~ /* use our own default filename */
+        //~ else
+        //~ {
+                //~ if(snprintf(dst, size, "%s/.niftyled.xml", getenv("HOME")) < 0)
+                //~ {
+                        //~ NFT_LOG_PERROR("snprintf");
+                        //~ return NFT_FAILURE;
+                //~ }
+        //~ }
         
         
-        return NFT_SUCCESS;
+        //~ return NFT_SUCCESS;
 }
 
 
 /**
  * get width of complete setup
  *
- * @param s LedSettings descriptor
+ * @param s LedPrefs descriptor
  * @result total width of current setup in pixels
  */
-LedFrameCord led_settings_get_width(LedSettings *s)
+LedFrameCord led_prefs_get_width(LedPrefs *s)
 {
-        if(!s)
-                NFT_LOG_NULL(0);
+        //~ if(!s)
+                //~ NFT_LOG_NULL(0);
 
-        LedHardware *first;
-        if(!(first = led_settings_hardware_get_first(s)))
-        {
-                NFT_LOG(L_DEBUG, "Couldn't get width. No hardware node in setup.");
-                return 0;
-        }
+        //~ LedHardware *first;
+        //~ if(!(first = led_settings_hardware_get_first(s)))
+        //~ {
+                //~ NFT_LOG(L_DEBUG, "Couldn't get width. No hardware node in setup.");
+                //~ return 0;
+        //~ }
 
-        LedHardware *h;
-        LedFrameCord width = 0;
-        for(h = first; h; h = led_hardware_get_next_sibling(h))
-        {
-                LedTile *tile = led_hardware_get_tile(h);
-                LedFrameCord t = led_tile_get_width(tile)+led_tile_get_x(tile);
-                if(t > width)
-                        width = t;
-        }
+        //~ LedHardware *h;
+        //~ LedFrameCord width = 0;
+        //~ for(h = first; h; h = led_hardware_get_next_sibling(h))
+        //~ {
+                //~ LedTile *tile = led_hardware_get_tile(h);
+                //~ LedFrameCord t = led_tile_get_width(tile)+led_tile_get_x(tile);
+                //~ if(t > width)
+                        //~ width = t;
+        //~ }
 
-        return width;
+        //~ return width;
 
 }
 
@@ -315,32 +298,32 @@ LedFrameCord led_settings_get_width(LedSettings *s)
 /**
  * get height of complete setup
  *
- * @param s LedSettings descriptor
+ * @param s LedPrefs descriptor
  * @result total height of current setup in pixels
  */
-LedFrameCord led_settings_get_height(LedSettings *s)
+LedFrameCord led_prefs_get_height(LedPrefs *s)
 {
-        if(!s)
-                NFT_LOG_NULL(0);
+        //~ if(!s)
+                //~ NFT_LOG_NULL(0);
 
-        LedHardware *first;
-        if(!(first = led_settings_hardware_get_first(s)))
-        {
-                NFT_LOG(L_DEBUG, "Couldn't get height. No hardware node in setup.");
-                return 0;
-        }
+        //~ LedHardware *first;
+        //~ if(!(first = led_settings_hardware_get_first(s)))
+        //~ {
+                //~ NFT_LOG(L_DEBUG, "Couldn't get height. No hardware node in setup.");
+                //~ return 0;
+        //~ }
 
-        LedHardware *h;
-        LedFrameCord height = 0;
-        for(h = first; h; h = led_hardware_get_next_sibling(h))
-        {
-                LedTile *tile = led_hardware_get_tile(h);
-                LedFrameCord t = led_tile_get_height(tile)+led_tile_get_y(tile);
-                if(t > height)
-                        height = t;
-        }
+        //~ LedHardware *h;
+        //~ LedFrameCord height = 0;
+        //~ for(h = first; h; h = led_hardware_get_next_sibling(h))
+        //~ {
+                //~ LedTile *tile = led_hardware_get_tile(h);
+                //~ LedFrameCord t = led_tile_get_height(tile)+led_tile_get_y(tile);
+                //~ if(t > height)
+                        //~ height = t;
+        //~ }
 
-        return height;
+        //~ return height;
 }
 
 
@@ -350,33 +333,33 @@ LedFrameCord led_settings_get_height(LedSettings *s)
  * @param xml string containing one niftyled XML node
  * @result NIFTYLED_TYPE
  */
-NIFTYLED_TYPE led_settings_node_get_type(const char *xml)
+NIFTYLED_TYPE led_prefs_node_get_type(const char *xml)
 {
-        /* parse node */
-        NftSettingsNode *n;
-        if(!(n = nft_settings_node_parse(xml)))
-        {
-                NFT_LOG(L_ERROR, "Failed to parse XML node");
-                return T_LED_INVALID;
-        }
+        //~ /* parse node */
+        //~ NftSettingsNode *n;
+        //~ if(!(n = nft_settings_node_parse(xml)))
+        //~ {
+                //~ NFT_LOG(L_ERROR, "Failed to parse XML node");
+                //~ return T_LED_INVALID;
+        //~ }
 
 
-        NIFTYLED_TYPE t;
+        //~ NIFTYLED_TYPE t;
 
-        if(strcmp(nft_settings_node_name(n), LED_HARDWARE_NAME) == 0)
-                t = T_LED_HARDWARE;
-        else if(strcmp(nft_settings_node_name(n), LED_TILE_NAME) == 0)
-                t = T_LED_TILE;
-        else if(strcmp(nft_settings_node_name(n), LED_CHAIN_NAME) == 0)
-                t = T_LED_CHAIN;
-        else if(strcmp(nft_settings_node_name(n), LED_LED_NAME) == 0)
-                t = T_LED;
-        else
-                t = T_LED_INVALID;
+        //~ if(strcmp(nft_settings_node_name(n), LED_HARDWARE_NAME) == 0)
+                //~ t = T_LED_HARDWARE;
+        //~ else if(strcmp(nft_settings_node_name(n), LED_TILE_NAME) == 0)
+                //~ t = T_LED_TILE;
+        //~ else if(strcmp(nft_settings_node_name(n), LED_CHAIN_NAME) == 0)
+                //~ t = T_LED_CHAIN;
+        //~ else if(strcmp(nft_settings_node_name(n), LED_LED_NAME) == 0)
+                //~ t = T_LED;
+        //~ else
+                //~ t = T_LED_INVALID;
         
-        nft_settings_node_destroy(n);
+        //~ nft_settings_node_destroy(n);
 
-        return t;
+        //~ return t;
 }
 
 /**

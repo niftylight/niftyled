@@ -79,17 +79,6 @@
 #endif
 
 
-/* integer representation of niftyled elements */
-typedef enum
-{
-        T_LED_HARDWARE = 1,
-        T_LED_TILE,
-        T_LED_CHAIN,
-        T_LED,
-        T_LED_INVALID,
-}NIFTYLED_TYPE;
-
-
 
 
 #include <niftylog.h>
@@ -102,8 +91,8 @@ typedef enum
 #include "niftyled-hardware.h"
 #include "niftyled-tile.h"
 #include "niftyled-fps.h"
-/*#include "niftyled-prefs.h"
-#include "niftyled-prefs_chain.h"
+#include "niftyled-prefs.h"
+/*#include "niftyled-prefs_chain.h"
 #include "niftyled-prefs_hardware.h"
 #include "niftyled-prefs_tile.h"*/
 
