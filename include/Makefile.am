@@ -2,8 +2,8 @@
 
 SUBDIRS =
 
-# name of directory to create inside /usr/include/ 
-library_includedir = $(includedir)/lib$(GENERIC_LIBRARY_NAME)-$(GENERIC_RELEASE)
+# name of directory to create inside {prefix}/include/ 
+library_includedir = $(includedir)/lib$(PACKAGE)-$(PACKAGE_MAJOR_VERSION).$(PACKAGE_MINOR_VERSION)
 
 # headers to install 
 library_include_HEADERS = \

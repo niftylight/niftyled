@@ -49,11 +49,38 @@
 #ifndef _LED_VERSION
 #define _LED_VERSION
 
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+
+/** major version */
+#define NFT_LED_MAJOR_VERSION  (@PACKAGE_MAJOR_VERSION@)
+/** minor version */
+#define NFT_LED_MINOR_VERSION  (@PACKAGE_MINOR_VERSION@)
+/** micro version */
+#define NFT_LED_MICRO_VERSION  (@PACKAGE_MICRO_VERSION@)
+/** API revision (libtool) */
+#define NFT_LED_API_REVISION   (@PACKAGE_API_REVISION@)
+/** current API version (libtool) */
+#define NFT_LED_API_CURENT     (@PACKAGE_API_CURRENT@)
+/** current API age (libtool) */
+#define NFT_LED_API_AGE        (@PACKAGE_API_AGE@)
+/** current git version hash - defined using -DPACKAGE_GIT_VERSION at compile */
+#define NFT_LED_GIT_VERSION    (nft_prefs_version_git())
+/** nicely composed long version string */
+#define NFT_LED_LONG_VERSION   (nft_prefs_version_long())
+
+
 /** our plugin API version */
-#define HW_PLUGIN_API_VERSION @GENERIC_HW_PLUGIN_API_VERSION@
+#define HW_PLUGIN_API_MAJOR_VERSION @PACKAGE_HW_PLUGIN_API_MAJOR_VERSION@
+#define HW_PLUGIN_API_MINOR_VERSION @PACKAGE_HW_PLUGIN_API_MINOR_VERSION@
+#define HW_PLUGIN_API_MICRO_VERSION @PACKAGE_HW_PLUGIN_API_MICRO_VERSION@
+
 
 /** macro to check version-compatibility */
-#define LED_CHECK_VERSION led_check_version(@GENERIC_API_VERSION@);
+#define LED_CHECK_VERSION led_check_version(@PACKAGE_API_VERSION@);
 
 
 

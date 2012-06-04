@@ -7,11 +7,8 @@ INCLUDE_DIRS = -I../include -I$(top_srcdir)/include
 SUBDIRS =
 EXTRA_DIST = 
 
-# target library
-lib_LTLIBRARIES = lib@GENERIC_LIBRARY_NAME@.la
-
 # source-files
-lib@GENERIC_LIBRARY_NAME@_la_SOURCES = \
+lib@PACKAGE@_la_SOURCES = \
 	version.c \
 	tile.c \
 	chain.c \
@@ -25,26 +22,36 @@ lib@GENERIC_LIBRARY_NAME@_la_SOURCES = \
 	settings_hardware.c
 
 
+# compile for debugging ?
+if DEBUG
+    OPT_CFLAGS = -O0 -g
+else
+    OPT_CFLAGS = -O2
+endif
+
+
+# target library
+lib_LTLIBRARIES = lib@PACKAGE@.la
+
 
 # cflags 
-lib@GENERIC_LIBRARY_NAME@_la_CFLAGS = \
-        $(EXTRA_CFLAGS) \
+lib@PACKAGE@_la_CFLAGS = \
+	-Wall \
+	-D_BSD_SOURCE \
+	-DPLUGINDIR=\"@PACKAGE@-plugins\" \
+	-DPACKAGE_GIT_VERSION="\"`$(top_srcdir)/version.sh --git`\"" \
+	$(EXTRA_CFLAGS) \
 	$(WARNING_CFLAGS) \
 	$(INCLUDE_DIRS) \
-	-DPLUGINDIR=\"@GENERIC_LIBRARY_NAME@-plugins\" \
-        -D_BSD_SOURCE \
-	$(niftysettings_CFLAGS) \
-	$(babl_CFLAGS)
+	$(niftyprefs_CFLAGS) \
+	$(babl_CFLAGS) 
 
 # linker flags
-lib@GENERIC_LIBRARY_NAME@_la_LDFLAGS = \
-	-version-info $(GENERIC_LIBRARY_VERSION) \
-	-release $(GENERIC_RELEASE) \
+lib@PACKAGE@_la_LDFLAGS = \
+	-version-info @PACKAGE_API_CURRENT@:@PACKAGE_API_REVISION@:@PACKAGE_API_AGE@ \
+	-release @PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MICRO_VERSION@ \
 	-ldl \
         -Wall -no-undefined
 
 # link in modules from subdirectories
-lib@GENERIC_LIBRARY_NAME@_la_LIBADD = \
-	$(niftysettings_LIBS) \
-	$(babl_LIBS) \
-	-lm
+lib@PACKAGE@_la_LIBADD = $(niftyprefs_LIBS) $(babl_LIBS) -lm

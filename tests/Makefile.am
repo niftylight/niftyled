@@ -1,13 +1,15 @@
 INCLUDE_DIRS = -I../include -I$(top_srcdir)/include
+tests_CFLAGS_PRIV = -Wall $(INCLUDE_DIRS) -Wall $(niftyprefs_CFLAGS) $(babl_CFLAGS)
+tests_LDFLAGS_PRIV =
+tests_LDADD_PRIV = ../src/libniftyled.la $(niftyprefs_LIBS) $(babl_LIBS)
+
+
 
 check_PROGRAMS = mapping
-
-# test-target
 TESTS = $(check_PROGRAMS)
 
-my_cflags = $(INCLUDE_DIRS) -Wall $(niftysettings_CFLAGS) $(babl_CFLAGS)
-my_ldflags = ../src/libniftyled.la $(niftysettings_LIBS) $(babl_LIBS)
 
 mapping_SOURCES = mapping.c
-mapping_CFLAGS = $(my_cflags)
-mapping_LDADD = $(my_ldflags)
+mapping_CFLAGS = $(tests_CFLAGS_PRIV)
+mapping_LDFLAGS = $(tests_LDFLAGS_PRIV)
+mapping_LDADD = $(tests_LDADD_PRIV)
