@@ -1,6 +1,6 @@
 /*
  * libniftyled - Interface library for LED interfaces
- * Copyright (C) 2006-2011 Daniel Hiepler <daniel@niftylight.de>
+ * Copyright (C) 2006-2010 Daniel Hiepler <daniel@niftylight.de>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -41,76 +41,51 @@
  * Boston, MA 02111-1307, USA.
  */
 
-
-#ifndef _NIFTYLED
-#define _NIFTYLED
-
 /**
- * @mainpage libniftyled API documentation
- *
- * <h2>A library designed to provide an abstract interface to use LED hardware.</h2>
- *
- * For hardware-plugin developers - Use your LED device with libniftyled:
- * - check the dummy plugin as example (lib/niftyled-plugins/example)
- * - check documentation of a @ref LedHardwarePlugin
- *
- * For LED-controlling application developers:
- * - check @ref LedChain to define a chain of serially arranged @ref Led's
- * - check @ref LedTile to see how to associate a @ref LedChain to a tile and build larger tiles from groups of tiles
- * - check @ref LedHardware for interfacing with hardware
- * - check @ref LedSettings for loading, saving & handling LED-Setup configurations
- *
- * @todo check if all loglevels are appropriate to message
+ * @file pixel_format.h
+ * @brief LedPixelFormat API to organize various colorspaces
  */
 
 /**
- * @file niftyled.h
- * @brief niftyled API toplevel include file
+ * @defgroup pixel_format LedPixelFormat
+ * @brief pixel-format related functionality (libbabl wrapper)
+ * @{
  */
 
+#ifndef _LED_PIXEL_FORMAT_H
+#define _LED_PIXEL_FORMAT_H
+
+#include <stdbool.h>
+#include <stdlib.h>
+#include <babl/babl.h>
 
 
-#ifndef FALSE
-#define FALSE (0)
-#endif
-
-#ifndef TRUE
-#define TRUE (!FALSE)
-#endif
-
-
-/* integer representation of niftyled elements */
-typedef enum
-{
-        T_LED_HARDWARE = 1,
-        T_LED_TILE,
-        T_LED_CHAIN,
-        T_LED,
-        T_LED_INVALID,
-}NIFTYLED_TYPE;
+/** wrapper type to define the pixel-format of a frame */
+typedef Babl LedPixelFormat;
+/** wrapper type to define a babl-fish that converts one bufferful from one colorspace to another */
+typedef Babl LedPixelFormatConverter;
 
 
 
+void                            led_pixel_format_new();
+void                            led_pixel_format_destroy();
 
-#include <niftylog.h>
-#include <niftyprefs.h>
-#include "nifty-primitives.h"
-#include "niftyled-version.h"
-#include "niftyled-pixel_format.h"
-#include "niftyled-frame.h"
-#include "niftyled-chain.h"
-#include "niftyled-hardware.h"
-#include "niftyled-tile.h"
-#include "niftyled-fps.h"
-/*#include "niftyled-prefs.h"
-#include "niftyled-prefs_chain.h"
-#include "niftyled-prefs_hardware.h"
-#include "niftyled-prefs_tile.h"*/
+const char *                    led_pixel_format_type_to_string(LedPixelFormat *f, int component);
+const char *                    led_pixel_format_to_string(LedPixelFormat *f);
+LedPixelFormat *                led_pixel_format_from_string(const char *s);
+const char *                    led_pixel_format_colorspace_to_string(LedPixelFormat *f);
+bool                            led_pixel_format_is_equal(LedPixelFormat *a, LedPixelFormat *b);
+void                            led_pixel_format_convert(LedPixelFormatConverter *converter, void *src, void *dst, size_t n);
 
+size_t                          led_pixel_format_get_bytes_per_pixel(LedPixelFormat *f);
+size_t                          led_pixel_format_get_n_components(LedPixelFormat *f);
+size_t                          led_pixel_format_get_buffer_size(LedPixelFormat *f, int n);
+LedPixelFormatConverter *       led_pixel_format_get_converter(LedPixelFormat *src, LedPixelFormat *dst);
+bool                            led_pixel_format_is_big_endian();
+size_t                          led_pixel_format_get_component_offset(LedPixelFormat *f, size_t n);
+//size_t                          led_pixel_format_get_pixel_offset(LedPixelFormat *f, size_t n);
 
-
-
-#endif /* _NIFTYLED */
+#endif          /* _LED_PIXEL_FORMAT_H */
 
 /**
  * @}

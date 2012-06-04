@@ -55,7 +55,9 @@
  */
 
 #include <math.h>
-#include <niftyled.h>
+#include "niftyled-chain.h"
+#include "niftyled-frame.h"
+
 
 
 /** helper macro */

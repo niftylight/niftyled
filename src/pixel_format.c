@@ -54,8 +54,13 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <babl/babl.h>
-#include <niftyled.h>
+#include <niftylog.h>
+#include "niftyled-pixel_format.h"
+#include "niftyled-frame.h"
+
+#if HAVE_CONFIG_H
 #include "config.h"
+#endif
 
 
 

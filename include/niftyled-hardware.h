@@ -96,7 +96,8 @@
 typedef struct _LedHardware LedHardware;
 
 
-#include "tile.h"
+#include <niftylog.h>
+#include "niftyled-tile.h"
 
 
 /** 

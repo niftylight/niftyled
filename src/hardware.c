@@ -56,7 +56,7 @@
 #include "config.h"
 #endif
 
-#include <niftyled.h>
+//#include <niftyled.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -71,6 +71,8 @@
 #error We need dlfcn.h (-ldl) to use runtime loadable plugins
 #endif
 
+#include "niftyled-version.h"
+#include "niftyled-hardware.h"
 #include "_tile.h"
 #include "_chain.h"
 

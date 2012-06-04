@@ -55,6 +55,9 @@
 #ifndef _LED_FRAME_H
 #define _LED_FRAME_H
 
+#include <niftylog.h>
+#include "nifty-primitives.h"
+#include "niftyled-pixel_format.h"
 
 
 /** model of one pixelframe */
@@ -63,6 +66,7 @@ typedef struct _LedFrame LedFrame;
 typedef int LedFrameCord;
 /** type to define the channelnumber for one portion of a pixel */
 typedef short LedFrameComponent;
+
 
 
 

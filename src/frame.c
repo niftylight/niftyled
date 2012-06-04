@@ -54,14 +54,15 @@
 #include "config.h"
 #endif
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <alloca.h>
-#include <niftyled.h>
 
 #if HAVE_BYTESWAP_H
 #include <byteswap.h>
 #endif
 
+#include "niftyled-frame.h"
 
 
 

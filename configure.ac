@@ -133,7 +133,7 @@ AC_CONFIG_FILES([
 	Doxyfile \
 	Makefile \
 	include/Makefile \
-	include/niftyled_version.h \
+	include/niftyled-version.h \
 	src/version.c \
 	src/Makefile \
 	tests/Makefile \

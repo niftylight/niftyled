@@ -59,6 +59,11 @@
 #ifndef _LED_CHAIN_H
 #define _LED_CHAIN_H
 
+#include <stdlib.h>
+#include "nifty-primitives.h"
+#include "niftyled-frame.h"
+#include "niftyled-pixel_format.h"
+
 
 
 /** name of the LedChain object for NftSettings */
@@ -82,7 +87,7 @@ typedef size_t LedCount;
 typedef short LedGain;
 
 
-#include "tile.h"
+#include "niftyled-tile.h"
 
 
 /* LedChain API */

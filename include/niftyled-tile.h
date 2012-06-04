@@ -71,8 +71,9 @@
 typedef struct _LedTile LedTile;
 
 
-#include "chain.h"
-#include "hardware.h"
+#include "niftyled-chain.h"
+#include "niftyled-hardware.h"
+#include "niftyled-frame.h"
 
 
 LedTile *       led_tile_new();

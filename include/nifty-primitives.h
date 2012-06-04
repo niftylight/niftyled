@@ -1,6 +1,6 @@
 /*
- * libniftyled - Interface library for LED interfaces
- * Copyright (C) 2006-2010 Daniel Hiepler <daniel@niftylight.de>
+ * niftylight primitives header
+ * Copyright (C) 2006-2012 Daniel Hiepler <daniel@niftylight.de>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -41,49 +41,46 @@
  * Boston, MA 02111-1307, USA.
  */
 
+
 /**
- * @file pixel_format.h
- * @brief LedPixelFormat API to organize various colorspaces
+ * @file nifty-primitives.h
  */
 
 /**
- * @defgroup pixel_format LedPixelFormat
- * @brief pixel-format related functionality (libbabl wrapper)
+ * @defgroup primitives NftPrimitives
+ * @brief arbitrary primitive datatypes
  * @{
  */
 
-#ifndef _LED_PIXEL_FORMAT_H
-#define _LED_PIXEL_FORMAT_H
-
-#include <babl/babl.h>
+#ifndef _NFT_PRIMITIVES
+#define _NFT_PRIMITIVES
 
 
-/** wrapper type to define the pixel-format of a frame */
-typedef Babl LedPixelFormat;
-/** wrapper type to define a babl-fish that converts one bufferful from one colorspace to another */
-typedef Babl LedPixelFormatConverter;
+/** @todo remove this preprocessor macro & use clean structure instead */
+#ifndef FALSE
+/* boolean definition */
+#define FALSE (0)
+#endif
+/** @todo remove this preprocessor macro & use clean structure instead */
+#ifndef TRUE
+/* boolean definition */
+#define TRUE (!FALSE)
+#endif
+
+/** @todo remove this preprocessor macro & use clean structure instead */
+#ifndef NFT_RESULT_DEFINED
+#define NFT_RESULT_DEFINED
+/** type for returning failure-status */
+typedef enum
+{
+        NFT_FAILURE = 0,
+        NFT_SUCCESS,
+}NftResult;
+#endif
 
 
 
-void                            led_pixel_format_new();
-void                            led_pixel_format_destroy();
-
-const char *                    led_pixel_format_type_to_string(LedPixelFormat *f, int component);
-const char *                    led_pixel_format_to_string(LedPixelFormat *f);
-LedPixelFormat *                led_pixel_format_from_string(const char *s);
-const char *                    led_pixel_format_colorspace_to_string(LedPixelFormat *f);
-bool                            led_pixel_format_is_equal(LedPixelFormat *a, LedPixelFormat *b);
-void                            led_pixel_format_convert(LedPixelFormatConverter *converter, void *src, void *dst, size_t n);
-
-size_t                          led_pixel_format_get_bytes_per_pixel(LedPixelFormat *f);
-size_t                          led_pixel_format_get_n_components(LedPixelFormat *f);
-size_t                          led_pixel_format_get_buffer_size(LedPixelFormat *f, int n);
-LedPixelFormatConverter *       led_pixel_format_get_converter(LedPixelFormat *src, LedPixelFormat *dst);
-bool                            led_pixel_format_is_big_endian();
-size_t                          led_pixel_format_get_component_offset(LedPixelFormat *f, size_t n);
-//size_t                          led_pixel_format_get_pixel_offset(LedPixelFormat *f, size_t n);
-
-#endif          /* _LED_PIXEL_FORMAT_H */
+#endif /** _NFT_PRIMITIVES */
 
 /**
  * @}
