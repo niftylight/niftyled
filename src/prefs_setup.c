@@ -88,7 +88,7 @@ static NftResult _prefs_to_setup(LedPrefs *p, void **newObj, NftPrefsNode *n, vo
 	    child = nft_prefs_node_get_next(child))
     	{
 		/* check if node describes a LedHardware object */
-		if(strcmp(nft_prefs_node_get_name(child), LED_HARDWARE_NAME) != 0)
+		if(led_prefs_is_hardware_node(child))
 		{
 			NFT_LOG(L_ERROR, "<ledsetup> node may only contain <hardware> children");
 		    	goto _pts_error;

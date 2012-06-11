@@ -52,6 +52,7 @@
  */
 
 #include "niftyled-prefs_hardware.h"
+#include "niftyled-prefs_chain.h"
 
 
 
@@ -61,10 +62,10 @@
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
 
-#define	LED_HARDWARE_PREFS_NAME                  "name"
-#define	LED_HARDWARE_PREFS_PLUGIN                "plugin"
-#define	LED_HARDWARE_PREFS_ID                    "id"
-#define LED_HARDWARE_PREFS_STRIDE                "stride"
+#define	LED_HARDWARE_PROP_NAME                  "name"
+#define	LED_HARDWARE_PROP_PLUGIN                "plugin"
+#define	LED_HARDWARE_PROP_ID                    "id"
+#define LED_HARDWARE_PROP_STRIDE                "stride"
 
 
 
@@ -72,6 +73,69 @@
 /******************************************************************************/
 /**************************** STATIC FUNCTIONS ********************************/
 /******************************************************************************/
+
+
+/**
+ * Object-to-Config function. 
+ * Creates a config-node (and subnodes) from a LedHardware model
+ * @param c the current preferences context
+ * @param n a freshly created prefs node that this function should fill with properties of obj
+ * @param obj object of this class where preferences should be generated from
+ * @result NFT_SUCCESS if everything went fine, NFT_FAILURE otherwise
+ * @note you shouldn't call this function directly
+ */
+static NftResult _prefs_from_hardware(NftPrefs *p, NftPrefsNode *n, void *obj, void *userptr)
+{
+	if(!p || !n | !obj)
+		NFT_LOG_NULL(NFT_FAILURE);
+
+    	/* hardware "object" */
+    	LedHardware *h = obj;
+    
+	
+	
+	/* name of hardware */
+	if(!nft_prefs_node_prop_string_set(n, LED_HARDWARE_PROP_NAME,
+	                                  (char *) led_hardware_get_name(h)))
+		return NFT_FAILURE;
+	
+
+	/* plugin family of hardware */
+	if(!nft_prefs_node_prop_string_set(n, LED_HARDWARE_PROP_PLUGIN,
+	                                  (char *) led_hardware_get_name(h)))
+		return NFT_FAILURE;
+    
+	
+	/* id of hardware */
+	if(!nft_prefs_node_prop_string_set(n, LED_HARDWARE_PROP_ID,
+	                                  (char *) led_hardware_get_id(h)))
+		return NFT_FAILURE;
+	
+      
+	/* LED stride */
+        if(!nft_prefs_node_prop_int_set(n, LED_HARDWARE_PROP_STRIDE,
+                                        led_hardware_get_stride(h)))
+                return NFT_FAILURE;
+
+        
+        /* chain of this hardware */
+    	LedChain *c;
+    	if((c = led_hardware_get_chain(h)))
+	{
+	    	/* generate prefs node from chain */
+		NftPrefsNode *node;
+		if(!(node = led_prefs_chain_to_node(p, c)))
+			return NFT_FAILURE;
+
+		/* add node as child of this node */
+		nft_prefs_node_add_child(n, node);
+    	}
+    
+        
+	/* all OK */
+	return NFT_SUCCESS;
+}
+
 
 /**
  * Config-to-Object function.
@@ -170,64 +234,6 @@ static NftResult _prefs_to_hardware(LedPrefs *c, void **newObj, NftPrefsNode *n,
 }
 
 
-/**
- * Object-to-Config function. 
- * Creates a config-node (and subnodes) from a LedHardware model
- * @param c the current preferences context
- * @param n a freshly created prefs node that this function should fill with properties of obj
- * @param obj object of this class where preferences should be generated from
- * @result NFT_SUCCESS if everything went fine, NFT_FAILURE otherwise
- * @note you shouldn't call this function directly
- */
-static NftResult _prefs_from_hardware(NftPrefs *c, NftPrefsNode *n, void *obj, void *userptr)
-{
-	if(!c || !n | !obj)
-		NFT_LOG_NULL(NFT_FAILURE);
-
-    	/* hardware "object" */
-    	LedHardware *h = obj;
-    
-	
-	
-	/* name of hardware */
-	if(!nft_prefs_node_prop_string_set(n, LED_HARDWARE_PREFS_NAME,
-	                                  (char *) led_hardware_get_name(h)))
-		return NFT_FAILURE;
-	
-
-	//~ /* plugin family of hardware */
-	//~ if(!nft_prefs_node_prop_string_set(n, LED_HARDWARE_PREFS_PLUGIN, 
-					//~ (char *) led_hardware_get_plugin_family(h)))
-		//~ return NFT_FAILURE;
-	
-	
-	//~ /* id of hardware */
-	//~ if(!nft_prefs_node_prop_string_set(n, LED_HARDWARE_PREFS_ID,
-	                                  //~ (char *) led_hardware_get_id(h)))
-		//~ return NFT_FAILURE;
-	
-      
-	//~ /* LED stride */
-        //~ if(!nft_prefs_node_prop_int_set(n, LED_HARDWARE_PREFS_STRIDE,
-                                       //~ led_hardware_get_stride(h)))
-                //~ return NFT_FAILURE;
-
-        
-        //~ /* chain of this hardware */
-        //~ LedChain *chain;
-        //~ if((chain = led_hardware_get_chain(h)))
-        //~ {
-                //~ if(!nft_settings_func_from_obj_call(c, chain, n, NULL))
-                        //~ goto _cfh_error;
-        //~ }
-        
-	/* all OK */
-	return NFT_SUCCESS;
-}
-
-
-
-
 
 
 /******************************************************************************/
@@ -252,6 +258,18 @@ NftResult _prefs_hardware_class_register(NftPrefs *p)
 /******************************************************************************/
 /**************************** API FUNCTIONS ***********************************/
 /******************************************************************************/
+
+
+/**
+ * check if NftPrefsNode represents a hardware object
+ *
+ * @param n LedPrefsNode
+ * @result TRUE if node represents a hardware object, FALSE otherwise
+ */ 
+bool led_prefs_is_hardware_node(LedPrefsNode *n)
+{
+	return (strcmp(nft_prefs_node_get_name(n), LED_HARDWARE_NAME) == 0);
+}
 
 
 /**

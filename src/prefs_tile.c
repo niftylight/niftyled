@@ -55,15 +55,21 @@
 #include <niftyled.h>
 
 
-#define LED_TILE_SETTING_X              "x"
-#define LED_TILE_SETTING_Y              "y"
-#define LED_TILE_SETTING_WIDTH          "width"
-#define LED_TILE_SETTING_HEIGHT         "height"
-#define LED_TILE_SETTING_ROTATION       "rotation"
-#define LED_TILE_SETTING_ROT_X          "pivot_x"
-#define LED_TILE_SETTING_ROT_Y          "pivot_y"
-#define LED_TILE_SETTING_CHILDCOUNT     "children"
+#define LED_TILE_PROP_X              "x"
+#define LED_TILE_PROP_Y              "y"
+#define LED_TILE_PROP_WIDTH          "width"
+#define LED_TILE_PROP_HEIGHT         "height"
+#define LED_TILE_PROP_ROTATION       "rotation"
+#define LED_TILE_PROP_ROT_X          "pivot_x"
+#define LED_TILE_PROP_ROT_Y          "pivot_y"
 
+
+
+
+
+/******************************************************************************/
+/**************************** STATIC FUNCTIONS ********************************/
+/******************************************************************************/
 
 
 /**
@@ -85,31 +91,31 @@ static NftResult _prefs_from_tile(NftPrefs *p, NftPrefsNode *n, void *obj, void 
 
 
     	/* x offset */
-    	if(!nft_prefs_node_prop_int_set(n, LED_TILE_SETTING_X, led_tile_get_x(t)))
+    	if(!nft_prefs_node_prop_int_set(n, LED_TILE_PROP_X, led_tile_get_x(t)))
                 return NFT_FAILURE;
            
 	/* y offset */
-    	if(!nft_prefs_node_prop_int_set(n, LED_TILE_SETTING_Y, led_tile_get_y(t)))
+    	if(!nft_prefs_node_prop_int_set(n, LED_TILE_PROP_Y, led_tile_get_y(t)))
                 return NFT_FAILURE;
     
         /* mapping width */
-    	if(!nft_prefs_node_prop_int_set(n, LED_TILE_SETTING_WIDTH, led_tile_get_width(t)))
+    	if(!nft_prefs_node_prop_int_set(n, LED_TILE_PROP_WIDTH, led_tile_get_width(t)))
                 return NFT_FAILURE;
 
 	/* mapping height */
-    	if(!nft_prefs_node_prop_int_set(n, LED_TILE_SETTING_HEIGHT, led_tile_get_height(t)))
+    	if(!nft_prefs_node_prop_int_set(n, LED_TILE_PROP_HEIGHT, led_tile_get_height(t)))
                 return NFT_FAILURE;    	
 
         /* rotation center x */
-    	if(!nft_prefs_node_prop_double_set(n, LED_TILE_SETTING_ROT_X, led_tile_get_pivot_x(t)))
+    	if(!nft_prefs_node_prop_double_set(n, LED_TILE_PROP_ROT_X, led_tile_get_pivot_x(t)))
                 return NFT_FAILURE;  
 
         /* rotation center y */
-    	if(!nft_prefs_node_prop_double_set(n, LED_TILE_SETTING_ROT_Y, led_tile_get_pivot_y(t)))
+    	if(!nft_prefs_node_prop_double_set(n, LED_TILE_PROP_ROT_Y, led_tile_get_pivot_y(t)))
                 return NFT_FAILURE;  
        
 	/* rotation angle (radians -> degrees) */
-    	if(!nft_prefs_node_prop_double_set(n, LED_TILE_SETTING_ROTATION, (led_tile_get_rotation(t)*180)/M_PI))
+    	if(!nft_prefs_node_prop_double_set(n, LED_TILE_PROP_ROTATION, (led_tile_get_rotation(t)*180)/M_PI))
                 return NFT_FAILURE; 
 
     
@@ -159,42 +165,42 @@ static NftResult _prefs_to_tile(LedPrefs *p, void **newObj, NftPrefsNode *n, voi
 	
 	/* get x offset */
 	LedFrameCord x;
-    	if(!nft_prefs_node_prop_int_get(n, LED_TILE_SETTING_X, &x))
+    	if(!nft_prefs_node_prop_int_get(n, LED_TILE_PROP_X, &x))
 	{
-		NFT_LOG(L_WARNING, "<tile> config-node has no \"%s\" offset. Using 0 as default.", LED_TILE_SETTING_X);
+		NFT_LOG(L_WARNING, "<tile> config-node has no \"%s\" offset. Using 0 as default.", LED_TILE_PROP_X);
 		x = 0;
 	}
 
 	/* get y offset */
 	LedFrameCord y;
-    	if(!nft_prefs_node_prop_int_get(n, LED_TILE_SETTING_Y, &y))
+    	if(!nft_prefs_node_prop_int_get(n, LED_TILE_PROP_Y, &y))
 	{
-		NFT_LOG(L_WARNING, "<tile> config-node has no \"%s\" offset. Using 0 as default.", LED_TILE_SETTING_Y);
+		NFT_LOG(L_WARNING, "<tile> config-node has no \"%s\" offset. Using 0 as default.", LED_TILE_PROP_Y);
 		y = 0;
 	}
 	       
 	
         /* get rotation center x */
 	double rot_x;
-	if(!nft_prefs_node_prop_double_get(n, LED_TILE_SETTING_ROT_X, &rot_x))
+	if(!nft_prefs_node_prop_double_get(n, LED_TILE_PROP_ROT_X, &rot_x))
 	{
-		NFT_LOG(L_WARNING, "<tile> config-node has no \"%s\" offset. Using 0 as default.", LED_TILE_SETTING_ROT_X);
+		NFT_LOG(L_WARNING, "<tile> config-node has no \"%s\" offset. Using 0 as default.", LED_TILE_PROP_ROT_X);
 		rot_x = 0;
 	}
 		       
         /* get rotation center y */
 	double rot_y;
-	if(!nft_prefs_node_prop_double_get(n, LED_TILE_SETTING_ROT_Y, &rot_y))
+	if(!nft_prefs_node_prop_double_get(n, LED_TILE_PROP_ROT_Y, &rot_y))
 	{
-		NFT_LOG(L_WARNING, "<tile> config-node has no \"%s\" offset. Using 0 as default.", LED_TILE_SETTING_ROT_Y);
+		NFT_LOG(L_WARNING, "<tile> config-node has no \"%s\" offset. Using 0 as default.", LED_TILE_PROP_ROT_Y);
 		rot_y = 0;
 	}
 		           
 	/* get rotation angle */
 	double rotation;
-	if(!nft_prefs_node_prop_double_get(n, LED_TILE_SETTING_ROTATION, &rotation))
+	if(!nft_prefs_node_prop_double_get(n, LED_TILE_PROP_ROTATION, &rotation))
 	{
-		NFT_LOG(L_WARNING, "<tile> config-node has no \"%s\" offset. Using 0 as default.", LED_TILE_SETTING_ROTATION);
+		NFT_LOG(L_WARNING, "<tile> config-node has no \"%s\" offset. Using 0 as default.", LED_TILE_PROP_ROTATION);
 		rotation = 0;
 	}
 		           
