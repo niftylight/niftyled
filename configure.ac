@@ -1,8 +1,10 @@
 # libniftyled configure.ac 
 # v0.3 - (c) Daniel Hiepler (2010-2012)
+
 # --------------------------------
 #    initialization
 # --------------------------------
+
 AC_INIT([libniftyled], m4_esyscmd([./version.sh --short]), [http://github.com/niftylight/niftyled/issues], [niftyled], [http://wiki.niftylight.de/AC_PACKAGE_NAME])
 AC_COPYRIGHT([Copyright (C) 2006-2012 Daniel Hiepler])
 
@@ -159,4 +161,3 @@ Configure report:
     System CXXFLAGS.............:  ${CXXFLAGS}
     System LDFLAGS..............:  ${LDFLAGS}
 "
-
