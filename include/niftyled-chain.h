@@ -48,7 +48,7 @@
  */
 
 /**      
- * @addtogroup tile
+ * @addtogroup setup
  * @{
  * @defgroup chain LedChain
  * @brief Model for chains of serially aligned LEDs
@@ -66,10 +66,7 @@
 
 
 
-/** name of the LedChain object for NftSettings */
-#define LED_CHAIN_NAME  "chain"
-/** name of the Led object for NftSettings */
-#define LED_LED_NAME    "led"
+
 
 /** minimum value for LedGain type (LED is turned off) */
 #define LED_GAIN_MIN    (0)

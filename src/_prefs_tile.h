@@ -41,38 +41,13 @@
  * Boston, MA 02111-1307, USA.
  */
 
-
-/**
- * @file niftyled-prefs_tile.h
- * @brief API to organize LedTile preferences
- */
-
-/**      
- * @addtogroup prefs
- * @{
- * @defgroup prefs_tile LedTile preferences
- * @brief LedTile related LedPrefs functions & definitions
- *
- * @{
- */
-
-#ifndef _LED_PREFS_TILE_H
-#define _LED_PREFS_TILE_H
-
-
-/** name of the LedTile object for NftSettings */
-#define LED_TILE_NAME "tile"
-
-
-LedTile *	led_prefs_tile_from_node(LedPrefs *p, LedPrefsNode *n);
-LedPrefsNode *	led_prefs_tile_to_node(LedPrefs *p, LedTile *t);
+#ifndef _LED__PREFS_TILE_H
+#define _LED__PREFS_TILE_H
 
 
 
+NftResult 	_prefs_tile_class_register(NftPrefs *p);
 
-#endif  /* _LED_PREFS_TILE_H */
 
-/**
- * @}
- * @}
- */
+
+#endif  /* _LED__PREFS_TILE_H */

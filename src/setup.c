@@ -41,38 +41,107 @@
  * Boston, MA 02111-1307, USA.
  */
 
-
 /**
- * @file niftyled-prefs_tile.h
- * @brief API to organize LedTile preferences
+ * @file setup.c
  */
 
-/**      
- * @addtogroup prefs
+
+/**
+ * @addtogroup setup
  * @{
- * @defgroup prefs_tile LedTile preferences
- * @brief LedTile related LedPrefs functions & definitions
+ */
+
+#include "niftyled-setup.h"
+
+
+/**
+ * model to describe one setup of LED hardware
+ */
+struct _LedSetup
+{
+    	/** first hardware in setup or NULL */
+	LedHardware *firstHw;	
+};
+
+
+
+
+
+
+
+
+/** 
+ * allocate new LedSetup model descriptor
  *
- * @{
+ * @result new empty LedSetup model descriptor or NULL
  */
+LedSetup *led_setup_new()
+{
+	LedSetup *r;
+    	if(!(r = calloc(1, sizeof(LedSetup))))
+    	{
+		NFT_LOG_PERROR("calloc");
+		return NULL;
+	}
 
-#ifndef _LED_PREFS_TILE_H
-#define _LED_PREFS_TILE_H
+    	return r;
+}
 
-
-/** name of the LedTile object for NftSettings */
-#define LED_TILE_NAME "tile"
-
-
-LedTile *	led_prefs_tile_from_node(LedPrefs *p, LedPrefsNode *n);
-LedPrefsNode *	led_prefs_tile_to_node(LedPrefs *p, LedTile *t);
-
-
-
-
-#endif  /* _LED_PREFS_TILE_H */
 
 /**
- * @}
+ * free all resources allocated by a LedSetup object
+ *
+ * @param s valid LedSetup
+ */
+void led_setup_destroy(LedSetup *s)
+{
+	if(!s)
+		return;
+
+    	/* destroy all LedHardware objects */
+    	if(s->firstHw)
+    	{
+		led_hardware_destroy_list(s->firstHw);
+	}
+
+    	/* be really tidy :) */
+    	s->firstHw = NULL;
+
+    	/* free descriptor */
+    	free(s);
+}
+
+
+/**
+ * set head of hardware list in this setup
+ *
+ * @param s valid LedSetup 
+ * @param h LedHardware to set as head in this setup
+ */
+void led_setup_set_hardware(LedSetup *s, LedHardware *h)
+{
+	if(!s)
+		NFT_LOG_NULL();
+
+    	s->firstHw = h;
+}
+
+
+/**
+ * get head of hardware list from this setup
+ *
+ * @param s valid LedSetup
+ * @result head of LedHardware list of this setup
+ */
+LedHardware *led_setup_get_hardware(LedSetup *s)
+{
+	if(!s)
+		NFT_LOG_NULL(NULL);
+
+    	return s->firstHw;
+}
+
+
+/**
  * @}
  */

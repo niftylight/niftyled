@@ -48,6 +48,8 @@
  */
 
 /**      
+ * @addtogroup setup 
+ * @{ 
  * @defgroup tile LedTile
  * @brief Model to describe a LED arrangement. 
  * - can contain a @ref LedChain or groups of LedTiles. 
@@ -62,9 +64,6 @@
 #ifndef _LED_TILE_H
 #define _LED_TILE_H
 
-
-/** name of the LedTile object for NftSettings */
-#define LED_TILE_NAME "tile"
 
 
 /** model of one LedTile */
@@ -126,5 +125,5 @@ void            led_tile_list_destroy(LedTile *first);
 
 /**
  * @}
+ * @}
  */
-

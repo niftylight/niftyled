@@ -105,11 +105,10 @@ int main(int argc, char *argv[])
 
 	
 	/* create new config */
-	if(!(conf = led_prefs_new()))
+	if(!(conf = led_prefs_init()))
 		goto m_deinit;
 
-
-
+    	
 
         /***** BEGIN module creation *****/
 
@@ -168,28 +167,39 @@ int main(int argc, char *argv[])
         /* map */
         if(led_tile_to_chain(m, cm, 0) != led_tile_get_ledcount(m))
                 goto m_deinit;
-        
-        /* generate config for all objects (+ their subobjects) */
-        if(!led_prefs_create_from_tile(conf, m))
+
+
+    
+        /* dump config of tile to PrefsNode */
+    	NftPrefsNode *n;
+        if(!(n = led_prefs_tile_to_node(conf, m)))
 		goto m_deinit;
-        if(!led_prefs_create_from_chain(conf, cm))
+    
+    	/* dump node to file */
+    	if(!(led_prefs_node_to_file(conf, n, "-")))
 		goto m_deinit;
 
-        /* dump config */
-	if(!led_prefs_save(conf, "-"))
+    	/* free node */
+    	led_prefs_node_free(n);
+
+
+    
+	/* dump config of chain to PrefsNode */
+        if(!(n = led_prefs_chain_to_node(conf, cm)))
+		goto m_deinit;
+    
+    	/* dump node to file */
+    	if(!(led_prefs_node_to_file(conf, n, "-")))
 		goto m_deinit;
 
-        /* remove tile */
-        if(!led_prefs_tile_unlink(conf, m))
-                goto m_deinit;
-                
-
-        /* dump config */
-	if(!led_prefs_save(conf, "-"))
-		goto m_deinit;
-                
+    	/* free node */
+    	led_prefs_node_free(n);
+    
+                    
         result = 0;
-        
+
+    
+    
 m_deinit:              
                 
         /* destroy module (and children + chains) */
@@ -197,7 +207,7 @@ m_deinit:
         led_chain_destroy(cm);
         
         /* cleanup config */
-	led_prefs_destroy(conf);
+	led_prefs_deinit(conf);
 	        
         return result;
 }

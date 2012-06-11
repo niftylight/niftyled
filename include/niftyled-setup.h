@@ -43,36 +43,43 @@
 
 
 /**
- * @file niftyled-prefs_tile.h
- * @brief API to organize LedTile preferences
+ * @file niftyled-setup.h
  */
 
-/**      
- * @addtogroup prefs
- * @{
- * @defgroup prefs_tile LedTile preferences
- * @brief LedTile related LedPrefs functions & definitions
+/**       
+ * @defgroup setup LedSetup
+ * @brief object to gather a complete setup of LED hardware
  *
  * @{
  */
 
-#ifndef _LED_PREFS_TILE_H
-#define _LED_PREFS_TILE_H
+#ifndef _LED_SETUP_H
+#define _LED_SETUP_H
 
 
-/** name of the LedTile object for NftSettings */
-#define LED_TILE_NAME "tile"
-
-
-LedTile *	led_prefs_tile_from_node(LedPrefs *p, LedPrefsNode *n);
-LedPrefsNode *	led_prefs_tile_to_node(LedPrefs *p, LedTile *t);
+#include "niftyled-hardware.h"
 
 
 
 
-#endif  /* _LED_PREFS_TILE_H */
+
+
+/** LedSetup model */
+typedef struct _LedSetup LedSetup;
+
+
+
+LedSetup *	led_setup_new();
+void 		led_setup_destroy(LedSetup *s);
+
+void 		led_setup_set_hardware(LedSetup *s, LedHardware *h);
+LedHardware *	led_setup_get_hardware(LedSetup *s);
+
+
+
+#endif  /* _LED_SETUP_H */
 
 /**
  * @}
- * @}
  */
+

@@ -44,33 +44,38 @@
 
 /**
  * @file niftyled-prefs_chain.h
- * @brief API to organize LedChain settings
+ * @brief API to organize LedChain preferences
  */
 
 /**      
- * @addtogroup settings
+ * @addtogroup prefs
  * @{
- * @defgroup settings_chain LedChain settings
- * @brief LedChain related LedSettings functions & definitions
+ * @defgroup prefs_chain LedChain preferences
+ * @brief LedChain related LedPrefs functions & definitions
  *
  * @{
  */
 
-#ifndef _LED_SETTINGS_CHAIN_H
-#define _LED_SETTINGS_CHAIN_H
+#ifndef _LED_PREFS_CHAIN_H
+#define _LED_PREFS_CHAIN_H
+
+
+/** name of the LedChain object for NftSettings */
+#define LED_CHAIN_NAME  "chain"
+/** name of the Led object for NftSettings */
+#define LED_LED_NAME    "led"
 
 
 
+LedChain *	led_prefs_chain_from_node(LedPrefs *p, LedPrefsNode *n);
+LedPrefsNode *	led_prefs_chain_to_node(LedPrefs *p, LedChain *c);
+
+NftResult	led_prefs_led_from_node(LedPrefs *p, LedPrefsNode *n, Led *led);
+LedPrefsNode *	led_prefs_led_to_node(LedPrefs *p, Led *l);
 
 
-NftResult 		led_settings_create_from_chain(LedSettings *c, LedChain *);
-NftResult 		led_settings_chain_register(LedChain *);
-NftResult		led_settings_chain_unregister(LedChain *);
-NftResult               led_settings_chain_unlink(LedSettings *s, LedChain *c);
-const char *            led_settings_chain_dump_xml(LedSettings *s, LedChain *c);
-LedChain *              led_settings_chain_parse_xml(const char *xml);
 
-#endif  /* _LED_SETTINGS_CHAIN_H */
+#endif  /* _LED_PREFS_CHAIN_H */
 
 /**
  * @}

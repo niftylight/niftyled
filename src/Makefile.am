@@ -13,10 +13,15 @@ lib@PACKAGE@_la_SOURCES = \
 	tile.c \
 	chain.c \
 	hardware.c \
+	setup.c \
 	frame.c \
 	pixel_format.c \
 	fps.c \
-	prefs.c
+	prefs.c \
+	prefs_setup.c \
+	prefs_hardware.c \
+	prefs_tile.c \
+	prefs_chain.c
 
 
 

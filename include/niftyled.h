@@ -85,17 +85,21 @@
 #include <niftylog.h>
 #include <niftyprefs.h>
 #include "nifty-primitives.h"
+
 #include "niftyled-version.h"
 #include "niftyled-pixel_format.h"
 #include "niftyled-frame.h"
 #include "niftyled-chain.h"
 #include "niftyled-hardware.h"
+#include "niftyled-setup.h"
 #include "niftyled-tile.h"
 #include "niftyled-fps.h"
+
 #include "niftyled-prefs.h"
-/*#include "niftyled-prefs_chain.h"
+#include "niftyled-prefs_setup.h"
 #include "niftyled-prefs_hardware.h"
-#include "niftyled-prefs_tile.h"*/
+#include "niftyled-prefs_chain.h"
+#include "niftyled-prefs_tile.h"
 
 
 

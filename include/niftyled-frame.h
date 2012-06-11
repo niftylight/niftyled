@@ -47,6 +47,8 @@
  */
 
 /**
+ * @addtogroup setup 
+ * @{ 
  * @defgroup frame LedFrame
  * @brief abstract handling of RAW pixel-data
  * @{
@@ -91,5 +93,6 @@ void                    led_frame_convert_endianess(LedFrame *f);
 #endif /* _LED_FRAME_H */
 
 /**
+ * @}
  * @}
  */

@@ -47,6 +47,8 @@
  */
 
 /**         
+ * @addtogroup setup
+ * @{
  * @defgroup hardware LedHardware
  * @brief Used to interface with LED-controlling hardware. 
  * A LedHardware is used to send pixels to a device that then sets 
@@ -81,8 +83,7 @@
 
 /** current API version - s. configure.ac */
 #define LED_HARDWARE_API        HW_PLUGIN_API_VERSION
-/** name of the LedHardware object for NftSettings */
-#define LED_HARDWARE_NAME       "hardware"
+
 
 
 /** macro to check if plugin provides function */
@@ -330,5 +331,6 @@ const char *            led_hardware_get_plugin_obj_name(LedPluginObj o);
 
 
 /**
+ * @}
  * @}
  */

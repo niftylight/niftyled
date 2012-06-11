@@ -47,6 +47,8 @@
  */
 
 /**
+ * @addtogroup setup
+ * @{
  * @defgroup pixel_format LedPixelFormat
  * @brief pixel-format related functionality (libbabl wrapper)
  * @{
@@ -88,5 +90,6 @@ size_t                          led_pixel_format_get_component_offset(LedPixelFo
 #endif          /* _LED_PIXEL_FORMAT_H */
 
 /**
+ * @}
  * @}
  */

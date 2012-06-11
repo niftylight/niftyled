@@ -44,41 +44,36 @@
 
 /**
  * @file niftyled-prefs_hardware.h
- * @brief API to organize LedHardware settings
+ * @brief API to organize LedHardware prefs
  */
 
 /**      
- * @addtogroup settings
+ * @addtogroup prefs
  * @{
- * @defgroup settings_hardware Hardware settings
- * @brief LedHardware related LedSettings functions & definitions
+ * @defgroup prefs_hardware LedHardware preferences
+ * @brief LedHardware related LedPrefs functions & definitions
  *
  * @{
  */
 
-#ifndef _LED_SETTINGS_HARDWARE_H
-#define _LED_SETTINGS_HARDWARE_H
+#ifndef _LED_PREFS_HARDWARE_H
+#define _LED_PREFS_HARDWARE_H
+
+
+#include "niftyled-hardware.h"
+#include "niftyled-prefs.h"
+
+
+/** name of the LedHardware object for NftPrefs */
+#define LED_HARDWARE_NAME       "hardware"
+
+
+LedHardware *	led_prefs_hardware_from_node(LedPrefs *p, LedPrefsNode *n);
+LedPrefsNode *	led_prefs_hardware_to_node(LedPrefs *p, LedHardware *h);
 
 
 
-
-
-
-
-
-
-NftResult 	led_settings_create_from_hardware(LedSettings *c, LedHardware *h);
-NftResult 	led_settings_hardware_register(LedHardware *h);
-NftResult	led_settings_hardware_unregister(LedHardware *h);
-NftResult       led_settings_hardware_unlink(LedSettings *s, LedHardware *h);
-
-LedHardware *   led_settings_hardware_get_first(LedSettings *c);
-const char *    led_settings_hardware_dump_xml(LedSettings *c, LedHardware *h);
-LedHardware *   led_settings_hardware_parse_xml(const char *xml);
-
-
-
-#endif  /* _LED_SETTINGS_HARDWARE_H */
+#endif  /* _LED_PREFS_HARDWARE_H */
 
 
 /**

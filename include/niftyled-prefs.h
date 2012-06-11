@@ -62,8 +62,11 @@
 
 
 
-/** LedPrefs model */
+/** model to hold LedPrefs */
 typedef NftPrefs LedPrefs;
+/** wrappel model for niftyprefs */
+typedef NftPrefsNode LedPrefsNode;
+
 
 /* integer representation of niftyled elements */
 typedef enum
@@ -80,16 +83,17 @@ typedef enum
 
 NftResult               led_prefs_default_filename(char *dst, size_t size, const char *filename);
 
-LedPrefs *           	led_prefs_new();
-void                    led_prefs_destroy(LedPrefs *c);
+LedPrefs *           	led_prefs_init();
+void                    led_prefs_deinit(LedPrefs *c);
 
-LedPrefs *           	led_prefs_load(const char *filename);
-NftResult               led_prefs_save(LedPrefs *c, const char *filename);
+LedPrefsNode *		led_prefs_node_from_buffer(LedPrefs *p, char *buffer, size_t bufsize);
+LedPrefsNode *		led_prefs_node_from_file(LedPrefs *p, const char *filename);
 
-LedFrameCord            led_prefs_get_width(LedPrefs *s);
-LedFrameCord            led_prefs_get_height(LedPrefs *s);
+char *			led_prefs_node_to_buffer(LedPrefs *p, LedPrefsNode *n);
+NftResult		led_prefs_node_to_file(LedPrefs *p, LedPrefsNode *n, const char *filename);
 
-NIFTYLED_TYPE           led_prefs_node_get_type(const char *xml);
+void			led_prefs_node_free(LedPrefsNode *n);
+
 
 
 #endif  /* _LED_PREFS_H */
@@ -97,4 +101,3 @@ NIFTYLED_TYPE           led_prefs_node_get_type(const char *xml);
 /**
  * @}
  */
-

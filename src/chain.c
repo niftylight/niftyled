@@ -255,8 +255,8 @@ LedChain *led_chain_new(LedCount ledcount, const char *pixelformat)
         /* do we have incomplete pixels? */
         if(ledcount%components != 0)
         {
-                NFT_LOG(L_WARNING, "We have an incomplete pixel. %d LEDs defined but %d needed for %s format",
-                        ledcount, components, led_pixel_format_to_string(c->format));
+                NFT_LOG(L_WARNING, "We have an incomplete pixel. %d LEDs defined but %d needed for complete %s pixel (%d components)",
+                        ledcount, ((ledcount/components)+1)*components, led_pixel_format_to_string(c->format), components);
         }
         
         int pixels = ledcount/components;

@@ -12,11 +12,13 @@ library_include_HEADERS = \
 	niftyled-tile.h \
 	niftyled-chain.h \
 	niftyled-hardware.h \
+	niftyled-setup.h \
 	niftyled-frame.h \
 	niftyled-pixel_format.h \
 	niftyled-fps.h \
 	niftyled-prefs.h \
 	niftyled-prefs_tile.h \
 	niftyled-prefs_chain.h \
-	niftyled-prefs_hardware.h
+	niftyled-prefs_hardware.h \
+	niftyled-prefs_setup.h
 
