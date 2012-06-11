@@ -99,8 +99,11 @@ int main(int argc, char *argv[])
         LedTile *msub1 = NULL;
         LedTile *msub2 = NULL;
         
-        
-         /* set maximum verbosity */
+
+    	/* check library version */
+    	NFT_LED_CHECK_VERSION
+	
+        /* set maximum verbosity */
         nft_log_level_set(L_NOISY);
 
 	
@@ -176,11 +179,11 @@ int main(int argc, char *argv[])
 		goto m_deinit;
     
     	/* dump node to file */
-    	if(!(led_prefs_node_to_file(conf, n, "-")))
+    	if(!(nft_prefs_node_to_file(conf, n, "-")))
 		goto m_deinit;
 
     	/* free node */
-    	led_prefs_node_free(n);
+    	//led_prefs_node_free(n);
 
 
     
@@ -189,11 +192,11 @@ int main(int argc, char *argv[])
 		goto m_deinit;
     
     	/* dump node to file */
-    	if(!(led_prefs_node_to_file(conf, n, "-")))
+    	if(!(nft_prefs_node_to_file(conf, n, "-")))
 		goto m_deinit;
 
     	/* free node */
-    	led_prefs_node_free(n);
+    	//led_prefs_node_free(n);
     
                     
         result = 0;

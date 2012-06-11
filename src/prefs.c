@@ -65,14 +65,6 @@
 
 
 
-
-//~ /* declare external functions */
-//~ extern LedHardware *_prefs_to_hardware(LedPrefs *c, NftPrefsNode *node);
-//~ extern LedChain *_prefs_to_chain(LedPrefs *c, NftPrefsNode *node);
-//~ extern void *_prefs_to_led(LedPrefs *c, NftPrefsNode *node);
-//~ extern LedTile *_prefs_to_tile(LedPrefs *c, NftPrefsNode *n);
-
-
 /******************************************************************************/
 /**************************** STATIC FUNCTIONS ********************************/
 /******************************************************************************/
@@ -81,8 +73,6 @@
 /******************************************************************************/
 /**************************** API FUNCTIONS ***********************************/
 /******************************************************************************/
-
-
 
 /**
  * create new LedPrefs model
@@ -181,40 +171,6 @@ NftResult led_prefs_default_filename(char *dst, size_t size, const char *filenam
         return NFT_SUCCESS;
 }
 
-
-/** wrapper for nft_prefs_node_from_buffer */
-LedPrefsNode *led_prefs_node_from_buffer(LedPrefs *p, char *buffer, size_t bufsize)
-{
-	return nft_prefs_node_from_buffer(p, buffer, bufsize);
-}
-
-
-/** wrapper for nft_prefs_node_from_buffer */
-LedPrefsNode *led_prefs_node_from_file(LedPrefs *p, const char *filename)
-{
-	return nft_prefs_node_from_file(p, filename);
-}
-
-
-/** wrapper for nft_prefs_node_from_buffer */
-char *led_prefs_node_to_buffer(LedPrefs *p, LedPrefsNode *n)
-{
-	return nft_prefs_node_to_buffer(p, n);
-}
-
-
-/** wrapper for nft_prefs_node_from_buffer */
-NftResult led_prefs_node_to_file(LedPrefs *p, LedPrefsNode *n, const char *filename)
-{
-	return nft_prefs_node_to_file(p, n, filename);
-}
-
-
-/** wrapper for nft_prefs_node_from_buffer */
-void led_prefs_node_free(LedPrefsNode *n)
-{
-	return nft_prefs_node_free(n);
-}
 
 
 

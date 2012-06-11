@@ -185,7 +185,8 @@ NftResult _prefs_setup_class_register(NftPrefs *p)
  * generate LedSetup from LedPrefsNode
  *
  * @param p LedPrefs context
- * @param newly created LedSetup
+ * @param n LedPrefsNode 
+ * @result newly created LedSetup
  */
 LedSetup *led_prefs_setup_from_node(LedPrefs *p, LedPrefsNode *n)
 {
@@ -208,14 +209,15 @@ LedSetup *led_prefs_setup_from_node(LedPrefs *p, LedPrefsNode *n)
  * generate LedPrefsNode from LedSetup object
  *
  * @param p LedPrefs context
- * @param h LedSetup object 
+ * @param s LedSetup object 
+ * @result newly created LedPrefsNode 
  */
-LedPrefsNode *led_prefs_setup_to_node(LedPrefs *p, LedSetup *c)
+LedPrefsNode *led_prefs_setup_to_node(LedPrefs *p, LedSetup *s)
 {
-    	if(!p || !c)
+    	if(!p || !s)
 		NFT_LOG_NULL(NULL);
     
-	return nft_prefs_obj_to_node(p, LED_SETUP_NAME, c, NULL);
+	return nft_prefs_obj_to_node(p, LED_SETUP_NAME, s, NULL);
 }
 
 

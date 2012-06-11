@@ -86,13 +86,6 @@ NftResult               led_prefs_default_filename(char *dst, size_t size, const
 LedPrefs *           	led_prefs_init();
 void                    led_prefs_deinit(LedPrefs *c);
 
-LedPrefsNode *		led_prefs_node_from_buffer(LedPrefs *p, char *buffer, size_t bufsize);
-LedPrefsNode *		led_prefs_node_from_file(LedPrefs *p, const char *filename);
-
-char *			led_prefs_node_to_buffer(LedPrefs *p, LedPrefsNode *n);
-NftResult		led_prefs_node_to_file(LedPrefs *p, LedPrefsNode *n, const char *filename);
-
-void			led_prefs_node_free(LedPrefsNode *n);
 
 
 

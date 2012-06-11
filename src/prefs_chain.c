@@ -78,24 +78,87 @@
  * @result NFT_SUCCESS if everything went fine, NFT_FAILURE otherwise
  * @note you shouldn't call this function directly
  */
-static NftResult _prefs_from_chain(NftPrefs *c, NftPrefsNode *n, void *obj, void *userptr)
+static NftResult _prefs_from_chain(NftPrefs *p, NftPrefsNode *n, void *obj, void *userptr)
 {
-	return NFT_FAILURE;
+    	if(!p || !n || !obj)
+		NFT_LOG_NULL(NFT_FAILURE);
+
+    
+    	/* chain to generate preferences from */
+    	LedChain *c = obj;
+
+
+    	/* amount of LEDs in this chain - ledcount */
+	if(!nft_prefs_node_prop_int_set(n, LED_CHAIN_SETTING_LEDCOUNT,
+	                                  led_chain_get_ledcount(c)))
+		return NFT_FAILURE;
+
+        /* pixel-format of this chain */
+        if(!nft_prefs_node_prop_string_set(n, LED_CHAIN_SETTING_FORMAT,
+                         (char *) led_pixel_format_to_string(
+                                          led_chain_get_format(c))))
+                return NFT_FAILURE;
+
+    
+    	/* add all LEDs in this chain */
+	LedCount i;
+	for(i = 0; i < led_chain_get_ledcount(c); i++)
+	{
+		/* generate prefs node from LED */
+	    	NftPrefsNode *node;
+	    	if(!(node = led_prefs_led_to_node(p, led_chain_get_nth(c, i))))
+			return NFT_FAILURE;
+	    
+		/* add node as child of this node */
+		if(!nft_prefs_node_add_child(n, node))
+			return NFT_FAILURE;
+	}
+
+    
+	return NFT_SUCCESS;
 }
 
 
 /**
  * Object-to-Config function. 
  * Creates a config-node (and subnodes) from a LedHardware model
- * @param c the current preferences context
+ * @param p the current preferences context
  * @param n a freshly created prefs node that this function should fill with properties of obj
  * @param obj object of this class where preferences should be generated from
  * @result NFT_SUCCESS if everything went fine, NFT_FAILURE otherwise
  * @note you shouldn't call this function directly
  */
-static NftResult _prefs_from_led(NftPrefs *c, NftPrefsNode *n, void *obj, void *userptr)
+static NftResult _prefs_from_led(NftPrefs *p, NftPrefsNode *n, void *obj, void *userptr)
 {
-	return NFT_FAILURE;
+    	if(!p || !n || !obj)
+		NFT_LOG_NULL(NFT_FAILURE);
+
+    
+    	/* Led to generate preferences from */
+    	Led *led = obj;
+
+    	/* x-position */
+	if(!nft_prefs_node_prop_int_set(n, LED_LED_SETTING_X, 
+	                                   	led_get_x(led)))
+		return NFT_FAILURE;
+
+	/* y-position */
+	if(!nft_prefs_node_prop_int_set(n, LED_LED_SETTING_Y, 
+	                                   	led_get_y(led)))
+		return NFT_FAILURE;
+
+	/* gain */
+	if(!nft_prefs_node_prop_int_set(n, LED_LED_SETTING_GAIN, 
+	                                   	led_get_gain(led)))
+		return NFT_FAILURE;
+
+	/* component */
+	if(!nft_prefs_node_prop_int_set(n, LED_LED_SETTING_COMPONENT,
+				  		led_get_component(led)))
+		return NFT_FAILURE;
+
+    
+	return NFT_SUCCESS;
 }
 
 
@@ -137,15 +200,7 @@ static NftResult _prefs_to_led(LedPrefs *c, void **newObj, NftPrefsNode *n, void
 		//~ goto _cfc_error;
 	
 	
-	//~ /* amount of LEDs in this chain - ledcount */
-	//~ if(!nft_settings_node_prop_int_set(n, LED_CHAIN_SETTING_LEDCOUNT,
-	                                  //~ led_chain_get_ledcount(chain)))
-		//~ goto _cfc_error;
-
-        //~ /* pixel-format of this chain */
-        //~ if(!nft_settings_node_prop_string_set(n, LED_CHAIN_SETTING_FORMAT,
-                                          //~ (char *) led_pixel_format_to_string(led_chain_get_format(chain))))
-                //~ goto _cfc_error;
+	
 
         
 	//~ /* add all LEDs in this chain */
@@ -161,25 +216,7 @@ static NftResult _prefs_to_led(LedPrefs *c, void **newObj, NftPrefsNode *n, void
 		//~ if(!nft_settings_node_child_append(led, n))
 			//~ goto _cfc_error;
 
-		//~ /* x-position */
-		//~ if(!nft_settings_node_prop_int_set(led, LED_LED_SETTING_X,
-	                                  //~ led_get_x(led_chain_get_nth(chain, i))))
-			//~ goto _cfc_error;
-
-		//~ /* y-position */
-		//~ if(!nft_settings_node_prop_int_set(led, LED_LED_SETTING_Y,
-	                                  //~ led_get_y(led_chain_get_nth(chain, i))))
-			//~ goto _cfc_error;
-
-		//~ /* gain */
-		//~ if(!nft_settings_node_prop_int_set(led, LED_LED_SETTING_GAIN,
-	                                  //~ led_get_gain(led_chain_get_nth(chain, i))))
-			//~ goto _cfc_error;
-
-		//~ /* component */
-		//~ if(!nft_settings_node_prop_int_set(led, LED_LED_SETTING_COMPONENT,
-	                                  //~ led_get_component(led_chain_get_nth(chain, i))))
-			//~ goto _cfc_error;
+		
 
 	//~ }
 
@@ -230,21 +267,7 @@ static NftResult _prefs_to_led(LedPrefs *c, void **newObj, NftPrefsNode *n, void
 		//~ NFT_LOG_NULL(NULL);
 
         
-	//~ /* get ledcount */
-	//~ LedCount ledcount;
-	//~ if(!(nft_settings_node_prop_int_get(n, LED_CHAIN_SETTING_LEDCOUNT, (int *) &ledcount)))
-	//~ {
-		//~ NFT_LOG(L_WARNING, "<chain> config-node has no \"ledcount\". Using 0 as default.");
-		//~ ledcount = 0;
-	//~ }
 
-        //~ /* get greyscale format */
-        //~ char *format_string;
-        //~ if(!(format_string = nft_settings_node_prop_string_get(n, LED_CHAIN_SETTING_FORMAT)))
-        //~ {
-                //~ NFT_LOG(L_WARNING, "<chain> config-node has no \"format\". Using \"RGB u8\" as default.");
-                //~ format_string = (char *) xmlStrdup((xmlChar *) "RGB u8");
-        //~ }
         
         
 	//~ /* our resulting chain */
@@ -367,6 +390,30 @@ static NftResult _prefs_to_led(LedPrefs *c, void **newObj, NftPrefsNode *n, void
 /******************************************************************************/
 
 /**
+ * check if NftPrefsNode represents a chain object
+ *
+ * @param n LedPrefsNode
+ * @result TRUE if node represents a chain object, FALSE otherwise
+ */ 
+bool led_prefs_is_chain_node(LedPrefsNode *n)
+{
+	return (strcmp(nft_prefs_node_get_name(n), LED_CHAIN_NAME) == 0);
+}
+
+
+/**
+ * check if NftPrefsNode represents a led object
+ *
+ * @param n LedPrefsNode
+ * @result TRUE if node represents a led object, FALSE otherwise
+ */ 
+bool led_prefs_is_led_node(LedPrefsNode *n)
+{
+	return (strcmp(nft_prefs_node_get_name(n), LED_LED_NAME) == 0);
+}
+
+
+/**
  * register "chain" prefs class (called once for initialization)
  */
 NftResult _prefs_chain_class_register(NftPrefs *p)
@@ -401,7 +448,8 @@ NftResult _prefs_led_class_register(NftPrefs *p)
  * generate LedChain from LedPrefsNode
  *
  * @param p LedPrefs context
- * @param newly created LedChain
+ * @param n LedPrefsNode 
+ * @result newly created LedChain
  */
 LedChain *led_prefs_chain_from_node(LedPrefs *p, LedPrefsNode *n)
 {
@@ -409,7 +457,7 @@ LedChain *led_prefs_chain_from_node(LedPrefs *p, LedPrefsNode *n)
 		NFT_LOG_NULL(NULL);
 
     	/* check if node is of expected class */
-    	if(strcmp(nft_prefs_node_get_name(n), LED_CHAIN_NAME) != 0)
+    	if(!led_prefs_is_chain_node(n))
     	{
 		NFT_LOG(L_ERROR, "got wrong LedPrefsNode class. Expected \"%s\" but got \"%s\"",
 		        	LED_CHAIN_NAME, nft_prefs_node_get_name(n));
@@ -424,7 +472,8 @@ LedChain *led_prefs_chain_from_node(LedPrefs *p, LedPrefsNode *n)
  * generate LedPrefsNode from LedChain object
  *
  * @param p LedPrefs context
- * @param h LedChain object 
+ * @param c LedChain object 
+ * @result newly created LedPrefsNode 
  */
 LedPrefsNode *led_prefs_chain_to_node(LedPrefs *p, LedChain *c)
 {
@@ -439,8 +488,9 @@ LedPrefsNode *led_prefs_chain_to_node(LedPrefs *p, LedChain *c)
  * generate Led from LedPrefsNode
  *
  * @param p LedPrefs context
+ * @param n LedPrefsNode 
  * @param led Led descriptor that will be filled according to preferences 
- * @param NFT_SUCCESS or NFT_FAILURE upon error
+ * @result NFT_SUCCESS or NFT_FAILURE upon error
  */
 NftResult led_prefs_led_from_node(LedPrefs *p, LedPrefsNode *n, Led *led)
 {
@@ -448,7 +498,7 @@ NftResult led_prefs_led_from_node(LedPrefs *p, LedPrefsNode *n, Led *led)
 		NFT_LOG_NULL(NFT_FAILURE);
 
     	/* check if node is of expected class */
-       	if(strcmp(nft_prefs_node_get_name(n), LED_LED_NAME) != 0)
+       	if(!led_prefs_is_led_node(n))
     	{
 		NFT_LOG(L_ERROR, "got wrong LedPrefsNode class. Expected \"%s\" but got \"%s\"",
 		        	LED_LED_NAME, nft_prefs_node_get_name(n));
@@ -467,7 +517,8 @@ NftResult led_prefs_led_from_node(LedPrefs *p, LedPrefsNode *n, Led *led)
  * generate LedPrefsNode from LedChain object
  *
  * @param p LedPrefs context
- * @param h LedChain object 
+ * @param l LedChain object 
+ * @result newly created LedPrefsNode 
  */
 LedPrefsNode *led_prefs_led_to_node(LedPrefs *p, Led *l)
 {

@@ -67,6 +67,9 @@
 
 
 
+bool            led_prefs_is_chain_node(LedPrefsNode *n);
+bool		led_prefs_is_led_node(LedPrefsNode *n);
+
 LedChain *	led_prefs_chain_from_node(LedPrefs *p, LedPrefsNode *n);
 LedPrefsNode *	led_prefs_chain_to_node(LedPrefs *p, LedChain *c);
 

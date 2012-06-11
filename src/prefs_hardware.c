@@ -258,7 +258,8 @@ NftResult _prefs_hardware_class_register(NftPrefs *p)
  * generate LedHardware from LedPrefsNode
  *
  * @param p LedPrefs context
- * @param newly created LedHardware
+ * @param n LedPrefsNode 
+ * @result newly created LedHardware
  */
 LedHardware *led_prefs_hardware_from_node(LedPrefs *p, LedPrefsNode *n)
 {
