@@ -62,6 +62,7 @@
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
 
+
 #define	LED_HARDWARE_PROP_NAME                  "name"
 #define	LED_HARDWARE_PROP_PLUGIN                "plugin"
 #define	LED_HARDWARE_PROP_ID                    "id"
@@ -142,93 +143,75 @@ static NftResult _prefs_from_hardware(NftPrefs *p, NftPrefsNode *n, void *obj, v
  * Creates a LedHardware model from a prefs node
  * @note you shouldn't call this function directly
  */
-static NftResult _prefs_to_hardware(LedPrefs *c, void **newObj, NftPrefsNode *n, void *userptr)
+static NftResult _prefs_to_hardware(LedPrefs *p, void **newObj, NftPrefsNode *n, void *userptr)
 {
-	if(!c || !newObj || !n)
+	if(!p || !newObj || !n)
 		NFT_LOG_NULL(NFT_FAILURE);
 
     	/** initial result */
     	NftResult r = NFT_FAILURE;
     
         LedHardware *h = *newObj;
-        //~ char *name = NULL;
-	//~ char *plugin_name = NULL;
-        //~ char *id = NULL;
         
+	char *name = NULL;
+        char *id = NULL;
+        char *plugin_name = NULL;
 
-	//~ /* get hardware name */
-	//~ if(!(name = nft_settings_node_prop_string_get(n, LED_HARDWARE_SETTING_NAME)))
-	//~ {
-		//~ NFT_LOG(L_ERROR, "<hardware> config-node has no name");
-		//~ goto _cth_end;
-	//~ }
+	/* get hardware name */
+	if(!(name = nft_prefs_node_prop_string_get(n, LED_HARDWARE_PROP_NAME)))
+	{
+		NFT_LOG(L_ERROR, "\"hardware\" has no name");
+		goto _pth_end;
+	}
 
-	//~ /* get plugin-name */
-	//~ if(!(plugin_name = nft_settings_node_prop_string_get(n, LED_HARDWARE_SETTING_PLUGIN)))
-	//~ {
-		//~ NFT_LOG(L_ERROR, "<hardware> config-node has no \"plugin\" type");
-		//~ goto _cth_end;
-	//~ }
+	/* get plugin-name */
+	if(!(plugin_name = nft_prefs_node_prop_string_get(n, LED_HARDWARE_PROP_PLUGIN)))
+	{
+		NFT_LOG(L_ERROR, "\"hardware\" has no \"plugin\" type");
+		goto _pth_end;
+	}
 
-	//~ /* get plugin-id */
-	//~ if(!(id = nft_settings_node_prop_string_get(n, LED_HARDWARE_SETTING_ID)))
-	//~ {
-		//~ NFT_LOG(L_ERROR, "<hardware> config-node has no \"id\" type");
-		//~ goto _cth_end;
-	//~ }
+	/* get plugin-id */
+	if(!(id = nft_prefs_node_prop_string_get(n, LED_HARDWARE_PROP_ID)))
+	{
+		NFT_LOG(L_ERROR, "\"hardware\" has no \"id\" type");
+		goto _pth_end;
+	}
 
-        //~ /* get stride */
-        //~ LedCount stride;
-        //~ if(!(nft_settings_node_prop_int_get(n, LED_HARDWARE_SETTING_STRIDE, (int *) &stride)))
-        //~ {
-                //~ NFT_LOG(L_WARNING, "<hardware> config-node has no \"stride\". Using 0 as default.");
-                //~ stride = 0;
-        //~ }
+        /* get stride */
+        LedCount stride;
+        if(!(nft_prefs_node_prop_int_get(n, LED_HARDWARE_PROP_STRIDE, (int *) &stride)))
+        {
+                NFT_LOG(L_WARNING, "\"hardware\" has no \"stride\". Using 0 as default.");
+                stride = 0;
+        }
         
-	//~ /* create new hardware object */
-	//~ LedHardware *h;
-	//~ if(!(h = led_hardware_new(name, plugin_name)))
-	//~ {
-		//~ goto _cth_end;
-	//~ }
+	/* create new hardware object */
+	if(!(h = led_hardware_new(name, plugin_name)))
+	{
+		goto _pth_end;
+	}
         
-        //~ /* set stride */
-        //~ if(!(led_hardware_set_stride (h, stride)))
-                //~ goto _cth_end;
+        /* set stride */
+        if(!(led_hardware_set_stride(h, stride)))
+                goto _pth_end;
 
-        //~ /* set id */
-        //~ if(!(led_hardware_set_id(h, id)))
-                //~ goto _cth_end;
+        /* set id */
+        if(!(led_hardware_set_id(h, id)))
+                goto _pth_end;
 
-	//~ /* initialize hardware */
-	//~ /*if(!(led_hardware_init(h, ledcount, (LedGreyscaleFormat) format)))
-	//~ {
-		//~ NFT_LOG(L_WARNING, "<hardware> successfully loaded but failed to initialize. Continuing anyway.");
-	//~ }*/
+	/* initialize hardware */
+	/*if(!(led_hardware_init(h, ledcount, (LedGreyscaleFormat) format)))
+	{
+		NFT_LOG(L_WARNING, "<hardware> successfully loaded but failed to initialize. Continuing anyway.");
+	}*/
 
-
-        //~ /* is this a sibling of another hardware? (a previous node == hardware?) */
-	//~ NftSettingsNode *prev;
-        //~ for(prev = nft_settings_node_prev(n); prev; prev = nft_settings_node_prev(prev))
-        //~ {
-                //~ if(strcmp(nft_settings_node_name(prev), LED_HARDWARE_NAME) == 0)
-                //~ {
-                        //~ /* register this hardware to previous sibling */
-                        //~ LedHardware *prev_h = nft_settings_node_obj_get(prev);
-                        //~ if(!(led_hardware_set_sibling(prev_h, h)))
-                                //~ goto _cth_end;
-                        //~ break;
-                //~ }
-        //~ }
-        
-	//~ /* return new hardware object */
-	//~ r = h;
 	
-//~ _cth_end:
-	//~ /* free strings */
-	//~ nft_settings_node_prop_string_free(id);
-	//~ nft_settings_node_prop_string_free(plugin_name);
-	//~ nft_settings_node_prop_string_free(name);
+_pth_end:
+	/* free strings */
+	nft_prefs_free(id);
+	nft_prefs_free(plugin_name);
+	nft_prefs_free(name);
 	
 	return r;
 }

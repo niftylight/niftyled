@@ -56,9 +56,47 @@
 
 
 
+
 /******************************************************************************/
 /**************************** STATIC FUNCTIONS ********************************/
 /******************************************************************************/
+
+
+/**
+ * Object-to-Config function. 
+ * Creates a config-node (and subnodes) from a LedSetup model
+ * @param c the current preferences context
+ * @param n a freshly created prefs node that this function should fill with properties of obj
+ * @param obj object of this class where preferences should be generated from
+ * @result NFT_SUCCESS if everything went fine, NFT_FAILURE otherwise
+ * @note you shouldn't call this function directly
+ */
+static NftResult _prefs_from_setup(NftPrefs *p, NftPrefsNode *n, void *obj, void *userptr)
+{
+    	if(!p || !n || !obj)
+		NFT_LOG_NULL(NFT_FAILURE);
+
+    	/* "Setup" object */
+    	LedSetup *s = obj;
+
+    	/* process all "hardware" objects */
+    	LedHardware *h;
+    	for(h = led_setup_get_hardware(s); h; h = led_hardware_get_next_sibling(h))
+	{
+	    /* generate prefs for each hardware node */
+	    NftPrefsNode *node;
+	    if(!(node = nft_prefs_obj_to_node(p, LED_HARDWARE_NAME, h, NULL)))
+		return NFT_FAILURE;
+
+	    /* add hardware to this setup */
+	    if(!(nft_prefs_node_add_child(n, node)))
+		return NFT_FAILURE;
+	    
+	}
+
+	return NFT_SUCCESS;
+}
+
 
 /**
  * Config-to-Object function.
@@ -126,41 +164,6 @@ _pts_error:
     return NFT_FAILURE;
 }
 
-
-/**
- * Object-to-Config function. 
- * Creates a config-node (and subnodes) from a LedSetup model
- * @param c the current preferences context
- * @param n a freshly created prefs node that this function should fill with properties of obj
- * @param obj object of this class where preferences should be generated from
- * @result NFT_SUCCESS if everything went fine, NFT_FAILURE otherwise
- * @note you shouldn't call this function directly
- */
-static NftResult _prefs_from_setup(NftPrefs *p, NftPrefsNode *n, void *obj, void *userptr)
-{
-    	if(!p || !n || !obj)
-		NFT_LOG_NULL(NFT_FAILURE);
-
-    	/* "Setup" object */
-    	LedSetup *s = obj;
-
-    	/* process all "hardware" objects */
-    	LedHardware *h;
-    	for(h = led_setup_get_hardware(s); h; h = led_hardware_get_next_sibling(h))
-	{
-	    /* generate prefs for each hardware node */
-	    NftPrefsNode *node;
-	    if(!(node = nft_prefs_obj_to_node(p, LED_HARDWARE_NAME, h, NULL)))
-		return NFT_FAILURE;
-
-	    /* add hardware to this setup */
-	    if(!(nft_prefs_node_add_child(n, node)))
-		return NFT_FAILURE;
-	    
-	}
-
-	return NFT_SUCCESS;
-}
 
 
 /******************************************************************************/
