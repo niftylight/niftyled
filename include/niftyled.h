@@ -46,7 +46,7 @@
 #define _NIFTYLED
 
 /**
- * @mainpage libniftyled API documentation
+ * @mainpage <a href="http://wiki.niftylight.de/libniftyled">library designed to provide an abstract interface for LED/lighting hardware to easily control it using pixel data.</a>
  *
  * <h2>library designed to provide an abstract interface for LED/lighting hardware.</h2>
  *
