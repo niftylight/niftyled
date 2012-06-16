@@ -1,4 +1,4 @@
-# libniftyled Makefile.am - v0.2 - Daniel Hiepler <daniel@niftylight.de>
+# libniftyled Makefile.am - v0.3 - Daniel Hiepler <daniel@niftylight.de>
 
 SUBDIRS =
 
@@ -21,4 +21,3 @@ library_include_HEADERS = \
 	niftyled-prefs_chain.h \
 	niftyled-prefs_hardware.h \
 	niftyled-prefs_setup.h
-

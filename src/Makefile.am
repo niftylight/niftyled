@@ -1,4 +1,4 @@
-# libnifty Makefile.am - v0.2 - Daniel Hiepler <daniel@niftylight.de> 
+# libniftyled Makefile.am - v0.3 - Daniel Hiepler <daniel@niftylight.de> 
 
 INCLUDE_DIRS = -I../include -I$(top_srcdir)/include
 
@@ -43,8 +43,7 @@ lib@PACKAGE@_la_CFLAGS = \
 	-D_BSD_SOURCE \
 	-DPLUGINDIR=\"@PACKAGE@-plugins\" \
 	-DPACKAGE_GIT_VERSION="\"`$(top_srcdir)/version.sh --git`\"" \
-	$(EXTRA_CFLAGS) \
-	$(WARNING_CFLAGS) \
+	$(OPT_CFLAGS) \
 	$(INCLUDE_DIRS) \
 	$(niftyprefs_CFLAGS) \
 	$(babl_CFLAGS) 
