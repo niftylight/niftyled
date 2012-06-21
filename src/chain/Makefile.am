@@ -4,11 +4,13 @@
 noinst_LTLIBRARIES = libchain.la
 
 # sources
-libchain_la_SOURCES = chain.c
+libchain_la_SOURCES = \
+	chain.c
 
 # cflags 
-libchain_la_CFLAGS = $(COMMON_CFLAGS)
+libchain_la_CFLAGS = \
+	$(COMMON_CFLAGS)
 
 # linker flags
 libchain_la_LDFLAGS = \
-	-Wall -no-undefined -no-allow-shlib-undefined
+	$(COMMON_LDFLAGS)

@@ -4,7 +4,15 @@
 noinst_LTLIBRARIES = libframe.la
 
 # sources
-libframe_la_SOURCES = fps.c pixel_format.c frame.c
+libframe_la_SOURCES = \
+	fps.c \
+	pixel_format.c \
+	frame.c
 
 # cflags 
-libframe_la_CFLAGS = $(COMMON_CFLAGS)
+libframe_la_CFLAGS = \
+	$(COMMON_CFLAGS)
+
+# linker flags
+libframe_la_LDFLAGS = \
+	$(COMMON_LDFLAGS)

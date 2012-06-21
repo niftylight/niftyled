@@ -12,4 +12,9 @@ libprefs_la_SOURCES = \
 	prefs_tile.c
 
 # cflags 
-libprefs_la_CFLAGS = $(COMMON_CFLAGS)
+libprefs_la_CFLAGS = \
+	$(COMMON_CFLAGS)
+
+# linker flags
+libprefs_la_LDFLAGS = \
+	$(COMMON_LDFLAGS)

@@ -4,7 +4,13 @@
 noinst_LTLIBRARIES = libtile.la
 
 # sources
-libtile_la_SOURCES = tile.c
+libtile_la_SOURCES = \
+	tile.c
 
 # cflags 
-libtile_la_CFLAGS = $(COMMON_CFLAGS)
+libtile_la_CFLAGS = \
+	$(COMMON_CFLAGS)
+
+# linker flags
+libtile_la_LDFLAGS = \
+	$(COMMON_LDFLAGS)

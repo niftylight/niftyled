@@ -4,7 +4,13 @@
 noinst_LTLIBRARIES = libhardware.la
 
 # sources
-libhardware_la_SOURCES = hardware.c
+libhardware_la_SOURCES = \
+	hardware.c
 
 # cflags 
-libhardware_la_CFLAGS = $(COMMON_CFLAGS)
+libhardware_la_CFLAGS = \
+	$(COMMON_CFLAGS)
+
+# linker flags
+libhardware_la_LDFLAGS = \
+	$(COMMON_LDFLAGS)

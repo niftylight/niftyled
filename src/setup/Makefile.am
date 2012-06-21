@@ -4,7 +4,13 @@
 noinst_LTLIBRARIES = libsetup.la
 
 # sources
-libsetup_la_SOURCES = setup.c
+libsetup_la_SOURCES = \
+	setup.c
 
 # cflags 
-libsetup_la_CFLAGS = $(COMMON_CFLAGS)
+libsetup_la_CFLAGS = \
+	$(COMMON_CFLAGS)
+
+# linker flags
+libsetup_la_LDFLAGS = \
+	$(COMMON_LDFLAGS)

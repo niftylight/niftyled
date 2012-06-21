@@ -29,6 +29,10 @@ export COMMON_CFLAGS = \
 	$(babl_CFLAGS) \
 	$(INCLUDE_DIRS)
 
+# global ldflags
+export COMMON_LDFLAGS = \
+	-Wall -no-undefined -no-allow-shlib-undefined
+
 # module-subdirs to include
 SUBDIRS = \
 	chain \
@@ -59,7 +63,7 @@ lib@PACKAGE@_la_LDFLAGS = \
 	-version-info @PACKAGE_API_CURRENT@:@PACKAGE_API_REVISION@:@PACKAGE_API_AGE@ \
 	-release @PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MICRO_VERSION@ \
 	-ldl \
-	-Wall -no-undefined -no-allow-shlib-undefined
+	$(COMMON_LDFLAGS)
 
 # link in modules from subdirectories
 lib@PACKAGE@_la_LIBADD = \
