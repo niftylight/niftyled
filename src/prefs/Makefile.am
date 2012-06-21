@@ -1,5 +1,8 @@
 # libniftyled Makefile.am - v0.3 - Daniel Hiepler <daniel@niftylight.de> 
 
+include ../Makefile.global.am
+
+
 # targets
 noinst_LTLIBRARIES = libprefs.la
 
@@ -13,8 +16,8 @@ libprefs_la_SOURCES = \
 
 # cflags 
 libprefs_la_CFLAGS = \
-	$(COMMON_CFLAGS)
+	$(COMMON_CFLAGS_N)
 
 # linker flags
 libprefs_la_LDFLAGS = \
-	$(COMMON_LDFLAGS)
+	$(COMMON_LDFLAGS_N)

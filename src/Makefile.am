@@ -13,7 +13,7 @@ SUBDIRS = \
 	setup \
 	tile
 
-EXTRA_DIST = 
+EXTRA_DIST = Makefile.global.am
 
 # object files
 lib@PACKAGE@_la_SOURCES = \
