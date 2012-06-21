@@ -1,7 +1,14 @@
 # libniftyled Makefile.am - v0.3 - Daniel Hiepler <daniel@niftylight.de> 
 
-INCLUDE_DIRS = -I../include -I$(top_srcdir)/include
-
+INCLUDE_DIRS = \
+	-I../include \
+	-I$(top_srcdir)/include \
+	-I$(top_srcdir)/src/chain \
+	-I$(top_srcdir)/src/frame \
+	-I$(top_srcdir)/src/hardware \
+	-I$(top_srcdir)/src/prefs \
+	-I$(top_srcdir)/src/setup \
+	-I$(top_srcdir)/src/tile
 
 # module-subdirs to include
 SUBDIRS =
@@ -10,18 +17,18 @@ EXTRA_DIST =
 # source-files
 lib@PACKAGE@_la_SOURCES = \
 	version.c \
-	tile.c \
-	chain.c \
-	hardware.c \
-	setup.c \
-	frame.c \
-	pixel_format.c \
-	fps.c \
-	prefs.c \
-	prefs_setup.c \
-	prefs_hardware.c \
-	prefs_tile.c \
-	prefs_chain.c
+	tile/tile.c \
+	chain/chain.c \
+	hardware/hardware.c \
+	setup/setup.c \
+	frame/frame.c \
+	frame/pixel_format.c \
+	frame/fps.c \
+	prefs/prefs.c \
+	prefs/prefs_setup.c \
+	prefs/prefs_hardware.c \
+	prefs/prefs_tile.c \
+	prefs/prefs_chain.c
 
 
 
