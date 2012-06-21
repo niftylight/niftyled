@@ -85,7 +85,7 @@ size_t                          led_pixel_format_get_buffer_size(LedPixelFormat 
 LedPixelFormatConverter *       led_pixel_format_get_converter(LedPixelFormat *src, LedPixelFormat *dst);
 bool                            led_pixel_format_is_big_endian();
 size_t                          led_pixel_format_get_component_offset(LedPixelFormat *f, size_t n);
-//size_t                          led_pixel_format_get_pixel_offset(LedPixelFormat *f, size_t n);
+/*size_t                          led_pixel_format_get_pixel_offset(LedPixelFormat *f, size_t n);*/
 
 #endif          /* _LED_PIXEL_FORMAT_H */
 

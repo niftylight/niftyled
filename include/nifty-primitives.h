@@ -74,7 +74,7 @@
 typedef enum
 {
         NFT_FAILURE = 0,
-        NFT_SUCCESS,
+        NFT_SUCCESS
 }NftResult;
 #endif
 

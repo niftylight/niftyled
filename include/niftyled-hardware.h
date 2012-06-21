@@ -118,7 +118,7 @@ typedef enum
         /* add new object-types above this line
            (don't forget to define name in LedPluginObjNames */
         /** always last entry */
-        LED_HW_MAX,
+        LED_HW_MAX
 }LedPluginObj;
 
 
@@ -300,7 +300,7 @@ NftResult               led_hardware_refresh_gain(LedHardware *h);
 NftResult               led_hardware_refresh_mapping(LedHardware *h);
 char *                  led_hardware_get_propname(LedHardware *h, const char *propname);
 
-void                    led_hardware_destroy_list(LedHardware *first);
+void                    led_hardware_list_destroy(LedHardware *first);
 LedCount                led_hardware_get_list_ledcount(LedHardware *first);
 NftResult               led_hardware_refresh_gain_list(LedHardware *first);
 NftResult               led_hardware_refresh_mapping_list(LedHardware *first);
