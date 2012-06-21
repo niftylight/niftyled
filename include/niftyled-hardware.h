@@ -291,6 +291,8 @@ NftResult               led_hardware_set_ledcount(LedHardware *h, LedCount leds)
 NftResult               led_hardware_set_gain(LedHardware *h, LedCount pos, LedGain gain);
 NftResult               led_hardware_set_privdata(LedHardware *h, void *privdata);
 
+NftResult               led_hardware_append_tile(LedHardware *h, LedTile *t);
+
 void                    led_hardware_print(LedHardware *h, NftLoglevel l);
 NftResult               led_hardware_send(LedHardware *h);
 NftResult               led_hardware_show(LedHardware *h);
