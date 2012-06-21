@@ -85,6 +85,7 @@
  * @param obj object of this class where preferences should be generated from
  * @result NFT_SUCCESS if everything went fine, NFT_FAILURE otherwise
  * @note you shouldn't call this function directly
+ * It's used by nft_prefs_obj_to_node() etc. 
  */
 static NftResult _prefs_from_hardware(NftPrefs *p, NftPrefsNode *n, void *obj, void *userptr)
 {
@@ -142,7 +143,8 @@ static NftResult _prefs_from_hardware(NftPrefs *p, NftPrefsNode *n, void *obj, v
 /**
  * Config-to-Object function.
  * Creates a LedHardware model from a prefs node
- * @note you shouldn't call this function directly
+ * @note you shouldn't call this function directly. 
+ * It's used by nft_prefs_obj_from_node() etc.
  */
 static NftResult _prefs_to_hardware(LedPrefs *p, void **newObj, NftPrefsNode *n, void *userptr)
 {

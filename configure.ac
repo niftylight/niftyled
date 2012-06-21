@@ -138,8 +138,14 @@ AC_CONFIG_FILES([
 	include/niftyled-version.h \
 	src/version.c \
 	src/Makefile \
+	src/chain/Makefile \
+	src/frame/Makefile \
+	src/hardware/Makefile \
+	src/prefs/Makefile \
+	src/setup/Makefile \
+	src/tile/Makefile \
 	tests/Makefile \
-        ${PACKAGE}.pc          
+	${PACKAGE}.pc
 ])
 AC_OUTPUT
 
