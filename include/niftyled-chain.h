@@ -68,11 +68,8 @@
 
 
 
-/** minimum value for LedGain type (LED is turned off) */
-#define LED_GAIN_MIN    (0)
-/** maximum value for LedGain type (LED at full brightness) */
-#define LED_GAIN_MAX    ((1<<(sizeof(LedGain)*8))-1)
-
+/** type used for LedGain */
+#define LED_GAIN_TYPE short
 
 /** model of one single LED */
 typedef struct _Led Led;
@@ -81,7 +78,13 @@ typedef struct _LedChain LedChain;
 /** type to count LEDs */
 typedef size_t LedCount;
 /** type to define the gain-setting of an LED-driver (0 = turned off, 65535 = full brightness) */
-typedef short LedGain;
+typedef LED_GAIN_TYPE LedGain;
+
+
+/** minimum value for LedGain type (LED is turned off) */
+#define LED_GAIN_MIN    (0)
+/** maximum value for LedGain type (LED at full brightness) */
+#define LED_GAIN_MAX    ((unsigned LED_GAIN_TYPE)((1<<(sizeof(LedGain)*8))-1))
 
 
 #include "niftyled-tile.h"
