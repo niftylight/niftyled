@@ -87,7 +87,7 @@ struct _LedChain
         /** Pixel format how LED-values are stored in this chain */
         LedPixelFormat *format;
         /** Pixel format for conversions when greyscale-values 
-              are written to chain (NULL for no conversion) */
+            are written to chain (NULL for no conversion) */
         LedPixelFormat *src_format;
         /** our converter to do format conversions */
         LedPixelFormatConverter *converter;
