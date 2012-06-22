@@ -46,8 +46,8 @@
 
 
 
-NftResult 	_prefs_chain_class_register(NftPrefs *p);
-NftResult 	_prefs_led_class_register(NftPrefs *p);
+NftResult         _prefs_chain_class_register(NftPrefs *p);
+NftResult         _prefs_led_class_register(NftPrefs *p);
 
 
 

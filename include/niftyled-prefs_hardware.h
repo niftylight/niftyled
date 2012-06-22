@@ -70,8 +70,8 @@
 
 bool            led_prefs_is_hardware_node(LedPrefsNode *n);
 
-LedHardware *	led_prefs_hardware_from_node(LedPrefs *p, LedPrefsNode *n);
-LedPrefsNode *	led_prefs_hardware_to_node(LedPrefs *p, LedHardware *h);
+LedHardware *   led_prefs_hardware_from_node(LedPrefs *p, LedPrefsNode *n);
+LedPrefsNode *  led_prefs_hardware_to_node(LedPrefs *p, LedHardware *h);
 
 
 

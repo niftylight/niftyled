@@ -82,37 +82,37 @@
  */
 LedPrefs *led_prefs_init()
 {
-    	/* initialize libniftyprefs */
-	LedPrefs *p;
-	if(!(p = nft_prefs_init()))
-		return NULL;
+            /* initialize libniftyprefs */
+        LedPrefs *p;
+        if(!(p = nft_prefs_init()))
+                return NULL;
 
 
-    	/* register overall setup class */
-    	if(!(_prefs_setup_class_register(p)))
-		goto _lpi_error;
-	         
-	/* register hardware class */
-    	if(!(_prefs_hardware_class_register(p)))
-		goto _lpi_error;
+            /* register overall setup class */
+            if(!(_prefs_setup_class_register(p)))
+                goto _lpi_error;
+                 
+        /* register hardware class */
+            if(!(_prefs_hardware_class_register(p)))
+                goto _lpi_error;
 
-	/* register tile class */
-	if(!(_prefs_tile_class_register(p)))
-		goto _lpi_error;
+        /* register tile class */
+        if(!(_prefs_tile_class_register(p)))
+                goto _lpi_error;
     
-	/* register chain class */
-    	if(!(_prefs_chain_class_register(p)))
-		goto _lpi_error;
+        /* register chain class */
+            if(!(_prefs_chain_class_register(p)))
+                goto _lpi_error;
 
-	/* register LED class */
-	if(!(_prefs_led_class_register(p)))
-		goto _lpi_error;
+        /* register LED class */
+        if(!(_prefs_led_class_register(p)))
+                goto _lpi_error;
         
-	return p;
+        return p;
     
 _lpi_error:
-    	nft_prefs_deinit(p);
-    	return NULL;
+            nft_prefs_deinit(p);
+            return NULL;
 }
 
 

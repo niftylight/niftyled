@@ -81,8 +81,8 @@ struct _LedFrame
         LedFrameCord height;
         /* format of this frame */
         LedPixelFormat *format;
-	/** size of buffer in bytes */
-	size_t bufsize;
+        /** size of buffer in bytes */
+        size_t bufsize;
         /** data buffer */
         void *buffer;
         /** 
@@ -121,14 +121,14 @@ LedFrame *led_frame_new(LedFrameCord width, LedFrameCord height, LedPixelFormat 
         
                 
         /* size of pixelbuffer */
-	size_t bufsize = led_pixel_format_get_buffer_size(format, width*height);
+        size_t bufsize = led_pixel_format_get_buffer_size(format, width*height);
         if(bufsize <= 0)
         {
                 NFT_LOG(L_ERROR, "Invalid calculated frame buffersize: %d", bufsize);
                 return NULL;
         }
         
-	/* allocate buffer */
+        /* allocate buffer */
         void *framebuffer;
         if(!(framebuffer = malloc(bufsize)))
         {
@@ -136,9 +136,9 @@ LedFrame *led_frame_new(LedFrameCord width, LedFrameCord height, LedPixelFormat 
                 return NULL;
         }
 
-	/* clear buffer */
-	memset(framebuffer, 0, bufsize);
-	
+        /* clear buffer */
+        memset(framebuffer, 0, bufsize);
+        
         /* allocate descriptor */
         LedFrame *n;
         if(!(n = calloc(1, sizeof(LedFrame))))
@@ -155,7 +155,7 @@ LedFrame *led_frame_new(LedFrameCord width, LedFrameCord height, LedPixelFormat 
         n->width = width;
         n->height = height;
         n->buffer = framebuffer;
-	n->bufsize = bufsize;
+        n->bufsize = bufsize;
               
         
         /* voilà */

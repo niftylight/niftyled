@@ -122,9 +122,9 @@ typedef enum
     
         /* add new parameter-types above this line
            (don't forget to define name in 
-            	hardware.c:
-            	led_hardware_get_plugin_param_name()
-		LedPluginParamNames */
+                hardware.c:
+                    led_hardware_get_plugin_param_name()
+                        LedPluginParamNames */
     
         /** always last entry */
         LED_HW_MAX
@@ -178,9 +178,9 @@ typedef struct LedHardwarePlugin
         const char *family;
         /** api major version */
         int api_major;
-    	/** api minor version */
+        /** api minor version */
         int api_minor;
-    	/** api micro version */
+        /** api micro version */
         int api_micro;
         /** plugin major version */
         int major_version;
@@ -200,9 +200,9 @@ typedef struct LedHardwarePlugin
         char *id_example;
         /** 
          * gets called first after loading a hardware_plugin. You may fill 
-	 * *privdata with a pointer to some own descriptor to differ multiple
-	 * pieces of hardware supported by your plugin connected at the same 
-	 * time.
+         * *privdata with a pointer to some own descriptor to differ multiple
+         * pieces of hardware supported by your plugin connected at the same 
+         * time.
          * @note mandatory - plugin must provide this function
          * @param privdata The plugins private data-descriptor from LedHardware->privdata 
          * @param h - the LedHardware this plugin belongs to

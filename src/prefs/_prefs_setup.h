@@ -46,7 +46,7 @@
 
 
 
-NftResult 	_prefs_setup_class_register(NftPrefs *p);
+NftResult         _prefs_setup_class_register(NftPrefs *p);
 
 
 

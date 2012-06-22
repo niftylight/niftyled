@@ -396,11 +396,11 @@ void led_tile_destroy(LedTile *m)
                 led_tile_list_destroy(m->relation.child);
 
         /* unlink from linked-list of siblings */
-	if(m->relation.next)
-		m->relation.next->relation.prev = m->relation.prev;
+        if(m->relation.next)
+                m->relation.next->relation.prev = m->relation.prev;
                 
-	if(m->relation.prev)
-		m->relation.prev->relation.next = m->relation.next;
+        if(m->relation.prev)
+                m->relation.prev->relation.next = m->relation.next;
 
         
         /* unlink from parent tile */
@@ -548,10 +548,10 @@ void led_tile_print(LedTile *t, NftLoglevel l)
 NftResult led_tile_set_x(LedTile *m, LedFrameCord x)
 {
         if(!m)
-		NFT_LOG_NULL(NFT_FAILURE);
+                NFT_LOG_NULL(NFT_FAILURE);
         
         /* save x-offset */
-	m->geometry.x = x;
+        m->geometry.x = x;
 
         _map_matrix(m);
                 
@@ -584,11 +584,11 @@ LedFrameCord led_tile_get_x(LedTile *m)
 NftResult led_tile_set_y(LedTile *m, LedFrameCord y)
 {
         if(!m)
-		NFT_LOG_NULL(NFT_FAILURE);
+                NFT_LOG_NULL(NFT_FAILURE);
 
         
         /* save x-offset */
-	m->geometry.y = y;
+        m->geometry.y = y;
 
         _map_matrix(m);
         
@@ -958,8 +958,8 @@ NftResult led_tile_append_sibling(LedTile *head, LedTile *sibling)
  */
 NftResult led_tile_set_sibling(LedTile *t, LedTile *sibling)
 {
-	if(!t)
-		NFT_LOG_NULL(NFT_FAILURE);
+        if(!t)
+                NFT_LOG_NULL(NFT_FAILURE);
 
         if(t->relation.next && sibling != NULL)
         {
@@ -973,12 +973,12 @@ NftResult led_tile_set_sibling(LedTile *t, LedTile *sibling)
                 return NFT_FAILURE;
         }
         
-	t->relation.next = sibling;
+        t->relation.next = sibling;
 
-	if(sibling)
-		sibling->relation.prev = t;
-	
-	return NFT_SUCCESS;
+        if(sibling)
+                sibling->relation.prev = t;
+        
+        return NFT_SUCCESS;
 }
 
 

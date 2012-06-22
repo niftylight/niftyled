@@ -110,9 +110,9 @@ struct _LedHardware
             /** advance this many LEDs to reach the next LED when sending */
             LedCount stride;
         }props;
-	/** relations of this hardware */
-	struct
-	{
+        /** relations of this hardware */
+        struct
+        {
             /** chain of this hardware-plugin (holds all currently configured 
                 LEDs this plugin can control) */
             LedChain *chain;
@@ -122,7 +122,7 @@ struct _LedHardware
             LedHardware *prev;
             /** next sibling */
             LedHardware *next;
-	}relation;
+        }relation;
 };
 
 
@@ -237,15 +237,15 @@ static LedHardware *_load_plugin(const char *name, const char *family)
 
         
         /* check plugin API major-version */
-	if(plugin->api_major != HW_PLUGIN_API_MAJOR_VERSION)
-	{
-		NFT_LOG(L_ERROR, "Plugin has been compiled against major version %d of %s, we are version %d. Not loading plugin.", 
-		        plugin->api_major, PACKAGE_NAME, HW_PLUGIN_API_MAJOR_VERSION);
-		dlclose(handle);
-		return NULL;
-	}
+        if(plugin->api_major != HW_PLUGIN_API_MAJOR_VERSION)
+        {
+                NFT_LOG(L_ERROR, "Plugin has been compiled against major version %d of %s, we are version %d. Not loading plugin.", 
+                        plugin->api_major, PACKAGE_NAME, HW_PLUGIN_API_MAJOR_VERSION);
+                dlclose(handle);
+                return NULL;
+        }
 
-	/* check plugin API minor-version */
+        /* check plugin API minor-version */
         if(plugin->api_minor != HW_PLUGIN_API_MINOR_VERSION)
         {
                 NFT_LOG(L_WARNING, "Plugin compiled against %d of %s, we are version %d. Continue at own risk.", 
@@ -268,7 +268,7 @@ static LedHardware *_load_plugin(const char *name, const char *family)
         a->libhandle = handle;
         /* copy instance-name */
         strncpy(a->props.name, name, sizeof(a->props.name));
-	
+        
         return a;
 }
 
@@ -353,7 +353,7 @@ LedHardware *led_hardware_new(const char *name, const char *plugin_name)
 
         /* print info about loaded plugin */
         led_hardware_plugin_print(h->plugin, L_INFO);
-	
+        
         /* initialize plugin */
         if(LED_HARDWARE_PLUGIN_HAS_FUNC(h,plugin_init))
         {
@@ -388,18 +388,18 @@ void led_hardware_destroy(LedHardware *h)
                 NFT_LOG_NULL();
         
         NFT_LOG(L_DEBUG, "Destroying hardware \"%s\" (family: \"%s\" id: \"%s\")", 
-                	h->props.name ? h->props.name : "<undefined>", 
-                	h->plugin->family ? h->plugin->family : "<undefined>",
-                	h->props.id ? h->props.id : "<undefined>");
+                        h->props.name ? h->props.name : "<undefined>", 
+                        h->plugin->family ? h->plugin->family : "<undefined>",
+                        h->props.id ? h->props.id : "<undefined>");
 
         /* unregister from config context */
         //~ led_settings_hardware_unregister(h);       
 
         /* unlink from linked-list of siblings */
-	if(h->relation.next)
-		h->relation.next->relation.prev = h->relation.prev;
-	if(h->relation.prev)
-		h->relation.prev->relation.next = h->relation.next;
+        if(h->relation.next)
+                h->relation.next->relation.prev = h->relation.prev;
+        if(h->relation.prev)
+                h->relation.prev->relation.next = h->relation.next;
         
         /* deinitialize hardware */
         led_hardware_deinit(h);
@@ -768,17 +768,17 @@ NftResult led_hardware_set_tile(LedHardware *h, LedTile *t)
  */ 
 NftResult led_hardware_append_tile(LedHardware *h, LedTile *t)
 {
-	if(!h->relation.first_tile)
-		return led_hardware_set_tile(h, t);
-	
-	if(!(led_tile_append_sibling(h->relation.first_tile, t)))
-    	{
-		NFT_LOG(L_ERROR, "Failed to append tile %p to hardware \"%s\"", 
-		        	t, led_hardware_get_name(h));
-		return NFT_FAILURE;
-	}
+        if(!h->relation.first_tile)
+                return led_hardware_set_tile(h, t);
+        
+        if(!(led_tile_append_sibling(h->relation.first_tile, t)))
+            {
+                NFT_LOG(L_ERROR, "Failed to append tile %p to hardware \"%s\"", 
+                                t, led_hardware_get_name(h));
+                return NFT_FAILURE;
+        }
 
-    	return tile_set_parent_hardware(t, h);
+            return tile_set_parent_hardware(t, h);
 }
 
 /**
@@ -804,10 +804,10 @@ LedTile *led_hardware_get_tile(LedHardware *h)
  */
 const char *led_hardware_get_name(LedHardware *h)
 {
-	if(!h)
-		NFT_LOG_NULL(NULL);
+        if(!h)
+                NFT_LOG_NULL(NULL);
 
-	return h->props.name;
+        return h->props.name;
 }
 
 
@@ -820,12 +820,12 @@ const char *led_hardware_get_name(LedHardware *h)
  */
 NftResult led_hardware_set_name(LedHardware *h, const char *name)
 {
-	if(!h || !name)
-		NFT_LOG_NULL(NFT_FAILURE);
+        if(!h || !name)
+                NFT_LOG_NULL(NFT_FAILURE);
 
-	strncpy(h->props.name, name, sizeof(h->props.name));
-	
-	return NFT_SUCCESS;
+        strncpy(h->props.name, name, sizeof(h->props.name));
+        
+        return NFT_SUCCESS;
 }
 
 
@@ -921,9 +921,9 @@ LedCount led_hardware_list_get_ledcount(LedHardware *h)
                 NFT_LOG_NULL(-1);
 
         
-	/* count total LEDs on hardware adapters */
+        /* count total LEDs on hardware adapters */
         LedCount res = 0;
-	LedHardware *t;
+        LedHardware *t;
         for(t = h; t; t=t->relation.next)
         {
                 res += led_hardware_get_ledcount(t);
@@ -1063,8 +1063,8 @@ void led_hardware_print(LedHardware *h, NftLoglevel l)
  */
 NftResult led_hardware_set_sibling(LedHardware *h, LedHardware *sibling)
 {
-	if(!h)
-		NFT_LOG_NULL(NFT_FAILURE);
+        if(!h)
+                NFT_LOG_NULL(NFT_FAILURE);
 
 
         /* don't attach to ourself */
@@ -1083,13 +1083,13 @@ NftResult led_hardware_set_sibling(LedHardware *h, LedHardware *sibling)
         
 
         /* register next */
-	h->relation.next = sibling;
+        h->relation.next = sibling;
 
         /* register previous */
-	if(sibling)
-		sibling->relation.prev = h;
-	
-	return NFT_SUCCESS;
+        if(sibling)
+                sibling->relation.prev = h;
+        
+        return NFT_SUCCESS;
 }
 
 
@@ -1193,7 +1193,7 @@ void led_hardware_plugin_print(LedHardwarePlugin *p, NftLoglevel l)
                 p->api_major, p->api_minor, p->api_micro, 
                 p->major_version, p->minor_version, p->micro_version, 
                 (p->license ? p->license : 
-	                 "check documentation or sourcecode"),
+                         "check documentation or sourcecode"),
                 (p->author ? p->author : "-"), 
                 (p->description ? p->description : "-"),
                 (p->url ? p->url : "-")
@@ -1249,10 +1249,10 @@ int led_hardware_get_plugin_count()
  */
 const char *led_hardware_get_plugin_family(LedHardware *h)
 {
-	if(!h || !h->plugin)
-		NFT_LOG_NULL(NULL);
+        if(!h || !h->plugin)
+                NFT_LOG_NULL(NULL);
 
-	return h->plugin->family;
+        return h->plugin->family;
 }
 
 

@@ -74,28 +74,28 @@
  */
 static NftResult _prefs_from_setup(NftPrefs *p, NftPrefsNode *n, void *obj, void *userptr)
 {
-    	if(!p || !n || !obj)
-		NFT_LOG_NULL(NFT_FAILURE);
+            if(!p || !n || !obj)
+                NFT_LOG_NULL(NFT_FAILURE);
 
-    	/* "Setup" object */
-    	LedSetup *s = obj;
+            /* "Setup" object */
+            LedSetup *s = obj;
 
-    	/* process all "hardware" objects */
-    	LedHardware *h;
-    	for(h = led_setup_get_hardware(s); h; h = led_hardware_get_next_sibling(h))
-	{
-	    /* generate prefs for each hardware node */
-	    NftPrefsNode *node;
-	    if(!(node = nft_prefs_obj_to_node(p, LED_HARDWARE_NAME, h, NULL)))
-		return NFT_FAILURE;
+            /* process all "hardware" objects */
+            LedHardware *h;
+            for(h = led_setup_get_hardware(s); h; h = led_hardware_get_next_sibling(h))
+        {
+            /* generate prefs for each hardware node */
+            NftPrefsNode *node;
+            if(!(node = nft_prefs_obj_to_node(p, LED_HARDWARE_NAME, h, NULL)))
+                return NFT_FAILURE;
 
-	    /* add hardware to this setup */
-	    if(!(nft_prefs_node_add_child(n, node)))
-		return NFT_FAILURE;
-	    
-	}
+            /* add hardware to this setup */
+            if(!(nft_prefs_node_add_child(n, node)))
+                return NFT_FAILURE;
+            
+        }
 
-	return NFT_SUCCESS;
+        return NFT_SUCCESS;
 }
 
 
@@ -107,63 +107,63 @@ static NftResult _prefs_from_setup(NftPrefs *p, NftPrefsNode *n, void *obj, void
  */
 static NftResult _prefs_to_setup(LedPrefs *p, void **newObj, NftPrefsNode *n, void *userptr)
 {
-    	if(!p || ! newObj)
-		NFT_LOG_NULL(NFT_FAILURE);
+            if(!p || ! newObj)
+                NFT_LOG_NULL(NFT_FAILURE);
 
-	
-	/* new setup */
-    	LedSetup *s;
+        
+        /* new setup */
+            LedSetup *s;
 
         /* new setup */
-    	if(!(s = led_setup_new()))
-    	{
-		NFT_LOG(L_ERROR, "Failed to create new LedSetup object");
-		return NFT_FAILURE;
-	}
+            if(!(s = led_setup_new()))
+            {
+                NFT_LOG(L_ERROR, "Failed to create new LedSetup object");
+                return NFT_FAILURE;
+        }
 
-    	/* walk all child nodes and process them */
-    	NftPrefsNode *child;
-    	for(child = nft_prefs_node_get_first_child(n);
-	    child;
-	    child = nft_prefs_node_get_next(child))
-    	{
-		/* check if node describes a LedHardware object */
-		if(!led_prefs_is_hardware_node(child))
-		{
-			NFT_LOG(L_ERROR, "\"%s\" object may only contain \"%s\" children but got \"%s\"",
-			        LED_SETUP_NAME, LED_HARDWARE_NAME,
-			        nft_prefs_node_get_name(child));
-		    	goto _pts_error;
-		}
-		
-		/* call toObj function of child node */
-		LedHardware *hw;
+            /* walk all child nodes and process them */
+            NftPrefsNode *child;
+            for(child = nft_prefs_node_get_first_child(n);
+            child;
+            child = nft_prefs_node_get_next(child))
+            {
+                /* check if node describes a LedHardware object */
+                if(!led_prefs_is_hardware_node(child))
+                {
+                        NFT_LOG(L_ERROR, "\"%s\" object may only contain \"%s\" children but got \"%s\"",
+                                LED_SETUP_NAME, LED_HARDWARE_NAME,
+                                nft_prefs_node_get_name(child));
+                            goto _pts_error;
+                }
+                
+                /* call toObj function of child node */
+                LedHardware *hw;
                 if(!(hw = nft_prefs_obj_from_node(p, child, userptr)))
                 {
                         NFT_LOG(L_ERROR, "Failed to create object from preference node");
                         return NFT_FAILURE;
                 }
 
-		/* register first hardware */
-		if(!led_setup_get_hardware(s))
-		{
-			led_setup_set_hardware(s, hw);
-		}
-		/* attach hardware to list */
-		else
-		{
-			if(!led_hardware_append_sibling(led_setup_get_hardware(s), hw))
-		    	{
-				NFT_LOG(L_ERROR, "Failed to append LedHardware as sibling");
-				return NFT_FAILURE;
-			}	
-		}
-	}
+                /* register first hardware */
+                if(!led_setup_get_hardware(s))
+                {
+                        led_setup_set_hardware(s, hw);
+                }
+                /* attach hardware to list */
+                else
+                {
+                        if(!led_hardware_append_sibling(led_setup_get_hardware(s), hw))
+                            {
+                                NFT_LOG(L_ERROR, "Failed to append LedHardware as sibling");
+                                return NFT_FAILURE;
+                        }        
+                }
+        }
 
-    	/* save new setup-object to "newObj" pointer */
-    	*newObj = s;
+            /* save new setup-object to "newObj" pointer */
+            *newObj = s;
     
-    	return NFT_SUCCESS;
+            return NFT_SUCCESS;
 
     
 _pts_error:
@@ -182,7 +182,7 @@ _pts_error:
  */
 NftResult _prefs_setup_class_register(NftPrefs *p)
 {
-	return nft_prefs_class_register(p, LED_SETUP_NAME, &_prefs_to_setup, &_prefs_from_setup);
+        return nft_prefs_class_register(p, LED_SETUP_NAME, &_prefs_to_setup, &_prefs_from_setup);
 }
 
 
@@ -200,18 +200,18 @@ NftResult _prefs_setup_class_register(NftPrefs *p)
  */
 LedSetup *led_prefs_setup_from_node(LedPrefs *p, LedPrefsNode *n)
 {
-    	if(!p || !n)
-		NFT_LOG_NULL(NULL);
+            if(!p || !n)
+                NFT_LOG_NULL(NULL);
 
-    	/* check if node is of expected class */
-    	if(strcmp(nft_prefs_node_get_name(n), LED_SETUP_NAME) != 0)
-    	{
-		NFT_LOG(L_ERROR, "got wrong LedPrefsNode class. Expected \"%s\" but got \"%s\"",
-		        	LED_SETUP_NAME, nft_prefs_node_get_name(n));
-		return NULL;
-	}
+            /* check if node is of expected class */
+            if(strcmp(nft_prefs_node_get_name(n), LED_SETUP_NAME) != 0)
+            {
+                NFT_LOG(L_ERROR, "got wrong LedPrefsNode class. Expected \"%s\" but got \"%s\"",
+                                LED_SETUP_NAME, nft_prefs_node_get_name(n));
+                return NULL;
+        }
     
-	return  nft_prefs_obj_from_node(p, n, NULL);
+        return  nft_prefs_obj_from_node(p, n, NULL);
 }
 
 
@@ -224,10 +224,10 @@ LedSetup *led_prefs_setup_from_node(LedPrefs *p, LedPrefsNode *n)
  */
 LedPrefsNode *led_prefs_setup_to_node(LedPrefs *p, LedSetup *s)
 {
-    	if(!p || !s)
-		NFT_LOG_NULL(NULL);
+            if(!p || !s)
+                NFT_LOG_NULL(NULL);
     
-	return nft_prefs_obj_to_node(p, LED_SETUP_NAME, s, NULL);
+        return nft_prefs_obj_to_node(p, LED_SETUP_NAME, s, NULL);
 }
 
 

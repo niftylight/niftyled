@@ -184,7 +184,7 @@ void chain_destroy(LedChain *c)
         //~ led_settings_chain_unregister(c);
         
         
-	/* free LED descriptor array */
+        /* free LED descriptor array */
         free(c->leds);
 
         /* free LED-buffer */
@@ -197,9 +197,9 @@ void chain_destroy(LedChain *c)
         led_frame_destroy(c->tmpframe);
         
         /* deinitialize this conversion instance */
-	led_pixel_format_destroy();
+        led_pixel_format_destroy();
         
-	/* free our very own space */
+        /* free our very own space */
         free(c);
 }
 
@@ -273,7 +273,7 @@ LedChain *led_chain_new(LedCount ledcount, const char *pixelformat)
 
         
         /* allocate LED descriptors */
-	if(!(c->leds = calloc(ledcount, sizeof(Led))))
+        if(!(c->leds = calloc(ledcount, sizeof(Led))))
                 goto _lcn_error;
 
         /* allocate space for pointer-offsets */
@@ -660,8 +660,8 @@ size_t led_chain_get_buffer_size(LedChain *chain)
  */
 Led *led_chain_get_nth(LedChain *c, LedCount n)
 {
-	if(!c)
-		NFT_LOG_NULL(NULL);
+        if(!c)
+                NFT_LOG_NULL(NULL);
 
         if(n >= c->ledcount)
         {
@@ -669,7 +669,7 @@ Led *led_chain_get_nth(LedChain *c, LedCount n)
                 return NULL;
         }
         
-	return &c->leds[n];
+        return &c->leds[n];
 }
 
 
@@ -844,14 +844,14 @@ NftResult led_set_privdata(Led *l, void *privdata)
  */
 NftResult led_copy(Led *dst, Led *src)
 {
-	if(!dst || !src)
-		NFT_LOG_NULL(NFT_FAILURE);
+        if(!dst || !src)
+                NFT_LOG_NULL(NFT_FAILURE);
 
-	
-	/* copy structure */
-	memcpy(dst, src, sizeof(Led));
-		
-	return NFT_SUCCESS;
+        
+        /* copy structure */
+        memcpy(dst, src, sizeof(Led));
+                
+        return NFT_SUCCESS;
 }
 
 

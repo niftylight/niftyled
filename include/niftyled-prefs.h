@@ -83,7 +83,7 @@ typedef enum
 
 NftResult               led_prefs_default_filename(char *dst, size_t size, const char *filename);
 
-LedPrefs *           	led_prefs_init();
+LedPrefs *              led_prefs_init();
 void                    led_prefs_deinit(LedPrefs *c);
 
 

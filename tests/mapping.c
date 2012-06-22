@@ -58,8 +58,8 @@ static LedTile *_create_subsubmodule(LedPrefs *c, LedFrameCord x, LedFrameCord y
 {
         /* create new LED-Chain */
         LedChain *chain;
-	if(!(chain = led_chain_new(4, "RGB u8")))
-		return NULL;
+        if(!(chain = led_chain_new(4, "RGB u8")))
+                return NULL;
 
         /* set LED positions */
         led_set_x(led_chain_get_nth(chain, 1), 1);
@@ -100,18 +100,18 @@ int main(int argc, char *argv[])
         LedTile *msub2 = NULL;
         
 
-    	/* check library version */
-    	NFT_LED_CHECK_VERSION
-	
+            /* check library version */
+            NFT_LED_CHECK_VERSION
+        
         /* set maximum verbosity */
         nft_log_level_set(L_NOISY);
 
-	
-	/* create new config */
-	if(!(conf = led_prefs_init()))
-		goto m_deinit;
+        
+        /* create new config */
+        if(!(conf = led_prefs_init()))
+                goto m_deinit;
 
-    	
+            
 
         /***** BEGIN module creation *****/
 
@@ -174,29 +174,29 @@ int main(int argc, char *argv[])
 
     
         /* dump config of tile to PrefsNode */
-    	NftPrefsNode *n;
+            NftPrefsNode *n;
         if(!(n = led_prefs_tile_to_node(conf, m)))
-		goto m_deinit;
+                goto m_deinit;
     
-    	/* dump node to file */
-    	if(!(nft_prefs_node_to_file(conf, n, "-")))
-		goto m_deinit;
+            /* dump node to file */
+            if(!(nft_prefs_node_to_file(conf, n, "-")))
+                goto m_deinit;
 
-    	/* free node */
-    	//led_prefs_node_free(n);
+            /* free node */
+            //led_prefs_node_free(n);
 
 
     
-	/* dump config of chain to PrefsNode */
+        /* dump config of chain to PrefsNode */
         if(!(n = led_prefs_chain_to_node(conf, cm)))
-		goto m_deinit;
+                goto m_deinit;
     
-    	/* dump node to file */
-    	if(!(nft_prefs_node_to_file(conf, n, "-")))
-		goto m_deinit;
+            /* dump node to file */
+            if(!(nft_prefs_node_to_file(conf, n, "-")))
+                goto m_deinit;
 
-    	/* free node */
-    	//led_prefs_node_free(n);
+            /* free node */
+            //led_prefs_node_free(n);
     
                     
         result = 0;
@@ -206,11 +206,11 @@ int main(int argc, char *argv[])
 m_deinit:              
                 
         /* destroy module (and children + chains) */
-	led_tile_destroy(m);
+        led_tile_destroy(m);
         led_chain_destroy(cm);
         
         /* cleanup config */
-	led_prefs_deinit(conf);
-	        
+        led_prefs_deinit(conf);
+                
         return result;
 }

@@ -66,8 +66,8 @@
 
 bool            led_prefs_is_tile_node(LedPrefsNode *n);
 
-LedTile *	led_prefs_tile_from_node(LedPrefs *p, LedPrefsNode *n);
-LedPrefsNode *	led_prefs_tile_to_node(LedPrefs *p, LedTile *t);
+LedTile *       led_prefs_tile_from_node(LedPrefs *p, LedPrefsNode *n);
+LedPrefsNode *  led_prefs_tile_to_node(LedPrefs *p, LedTile *t);
 
 
 

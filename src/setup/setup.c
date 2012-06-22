@@ -59,8 +59,8 @@
  */
 struct _LedSetup
 {
-    	/** first hardware in setup or NULL */
-	LedHardware *firstHw;	
+            /** first hardware in setup or NULL */
+        LedHardware *firstHw;        
 };
 
 
@@ -77,14 +77,14 @@ struct _LedSetup
  */
 LedSetup *led_setup_new()
 {
-	LedSetup *r;
-    	if(!(r = calloc(1, sizeof(LedSetup))))
-    	{
-		NFT_LOG_PERROR("calloc");
-		return NULL;
-	}
+        LedSetup *r;
+            if(!(r = calloc(1, sizeof(LedSetup))))
+            {
+                NFT_LOG_PERROR("calloc");
+                return NULL;
+        }
 
-    	return r;
+            return r;
 }
 
 
@@ -95,20 +95,20 @@ LedSetup *led_setup_new()
  */
 void led_setup_destroy(LedSetup *s)
 {
-	if(!s)
-		return;
+        if(!s)
+                return;
 
-    	/* destroy all LedHardware objects */
-    	if(s->firstHw)
-    	{
-		led_hardware_list_destroy(s->firstHw);
-	}
+            /* destroy all LedHardware objects */
+            if(s->firstHw)
+            {
+                led_hardware_list_destroy(s->firstHw);
+        }
 
-    	/* be really tidy :) */
-    	s->firstHw = NULL;
+            /* be really tidy :) */
+            s->firstHw = NULL;
 
-    	/* free descriptor */
-    	free(s);
+            /* free descriptor */
+            free(s);
 }
 
 
@@ -120,10 +120,10 @@ void led_setup_destroy(LedSetup *s)
  */
 void led_setup_set_hardware(LedSetup *s, LedHardware *h)
 {
-	if(!s)
-		NFT_LOG_NULL();
+        if(!s)
+                NFT_LOG_NULL();
 
-    	s->firstHw = h;
+            s->firstHw = h;
 }
 
 
@@ -135,10 +135,10 @@ void led_setup_set_hardware(LedSetup *s, LedHardware *h)
  */
 LedHardware *led_setup_get_hardware(LedSetup *s)
 {
-	if(!s)
-		NFT_LOG_NULL(NULL);
+        if(!s)
+                NFT_LOG_NULL(NULL);
 
-    	return s->firstHw;
+            return s->firstHw;
 }
 
 
@@ -150,29 +150,29 @@ LedHardware *led_setup_get_hardware(LedSetup *s)
  */
 LedFrameCord led_setup_get_width(LedSetup *s)
 {
-	if(!s)
-		NFT_LOG_NULL(-1);
+        if(!s)
+                NFT_LOG_NULL(-1);
 
-    	/* result */
-    	LedFrameCord r = 0;
+            /* result */
+            LedFrameCord r = 0;
     
-    	/* no hardware registered? */
-    	if(!s->firstHw)
-		return r;
+            /* no hardware registered? */
+            if(!s->firstHw)
+                return r;
 
-    	/* walk all registered Hardware descriptors */
-    	LedHardware *h;
-    	for(h = s->firstHw; h; h = led_hardware_get_next_sibling(h))
-    	{
-		/* walk all tiles registered to this hardware */
-		LedTile *tile = led_hardware_get_tile(h);
-		
+            /* walk all registered Hardware descriptors */
+            LedHardware *h;
+            for(h = s->firstHw; h; h = led_hardware_get_next_sibling(h))
+            {
+                /* walk all tiles registered to this hardware */
+                LedTile *tile = led_hardware_get_tile(h);
+                
                 LedFrameCord w = led_tile_get_width(tile) + led_tile_get_x(tile);
                 if(w > r)
                         r = w;
-	}
+        }
 
-    	return r;
+            return r;
 }
 
 
@@ -184,29 +184,29 @@ LedFrameCord led_setup_get_width(LedSetup *s)
  */
 LedFrameCord led_setup_get_height(LedSetup *s)
 {
-	if(!s)
-		NFT_LOG_NULL(-1);
+        if(!s)
+                NFT_LOG_NULL(-1);
 
-    	/* result */
-    	LedFrameCord r = 0;
+            /* result */
+            LedFrameCord r = 0;
     
-    	/* no hardware registered? */
-    	if(!s->firstHw)
-		return r;
+            /* no hardware registered? */
+            if(!s->firstHw)
+                return r;
 
-    	/* walk all registered Hardware descriptors */
-    	LedHardware *h;
-    	for(h = s->firstHw; h; h = led_hardware_get_next_sibling(h))
-    	{
-		/* walk all tiles registered to this hardware */
-		LedTile *tile = led_hardware_get_tile(h);
-		
+            /* walk all registered Hardware descriptors */
+            LedHardware *h;
+            for(h = s->firstHw; h; h = led_hardware_get_next_sibling(h))
+            {
+                /* walk all tiles registered to this hardware */
+                LedTile *tile = led_hardware_get_tile(h);
+                
                 LedFrameCord w = led_tile_get_height(tile) + led_tile_get_y(tile);
                 if(w > r)
                         r = w;
-	}
+        }
 
-    	return r;
+            return r;
 }
 
 

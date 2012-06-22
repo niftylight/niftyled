@@ -72,8 +72,8 @@
 
 
 
-LedSetup *	led_prefs_setup_from_node(LedPrefs *p, LedPrefsNode *n);
-LedPrefsNode *	led_prefs_setup_to_node(LedPrefs *p, LedSetup *s);
+LedSetup *        led_prefs_setup_from_node(LedPrefs *p, LedPrefsNode *n);
+LedPrefsNode *    led_prefs_setup_to_node(LedPrefs *p, LedSetup *s);
 
 
 #endif  /* _LED_PREFS_SETUP_H */
