@@ -58,7 +58,7 @@
  * library. 
  * There's one "dummy" plugin family for testing purposes.
  *
- * Every hardware object has:
+ * Every LedHardware has:
  * - one or more @ref LedTile defining the physical location of each LED.
  * - a @ref LedChain representing all LEDs controlled by this hardware instance 
  * - an ID unique to the actual hardware device (e.g. /dev/ttyS0)
@@ -67,12 +67,12 @@
  * - a stride value (s. http://wiki.niftylight.de/index.php/LED-setup_XML#stride )
  *
  * <h3>Using one or more LedHardware adapters</h3>
- * - use @ref led_hardware_new() to create a new @ref LedHardware object.
+ * - use @ref led_hardware_new() to create a new @ref LedHardware.
  * - after that @ref led_hardware_init() will open/initialize the hardware and
  * - @ref led_hardware_deinit() will deinitialize it again. (can be re-initialized again)
  * - @ref led_hardware_destroy() will completly free all resources.
  * - use other functions from this module to interact with the hardware-model.
- * - use led_hardware_*_list() functions to operate on a hardware and all its siblings
+ * - use led_hardware_list_*() functions to operate on a hardware and all its siblings
  * @{
  */
 
@@ -81,7 +81,7 @@
 
 
 
-/** current API version - s. configure.ac */
+/** current API version - s. version.sh */
 #define LED_HARDWARE_API        HW_PLUGIN_API_VERSION
 
 
@@ -102,38 +102,45 @@ typedef struct _LedHardware LedHardware;
 
 
 /** 
- * IDs of plugin "objects" to exchange specific data or settings with the plugin
+ * IDs of plugin "parameters" to exchange specific data or settings with the plugin
  * (used for getter/setter) 
+ * Parameters are properties common to all plugins. While LedPluginProperties
+ * can be dynamically registered specifically by one plugin family, these
+ * are available to all plugins. 
  */
 typedef enum
 {
         /** always first entry */
         LED_HW_MIN,
+    
         /** led-gain */
         LED_HW_GAIN,
         /** amount of LEDs controlled by plugin */
         LED_HW_LEDCOUNT,
         /** hardware-id */
         LED_HW_ID,
-        /* add new object-types above this line
-           (don't forget to define name in LedPluginObjNames */
+    
+        /* add new parameter-types above this line
+           (don't forget to define name in 
+            	hardware.c:
+            	led_hardware_get_plugin_param_name()
+		LedPluginParamNames */
+    
         /** always last entry */
         LED_HW_MAX
-}LedPluginObj;
+}LedPluginParam;
 
 
 
 /**
- * @brief plugin-object specific data used as parameter for getter/setter 
- * (also s. @ref LedPluginObj)
- * - when used with the setter, you store the value(s) for the LedPluginObj
+ * @brief plugin-parameter specific data passed to getter/setter 
+ * (also s. @ref LedPluginParam)
+ * - when used with the setter, you store the value(s) for the LedPluginParam
  *   you want to set in the coresponding field of this union
  * - when used with the getter, you can define this union - pass it to the 
- *   getter - and read out the value(s) of the LedPluginObj from the 
+ *   getter - and read out the value(s) of the LedPluginParam from the 
  *   corresponding field afterwards (if getter doesn't fail)
  *
- * @todo remember plugin.so path & add getter
- * @todo proper plugin-specific property API
  */
 typedef union
 {
@@ -149,7 +156,7 @@ typedef union
         LedCount ledcount;
         /** LED_HW_ID: hardware id of plugin instance */
         const char *id;
-}LedPluginObjData;
+}LedPluginParamData;
 
 
 /** 
@@ -226,21 +233,21 @@ typedef struct LedHardwarePlugin
          *
          * @note function is optional - may be NULL (you'll really want it, tho)
          * @p privdata The plugins private data-descriptor from LedHardware->privdata 
-         * @p object type to get data from
+         * @p param plugin parameter
          * @p data union where plugin should store the data
          * @result NFT_SUCCESS or NFT_FAILURE
          */
-        NftResult (*get)(void *privdata, LedPluginObj object, LedPluginObjData *data);
+        NftResult (*get)(void *privdata, LedPluginParam param, LedPluginParamData *data);
         /**
          * set properties or data to plugin
          *
          * @note function is optional - may be NULL (you'll really want it, tho)
          * @p privdata The plugins private data-descriptor from LedHardware->privdata 
-         * @p object type to set data
-         * @p data union where plugin reads object-specific data from
+         * @p param plugin parameter
+         * @p data union where plugin reads parameter-specific data from
          * @result NFT_SUCCESS or NFT_FAILURE if value isn't accepted
          */
-        NftResult (*set)(void *privdata, LedPluginObj object, LedPluginObjData *data);
+        NftResult (*set)(void *privdata, LedPluginParam param, LedPluginParamData *data);
         /**
          * send data from chain to hardware
          *
@@ -301,11 +308,11 @@ NftResult               led_hardware_refresh_mapping(LedHardware *h);
 char *                  led_hardware_get_propname(LedHardware *h, const char *propname);
 
 void                    led_hardware_list_destroy(LedHardware *first);
-LedCount                led_hardware_get_list_ledcount(LedHardware *first);
-NftResult               led_hardware_refresh_gain_list(LedHardware *first);
-NftResult               led_hardware_refresh_mapping_list(LedHardware *first);
-NftResult               led_hardware_send_list(LedHardware *first);
-NftResult               led_hardware_show_list(LedHardware *first);
+LedCount                led_hardware_list_get_ledcount(LedHardware *first);
+NftResult               led_hardware_list_refresh_gain(LedHardware *first);
+NftResult               led_hardware_list_refresh_mapping(LedHardware *first);
+NftResult               led_hardware_list_send(LedHardware *first);
+NftResult               led_hardware_list_show(LedHardware *first);
 
 int                     led_hardware_get_sibling_count(LedHardware *h);
 LedHardware *           led_hardware_get_nth_sibling(LedHardware *h, int n);
@@ -326,7 +333,7 @@ const char *            led_hardware_get_plugin_id_example(LedHardware *h);
 int                     led_hardware_get_plugin_version_major(LedHardware *h);
 int                     led_hardware_get_plugin_version_minor(LedHardware *h);
 int                     led_hardware_get_plugin_version_micro(LedHardware *h);
-const char *            led_hardware_get_plugin_obj_name(LedPluginObj o);
+const char *            led_hardware_get_plugin_param_name(LedPluginParam p);
 
 
 #endif  /* _LED_HARDWARE_H */

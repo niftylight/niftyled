@@ -101,7 +101,7 @@ void led_setup_destroy(LedSetup *s)
     	/* destroy all LedHardware objects */
     	if(s->firstHw)
     	{
-		led_hardware_destroy_list(s->firstHw);
+		led_hardware_list_destroy(s->firstHw);
 	}
 
     	/* be really tidy :) */

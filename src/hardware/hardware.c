@@ -427,13 +427,13 @@ void led_hardware_destroy(LedHardware *h)
  *
  * @param first first LedHardware
  */
-void led_hardware_destroy_list(LedHardware *first)
+void led_hardware_list_destroy(LedHardware *first)
 {       
          if(!first)
                 return;
 
         if(first->relation.next)
-                led_hardware_destroy_list(first->relation.next);
+                led_hardware_list_destroy(first->relation.next);
 
         led_hardware_destroy(first);
         
@@ -625,7 +625,7 @@ const char *led_hardware_get_id(LedHardware *h)
                 return h->props.id;
 
         /* get operation */
-        LedPluginObjData get_id;
+        LedPluginParamData get_id;
         if(h->plugin->get(h->plugin_privdata, LED_HW_ID, &get_id))
         {
                 /* buffer id from hardware */
@@ -663,7 +663,7 @@ NftResult led_hardware_set_id(LedHardware *h, const char *id)
                 if(LED_HARDWARE_PLUGIN_HAS_FUNC(h, set))
                 {
                         /* set id operation */
-                        LedPluginObjData set_id = { .id = id };
+                        LedPluginParamData set_id = { .id = id };
                         if(!h->plugin->set(h->plugin_privdata, LED_HW_ID, &set_id))
                         {      
                                 NFT_LOG(L_ERROR, "Setting ID to plugin failed.");
@@ -844,7 +844,7 @@ NftResult led_hardware_set_ledcount(LedHardware *h, LedCount leds)
         /* set operation */
         if(LED_HARDWARE_PLUGIN_HAS_FUNC(h,set))
         {
-                LedPluginObjData set_ledcount = { .ledcount = leds };
+                LedPluginParamData set_ledcount = { .ledcount = leds };
                 
                 if(!(h->plugin->set(h->plugin_privdata, LED_HW_LEDCOUNT, &set_ledcount)))
                 {
@@ -884,7 +884,7 @@ LedCount led_hardware_get_ledcount(LedHardware *h)
                 return ledcount;
         }
         
-        LedPluginObjData get_ledcount;
+        LedPluginParamData get_ledcount;
         
         if(!(h->plugin->get(h->plugin_privdata, LED_HW_LEDCOUNT, &get_ledcount)))
         {
@@ -911,7 +911,7 @@ LedCount led_hardware_get_ledcount(LedHardware *h)
  * @param h First LedHardware
  * @result sum of LEDs registered to all sibling hardware-interfaces in total or < 0 upon error
  */
-LedCount led_hardware_get_list_ledcount(LedHardware *h)
+LedCount led_hardware_list_get_ledcount(LedHardware *h)
 {
 
         if(!h)
@@ -954,7 +954,7 @@ NftResult led_hardware_set_gain(LedHardware *h, LedCount pos, LedGain gain)
                 return NFT_SUCCESS;
         }
         
-        LedPluginObjData set_gain = { .gain.pos = pos, .gain.value = gain };
+        LedPluginParamData set_gain = { .gain.pos = pos, .gain.value = gain };
         
         if(!(h->plugin->set(h->plugin_privdata, LED_HW_GAIN, &set_gain)))
         {
@@ -988,7 +988,7 @@ LedGain led_hardware_get_gain(LedHardware *h, LedCount pos)
                 return 0;
         }
         
-        LedPluginObjData get_gain = { .gain.pos = pos };
+        LedPluginParamData get_gain = { .gain.pos = pos };
         
         if(!(h->plugin->get(h->plugin_privdata, LED_HW_GAIN, &get_gain)))
         {
@@ -1439,15 +1439,15 @@ int led_hardware_get_plugin_version_micro(LedHardware *h)
 
 
 /**
- * get printable name of LedPluginObj
+ * get printable name of LedPluginParam
  *
- * @param o a valid LedPluginObj type
+ * @param p a valid LedPluginParam type
  * @result pointer to printable name or "undefined"
  */
-const char *led_hardware_get_plugin_obj_name(LedPluginObj o)
+const char *led_hardware_get_plugin_param_name(LedPluginParam o)
 {
-        /** printable names of LedPluginObj definitions */
-        static const char *LedPluginObjNames[] =
+        /** printable names of LedPluginParam definitions */
+        static const char *LedPluginParamNames[] =
         {
                 "GAIN",
                 "LEDCOUNT",
@@ -1457,7 +1457,7 @@ const char *led_hardware_get_plugin_obj_name(LedPluginObj o)
         if(o <= LED_HW_MIN || o >= LED_HW_MAX)
                 return "undefined";
         
-        return LedPluginObjNames[o-1];
+        return LedPluginParamNames[o-1];
 }
 
 
@@ -1506,13 +1506,13 @@ NftResult led_hardware_refresh_mapping(LedHardware *h)
  * @param first first LedHardware
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult led_hardware_refresh_mapping_list(LedHardware *first)
+NftResult led_hardware_list_refresh_mapping(LedHardware *first)
 {
         if(!first)
                 NFT_LOG_NULL(NFT_FAILURE);
 
         if(first->relation.next)
-                if(!led_hardware_refresh_mapping_list(first->relation.next))
+                if(!led_hardware_list_refresh_mapping(first->relation.next))
                         return NFT_FAILURE;
         
         return led_hardware_refresh_mapping(first);
@@ -1552,7 +1552,7 @@ NftResult led_hardware_refresh_gain(LedHardware *h)
  * @param first first LedHardware
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult led_hardware_refresh_gain_list(LedHardware *first)
+NftResult led_hardware_list_refresh_gain(LedHardware *first)
 {
         if(!first)
                 NFT_LOG_NULL(NFT_FAILURE);
@@ -1616,14 +1616,14 @@ NftResult led_hardware_show(LedHardware *h)
  * @param first (first) LedHardware
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult led_hardware_show_list(LedHardware *first)
+NftResult led_hardware_list_show(LedHardware *first)
 {
         if(!first)
                 NFT_LOG_NULL(NFT_FAILURE);
 
         NftResult res = NFT_SUCCESS;
         if(first->relation.next)
-                res = led_hardware_show_list(first->relation.next);
+                res = led_hardware_list_show(first->relation.next);
                         
         
         if(!led_hardware_show(first))
@@ -1676,14 +1676,14 @@ NftResult led_hardware_send(LedHardware *h)
  * @param first first LedHardware
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult led_hardware_send_list(LedHardware *first)
+NftResult led_hardware_list_send(LedHardware *first)
 {
         if(!first)
                 NFT_LOG_NULL(NFT_FAILURE);
 
         NftResult res = NFT_SUCCESS;
         if(first->relation.next)
-                res = led_hardware_send_list(first->relation.next);
+                res = led_hardware_list_send(first->relation.next);
                         
         
         if(!led_hardware_send(first))
