@@ -1,4 +1,4 @@
-# libniftyled Makefile.am - v0.2 - Daniel Hiepler <daniel@niftylight.de> 
+# libniftyled Makefile.am - v0.3 - Daniel Hiepler <daniel@niftylight.de> 
 
 # AMFLAGS
 ACLOCAL_AMFLAGS = -I m4
@@ -12,7 +12,7 @@ AM_LDFLAGS =
 
 
 # subdirs to build
-SUBDIRS = src include
+SUBDIRS = src include utils
 
 # compile tests for "make check"? (configure argument "--disable-tests")
 if RUN_TESTS

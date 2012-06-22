@@ -145,6 +145,8 @@ AC_CONFIG_FILES([
 	src/setup/Makefile \
 	src/tile/Makefile \
 	tests/Makefile \
+	utils/Makefile \
+	utils/ledset/Makefile \
 	${PACKAGE}.pc
 ])
 AC_OUTPUT
