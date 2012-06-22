@@ -387,7 +387,10 @@ void led_hardware_destroy(LedHardware *h)
         if(!h)
                 NFT_LOG_NULL();
         
-        NFT_LOG(L_DEBUG, "Destroying hardware \"%s\" (family: \"%s\" id: \"%s\")", h->props.name, h->plugin->family, h->props.id);
+        NFT_LOG(L_DEBUG, "Destroying hardware \"%s\" (family: \"%s\" id: \"%s\")", 
+                	h->props.name ? h->props.name : "<undefined>", 
+                	h->plugin->family ? h->plugin->family : "<undefined>",
+                	h->props.id ? h->props.id : "<undefined>");
 
         /* unregister from config context */
         //~ led_settings_hardware_unregister(h);       

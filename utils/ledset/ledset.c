@@ -420,7 +420,7 @@ int main(int argc, char *argv[])
                 {
 
                         /* set hardware-stride to 0 while doing this */
-                       /* led_hardware_set_stride(first, 0);*/
+                        /*led_hardware_set_stride(first, 0);*/
                         
                         /* get hardware ledcount */
                         if(_c.ledcount == 0)
@@ -438,12 +438,14 @@ int main(int argc, char *argv[])
                                _c.ledcount, led_hardware_get_name(first), _c.configfile);
                         
                         /* first run through all LEDs once */
+		    	NFT_LOG(L_INFO, "Turning off all LEDs...");
                         int l;
                         for(l=0; l < _c.ledcount; l++)
                         {
                                 _light_led_n(first, l, 0);
                         }
-                        
+                        NFT_LOG(L_INFO, "Done.");
+		    
                         /* initialize new tile */
                         LedTile *tile;
                         if(!(tile = led_tile_new()))
