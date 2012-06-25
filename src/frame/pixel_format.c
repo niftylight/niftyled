@@ -88,10 +88,10 @@ void led_pixel_format_destroy()
  * return data-type used by this format as string
  *
  * @param f LedPixelFormat
- * @param component the component-number (e.g. 1 to get "G" type in "RGB")
+ * @param component the component-number starting from 0 (e.g. 1 to get "G" type in "RGB")
  * @result printable name of format (e.g. "u8") or NULL upon error
  */
-const char *led_pixel_format_type_to_string(LedPixelFormat *f, int component)
+const char *led_pixel_format_get_component_type(LedPixelFormat *f, int component)
 {
         if(component >= led_pixel_format_get_n_components(f))
         {

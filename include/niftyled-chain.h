@@ -94,6 +94,13 @@ typedef LED_GAIN_TYPE LedGain;
 LedChain *              led_chain_new(LedCount ledcount, const char *pixelformat);
 void                    led_chain_destroy(LedChain *c);
 LedChain *              led_chain_dup(LedChain *c);
+NftResult               led_chain_map_from_frame(LedChain *c, LedFrame *f);
+NftResult               led_chain_fill_from_frame(LedChain *c, LedFrame *f);
+void                    led_chain_print(LedChain *f, NftLoglevel l);
+LedCount                led_chain_stride_map(LedChain *c, LedCount stride, LedCount offset);
+LedCount                led_chain_stride_unmap(LedChain *c, LedCount stride, LedCount offset);
+bool                    led_chain_parent_is_hardware(LedChain *c);
+bool                    led_chain_parent_is_tile(LedChain *c);
 
 NftResult               led_chain_set_greyscale(LedChain *c, LedCount pos, long long int value);
 NftResult               led_chain_set_ledcount(LedChain *c, LedCount ledcount);
@@ -105,20 +112,10 @@ Led *                   led_chain_get_nth(LedChain *c, LedCount n);
 LedPixelFormat *        led_chain_get_format(LedChain *c);
 void *                  led_chain_get_buffer(LedChain *chain);
 size_t                  led_chain_get_buffer_size(LedChain *chain);
-
 LedFrameCord            led_chain_get_max_x(LedChain *chain);
 LedFrameCord            led_chain_get_max_y(LedChain *chain);
 LedFrameComponent       led_chain_get_max_component(LedChain *chain);
 LedGain                 led_chain_get_max_gain(LedChain *chain);
-
-
-LedCount                led_chain_stride_map(LedChain *c, LedCount stride, LedCount offset);
-LedCount                led_chain_stride_unmap(LedChain *c, LedCount stride, LedCount offset);
-NftResult               led_chain_map_from_frame(LedChain *c, LedFrame *f);
-NftResult               led_chain_fill_from_frame(LedChain *c, LedFrame *f);
-void                    led_chain_print(LedChain *f, NftLoglevel l);
-bool                    led_chain_parent_is_hardware(LedChain *c);
-bool                    led_chain_parent_is_tile(LedChain *c);
 
 /* Led API */
 LedFrameCord            led_get_x(Led *l);

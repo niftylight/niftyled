@@ -297,7 +297,7 @@ LedPixelFormat *led_frame_get_format(LedFrame *f)
  *
  * @param f a LedFrame
  */
-void led_frame_buffer_print(LedFrame *f)
+void led_frame_print_buffer(LedFrame *f)
 {
 /* loglevel to use for printout */
 #define P_LOGLEVEL L_NOISY
