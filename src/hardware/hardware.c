@@ -1031,6 +1031,9 @@ void led_hardware_print(LedHardware *h, NftLoglevel l)
 
 /**
  * set sibling hardware to this hardware (this fails if hardware already has a sibling)
+ * @param h a LedHardware
+ * @param sibling another LedHardware that should be set as sibling of h
+ * @result NFT_SUCCESS or NFT_FAILURE
  */
 NftResult led_hardware_list_append(LedHardware *h, LedHardware *sibling)
 {
@@ -1066,6 +1069,10 @@ NftResult led_hardware_list_append(LedHardware *h, LedHardware *sibling)
 
 /**
  * append hardware to last sibling of head
+ * @param head a LedHardware
+ * @param sibling another LedHardware that should be set as sibling of the last
+ * LedHardware in the list, starting from head 
+ * @result NFT_SUCCESS or NFT_FAILURE 
  */
 NftResult led_hardware_list_append_head(LedHardware *head, LedHardware *sibling)
 {
@@ -1088,6 +1095,10 @@ NftResult led_hardware_list_append_head(LedHardware *head, LedHardware *sibling)
 
 /**
  * get nth sibling of this hardware
+ *
+ * @param h a LedHardware (probably the head of a linked list ;)
+ * @param n position in list (starting from 0) 
+ * @result LedHardware at position n in list starting from h or NULL upon error
  */
 LedHardware *led_hardware_list_get_nth(LedHardware *h, int n)
 {
@@ -1103,6 +1114,9 @@ LedHardware *led_hardware_list_get_nth(LedHardware *h, int n)
 
 /**
  * get next sibling
+ *
+ * @param h a LedHardware
+ * @result next sibling of h or NULL upon error
  */
 LedHardware *led_hardware_list_get_next(LedHardware *h)
 {
@@ -1115,6 +1129,9 @@ LedHardware *led_hardware_list_get_next(LedHardware *h)
 
 /**
  * get previous sibling
+ *
+ * @param h a LedHardware
+ * @result previous sibling of h or NULL upon error 
  */
 LedHardware *led_hardware_list_get_prev(LedHardware *h)
 {
@@ -1127,6 +1144,9 @@ LedHardware *led_hardware_list_get_prev(LedHardware *h)
 
 /**
  * get amount of siblings this hardware has left
+ *
+ * @param h LedHardware to take as head of a linked list
+ * @result amount of siblings h has 
  */
 int led_hardware_list_get_length(LedHardware *h)
 {
@@ -1247,6 +1267,9 @@ void *led_hardware_plugin_get_privdata(LedHardware *h)
 
 /**
  * getter
+ *
+ * @param h a LedHardware
+ * @result plugin-family of this hardware or NULL 
  */
 const char *led_hardware_plugin_get_family(LedHardware *h)
 {
@@ -1448,7 +1471,7 @@ int led_hardware_plugin_get_version_micro(LedHardware *h)
  * @param p a valid LedPluginParam type
  * @result pointer to printable name or "undefined"
  */
-const char *led_hardware_plugin_get_param_name(LedPluginParam o)
+const char *led_hardware_plugin_get_param_name(LedPluginParam p)
 {
         /** printable names of LedPluginParam definitions */
         static const char *LedPluginParamNames[] =
@@ -1459,10 +1482,10 @@ const char *led_hardware_plugin_get_param_name(LedPluginParam o)
 		"CUSTOM_PROP",
         };
 
-        if(o <= LED_HW_MIN || o >= LED_HW_MAX)
+        if(p <= LED_HW_MIN || p >= LED_HW_MAX)
                 return "undefined";
         
-        return LedPluginParamNames[o-1];
+        return LedPluginParamNames[p-1];
 }
 
 
