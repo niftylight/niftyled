@@ -28,4 +28,4 @@ ledset_LDFLAGS = \
 	$(niftyprefs_LIBS) \
 	$(babl_LIBS) \
 	$(top_srcdir)/src/libniftyled.la \
-	-Wall -no-undefined -no-allow-shlib-undefined
+	-Wall -no-undefined

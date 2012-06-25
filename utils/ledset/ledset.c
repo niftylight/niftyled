@@ -120,10 +120,10 @@ static void _print_plugin_help()
 
 
         int i;
-        for(i = 0; i < led_hardware_get_plugin_count(); i++)
+        for(i = 0; i < led_hardware_plugin_total_count(); i++)
         {
                 const char *name;
-                if(!(name = led_hardware_get_plugin_family_by_n(i)))
+                if(!(name = led_hardware_plugin_get_family_by_n(i)))
                         continue;
 
                 printf("======================================\n\n");
@@ -133,7 +133,7 @@ static void _print_plugin_help()
                         continue;
                 
                 printf("\tID Example: %s\n",
-                       led_hardware_get_plugin_id_example(h));
+                       led_hardware_plugin_get_id_example(h));
 
                 
                 led_hardware_destroy(h);
@@ -398,7 +398,7 @@ int main(int argc, char *argv[])
                         /** seek to hardware */
                         LedHardware *h;
                         LedCount n = _c.ledpos;
-                        for(h = first; h; h = led_hardware_get_next_sibling(h))
+                        for(h = first; h; h = led_hardware_list_get_next(h))
                         {
                                 if(n < led_chain_get_ledcount(led_hardware_get_chain(h)))
                                         break;

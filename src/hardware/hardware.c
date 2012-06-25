@@ -425,6 +425,7 @@ void led_hardware_destroy(LedHardware *h)
 }
 
 
+
 /**
  * destroy hardware and all it's siblings sequentially
  *
@@ -572,36 +573,6 @@ NftResult led_hardware_is_initialized(LedHardware *h)
                 return NFT_FAILURE;
 
         return NFT_SUCCESS;
-}
-
-
-/**
- * get plugin descriptor of this hardware
- *
- * @param h @ref LedHardware descriptor
- * @result LedHardwarePlugin descriptor or NULL upon error
- */
-LedHardwarePlugin *led_hardware_get_plugin(LedHardware *h)
-{
-        if(!h)
-                NFT_LOG_NULL(NULL);
-
-        return h->plugin;
-}
-
-
-/**
- * get pointer that plugin registered as private-data
- *
- * @param h @ref LedHardware descriptor 
- * @result pointer to private data
- */
-void *led_hardware_get_plugin_privdata(LedHardware *h)
-{
-        if(!h)
-                NFT_LOG_NULL(NULL);
-
-        return h->plugin_privdata;
 }
 
 
@@ -1054,14 +1025,14 @@ void led_hardware_print(LedHardware *h, NftLoglevel l)
                 h->params.id,
                 h->params.initialized ? "initialized" : "not initialized",
                 h->params.stride,
-                led_hardware_get_sibling_count(h));
+                led_hardware_list_get_length(h));
 }
 
 
 /**
- * set sibling hardware to this hardware
+ * set sibling hardware to this hardware (this fails if hardware already has a sibling)
  */
-NftResult led_hardware_set_sibling(LedHardware *h, LedHardware *sibling)
+NftResult led_hardware_list_append(LedHardware *h, LedHardware *sibling)
 {
         if(!h)
                 NFT_LOG_NULL(NFT_FAILURE);
@@ -1096,7 +1067,7 @@ NftResult led_hardware_set_sibling(LedHardware *h, LedHardware *sibling)
 /**
  * append hardware to last sibling of head
  */
-NftResult led_hardware_append_sibling(LedHardware *head, LedHardware *sibling)
+NftResult led_hardware_list_append_head(LedHardware *head, LedHardware *sibling)
 {
         if(!head)
                 NFT_LOG_NULL(NFT_FAILURE);
@@ -1110,7 +1081,7 @@ NftResult led_hardware_append_sibling(LedHardware *head, LedHardware *sibling)
             last->relation.next;
             last = last->relation.next);
         
-        return led_hardware_set_sibling(last, sibling);
+        return led_hardware_list_append(last, sibling);
         
 }
 
@@ -1118,7 +1089,7 @@ NftResult led_hardware_append_sibling(LedHardware *head, LedHardware *sibling)
 /**
  * get nth sibling of this hardware
  */
-LedHardware *led_hardware_get_nth_sibling(LedHardware *h, int n)
+LedHardware *led_hardware_list_get_nth(LedHardware *h, int n)
 {
         if(!h)
                 return NULL;
@@ -1126,14 +1097,14 @@ LedHardware *led_hardware_get_nth_sibling(LedHardware *h, int n)
         if(n == 0)
                 return h;
 
-        return led_hardware_get_nth_sibling(h->relation.next, n-1);
+        return led_hardware_list_get_nth(h->relation.next, n-1);
 }
 
 
 /**
  * get next sibling
  */
-LedHardware *led_hardware_get_next_sibling(LedHardware *h)
+LedHardware *led_hardware_list_get_next(LedHardware *h)
 {
         if(!h)
                 NFT_LOG_NULL(NULL);
@@ -1145,7 +1116,7 @@ LedHardware *led_hardware_get_next_sibling(LedHardware *h)
 /**
  * get previous sibling
  */
-LedHardware *led_hardware_get_prev_sibling(LedHardware *h)
+LedHardware *led_hardware_list_get_prev(LedHardware *h)
 {
         if(!h)
                 NFT_LOG_NULL(NULL);
@@ -1157,7 +1128,7 @@ LedHardware *led_hardware_get_prev_sibling(LedHardware *h)
 /**
  * get amount of siblings this hardware has left
  */
-int led_hardware_get_sibling_count(LedHardware *h)
+int led_hardware_list_get_length(LedHardware *h)
 {
         LedHardware *t = h;
         int i;
@@ -1207,7 +1178,7 @@ void led_hardware_plugin_print(LedHardwarePlugin *p, NftLoglevel l)
  *
  * @result amount of installed hardware plugins
  */
-int led_hardware_get_plugin_count()
+int led_hardware_plugin_total_count()
 {       
         int amount = 0;
         
@@ -1245,9 +1216,39 @@ int led_hardware_get_plugin_count()
 
 
 /**
+ * get plugin descriptor of this hardware
+ *
+ * @param h @ref LedHardware descriptor
+ * @result LedHardwarePlugin descriptor or NULL upon error
+ */
+LedHardwarePlugin *led_hardware_get_plugin(LedHardware *h)
+{
+        if(!h)
+                NFT_LOG_NULL(NULL);
+
+        return h->plugin;
+}
+
+
+/**
+ * get pointer that plugin registered as private-data
+ *
+ * @param h @ref LedHardware descriptor 
+ * @result pointer to private data
+ */
+void *led_hardware_plugin_get_privdata(LedHardware *h)
+{
+        if(!h)
+                NFT_LOG_NULL(NULL);
+
+        return h->plugin_privdata;
+}
+
+
+/**
  * getter
  */
-const char *led_hardware_get_plugin_family(LedHardware *h)
+const char *led_hardware_plugin_get_family(LedHardware *h)
 {
         if(!h || !h->plugin)
                 NFT_LOG_NULL(NULL);
@@ -1259,11 +1260,11 @@ const char *led_hardware_get_plugin_family(LedHardware *h)
 /**
  * get family-name of a certain installed plugin
  *
- * @param num the index of the plugin (0 to led_hardware_plugin_count()-1).
+ * @param num the index of the plugin (0 to led_hardware_plugin_total_count()-1).
  *        A value of 0 will always bring the "dummy" hardware-plugin
  * @result string holding the name of this plugin or NULL
  */
-const char *led_hardware_get_plugin_family_by_n(int num)
+const char *led_hardware_plugin_get_family_by_n(int num)
 {
         int index = num;
         
@@ -1299,7 +1300,7 @@ const char *led_hardware_get_plugin_family_by_n(int num)
         }
 
         NFT_LOG(L_WARNING, "invalid index %d. Only %d installed hardware-plugins found.", 
-                index, led_hardware_get_plugin_count());
+                index, led_hardware_plugin_total_count());
         
         return NULL;
 }
@@ -1312,7 +1313,7 @@ const char *led_hardware_get_plugin_family_by_n(int num)
  * @param h @ref LedHardware descriptor
  * @result license-string
  */
-const char *led_hardware_get_plugin_license(LedHardware *h)
+const char *led_hardware_plugin_get_license(LedHardware *h)
 {
         if(!h || !h->plugin)
                 NFT_LOG_NULL(NULL);
@@ -1330,7 +1331,7 @@ const char *led_hardware_get_plugin_license(LedHardware *h)
  * @param h @ref LedHardware descriptor
  * @result author-string
  */
-const char *led_hardware_get_plugin_author(LedHardware *h)
+const char *led_hardware_plugin_get_author(LedHardware *h)
 {
         if(!h || !h->plugin)
                 NFT_LOG_NULL(NULL);
@@ -1348,7 +1349,7 @@ const char *led_hardware_get_plugin_author(LedHardware *h)
  * @param h @ref LedHardware descriptor
  * @result description-string
  */
-const char *led_hardware_get_plugin_description(LedHardware *h)
+const char *led_hardware_plugin_get_description(LedHardware *h)
 {
         if(!h || !h->plugin)
                 NFT_LOG_NULL(NULL);
@@ -1366,7 +1367,7 @@ const char *led_hardware_get_plugin_description(LedHardware *h)
  * @param h @ref LedHardware descriptor
  * @result url-string
  */
-const char *led_hardware_get_plugin_url(LedHardware *h)
+const char *led_hardware_plugin_get_url(LedHardware *h)
 {
         if(!h || !h->plugin)
                 NFT_LOG_NULL(NULL);
@@ -1384,7 +1385,7 @@ const char *led_hardware_get_plugin_url(LedHardware *h)
  * @param h @ref LedHardware descriptor
  * @result id-example-string
  */
-const char *led_hardware_get_plugin_id_example(LedHardware *h)
+const char *led_hardware_plugin_get_id_example(LedHardware *h)
 {
         if(!h || !h->plugin)
                 NFT_LOG_NULL(NULL);
@@ -1402,7 +1403,7 @@ const char *led_hardware_get_plugin_id_example(LedHardware *h)
  * @param h @ref LedHardware descriptor
  * @result major version number
  */
-int led_hardware_get_plugin_version_major(LedHardware *h)
+int led_hardware_plugin_get_version_major(LedHardware *h)
 {
         if(!h || !h->plugin)
                 NFT_LOG_NULL(-1);
@@ -1417,7 +1418,7 @@ int led_hardware_get_plugin_version_major(LedHardware *h)
  * @param h @ref LedHardware descriptor
  * @result minor version number
  */
-int led_hardware_get_plugin_version_minor(LedHardware *h)
+int led_hardware_plugin_get_version_minor(LedHardware *h)
 {
         if(!h || !h->plugin)
                 NFT_LOG_NULL(-1);
@@ -1432,7 +1433,7 @@ int led_hardware_get_plugin_version_minor(LedHardware *h)
  * @param h @ref LedHardware descriptor
  * @result micro version number
  */
-int led_hardware_get_plugin_version_micro(LedHardware *h)
+int led_hardware_plugin_get_version_micro(LedHardware *h)
 {
         if(!h || !h->plugin)
                 NFT_LOG_NULL(-1);
@@ -1447,7 +1448,7 @@ int led_hardware_get_plugin_version_micro(LedHardware *h)
  * @param p a valid LedPluginParam type
  * @result pointer to printable name or "undefined"
  */
-const char *led_hardware_get_plugin_param_name(LedPluginParam o)
+const char *led_hardware_plugin_get_param_name(LedPluginParam o)
 {
         /** printable names of LedPluginParam definitions */
         static const char *LedPluginParamNames[] =
@@ -1455,12 +1456,30 @@ const char *led_hardware_get_plugin_param_name(LedPluginParam o)
                 "GAIN",
                 "LEDCOUNT",
                 "HW_ID",
+		"CUSTOM_PROP",
         };
 
         if(o <= LED_HW_MIN || o >= LED_HW_MAX)
                 return "undefined";
         
         return LedPluginParamNames[o-1];
+}
+
+
+/**
+ * helper to combine plugin-name with property-name
+ *
+ * @param h LedHardware descriptor
+ * @param propname name of property
+ * @result string of form <hardware-instance-name>-<property-name>
+ */
+const char *led_hardware_get_propname(LedHardware *h, const char *propname)
+{
+
+        static char tmpname[256];
+        snprintf(tmpname, sizeof(tmpname), "%s-%s", h->params.name, propname);
+
+        return tmpname;
 }
 
 
@@ -1695,21 +1714,7 @@ NftResult led_hardware_list_send(LedHardware *first)
         return res;
 }
 
-/**
- * helper to combine plugin-name with property-name
- *
- * @param h LedHardware descriptor
- * @param propname name of property
- * @result string of form <hardware-instance-name>-<property-name>
- */
-char *led_hardware_get_propname(LedHardware *h, const char *propname)
-{
 
-        static char tmpname[256];
-        snprintf(tmpname, sizeof(tmpname), "%s-%s", h->params.name, propname);
-
-        return tmpname;
-}
 
 
 

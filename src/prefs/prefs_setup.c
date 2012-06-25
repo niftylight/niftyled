@@ -74,25 +74,25 @@
  */
 static NftResult _prefs_from_setup(NftPrefs *p, NftPrefsNode *n, void *obj, void *userptr)
 {
-            if(!p || !n || !obj)
+        if(!p || !n || !obj)
                 NFT_LOG_NULL(NFT_FAILURE);
 
-            /* "Setup" object */
-            LedSetup *s = obj;
+        /* "Setup" object */
+        LedSetup *s = obj;
 
-            /* process all "hardware" objects */
-            LedHardware *h;
-            for(h = led_setup_get_hardware(s); h; h = led_hardware_get_next_sibling(h))
+        /* process all "hardware" objects */
+        LedHardware *h;
+        for(h = led_setup_get_hardware(s); h; h = led_hardware_list_get_next(h))
         {
-            /* generate prefs for each hardware node */
-            NftPrefsNode *node;
-            if(!(node = nft_prefs_obj_to_node(p, LED_HARDWARE_NAME, h, NULL)))
-                return NFT_FAILURE;
+                /* generate prefs for each hardware node */
+                NftPrefsNode *node;
+                if(!(node = nft_prefs_obj_to_node(p, LED_HARDWARE_NAME, h, NULL)))
+                        return NFT_FAILURE;
 
-            /* add hardware to this setup */
-            if(!(nft_prefs_node_add_child(n, node)))
-                return NFT_FAILURE;
-            
+                /* add hardware to this setup */
+                if(!(nft_prefs_node_add_child(n, node)))
+                        return NFT_FAILURE;
+
         }
 
         return NFT_SUCCESS;
@@ -152,7 +152,7 @@ static NftResult _prefs_to_setup(LedPrefs *p, void **newObj, NftPrefsNode *n, vo
                 /* attach hardware to list */
                 else
                 {
-                        if(!led_hardware_append_sibling(led_setup_get_hardware(s), hw))
+                        if(!led_hardware_list_append_head(led_setup_get_hardware(s), hw))
                             {
                                 NFT_LOG(L_ERROR, "Failed to append LedHardware as sibling");
                                 return NFT_FAILURE;
