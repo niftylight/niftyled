@@ -742,7 +742,7 @@ NftResult led_hardware_append_tile(LedHardware *h, LedTile *t)
         if(!h->relation.first_tile)
                 return led_hardware_set_tile(h, t);
         
-        if(!(led_tile_append_sibling(h->relation.first_tile, t)))
+        if(!(led_tile_list_append_head(h->relation.first_tile, t)))
             {
                 NFT_LOG(L_ERROR, "Failed to append tile %p to hardware \"%s\"", 
                                 t, led_hardware_get_name(h));
@@ -1497,7 +1497,7 @@ NftResult led_hardware_refresh_mapping(LedHardware *h)
         /* map tiles to chain */
         LedTile *t;
         int mapped = 0;
-        for(t = h->relation.first_tile; t; t = led_tile_get_next_sibling(t))
+        for(t = h->relation.first_tile; t; t = led_tile_list_get_next(t))
         {
                 if((mapped += led_tile_to_chain(t, h->relation.chain, mapped)) == -1)
                 {

@@ -136,7 +136,7 @@ static NftResult _prefs_from_tile(NftPrefs *p, NftPrefsNode *n, void *obj, void 
         
         /* child tiles of this tile */
         LedTile *child;
-        for(child = led_tile_get_child(t); child; child = led_tile_get_next_sibling(child))
+        for(child = led_tile_get_child(t); child; child = led_tile_list_get_next(child))
         {
                     /* generate prefs node from tile */
                     NftPrefsNode *node;

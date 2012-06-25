@@ -931,7 +931,7 @@ LedCount led_tile_get_ledcount(LedTile *m)
  * @param sibling LedTile descriptor of sibling to be attached
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult led_tile_append_sibling(LedTile *head, LedTile *sibling)
+NftResult led_tile_list_append_head(LedTile *head, LedTile *sibling)
 {
         if(!head)
                 NFT_LOG_NULL(NFT_FAILURE);
@@ -945,7 +945,7 @@ NftResult led_tile_append_sibling(LedTile *head, LedTile *sibling)
             last->relation.next;
             last = last->relation.next);
 
-        return led_tile_set_sibling(last, sibling);
+        return led_tile_list_append(last, sibling);
 }
 
 
@@ -956,7 +956,7 @@ NftResult led_tile_append_sibling(LedTile *head, LedTile *sibling)
  * @param sibling the younger tile that gets "t" registered as "previous tile"
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult led_tile_set_sibling(LedTile *t, LedTile *sibling)
+NftResult led_tile_list_append(LedTile *t, LedTile *sibling)
 {
         if(!t)
                 NFT_LOG_NULL(NFT_FAILURE);
@@ -989,7 +989,7 @@ NftResult led_tile_set_sibling(LedTile *t, LedTile *sibling)
  * @param n position of sibling to get
  * @result LedTile descriptor of nth sibling
  */
-LedTile *led_tile_get_nth_sibling(LedTile *m, int n)
+LedTile *led_tile_list_get_nth(LedTile *m, int n)
 {
         if(!m)
                 return NULL;
@@ -997,7 +997,7 @@ LedTile *led_tile_get_nth_sibling(LedTile *m, int n)
         if(n == 0)
                 return m;
 
-        return led_tile_get_nth_sibling(m->relation.next, n-1);
+        return led_tile_list_get_nth(m->relation.next, n-1);
 }
 
 
@@ -1007,7 +1007,7 @@ LedTile *led_tile_get_nth_sibling(LedTile *m, int n)
  * @param m LedTile descriptor
  * @result LedTile descriptor of next sibling
  */
-LedTile *led_tile_get_next_sibling(LedTile *m)
+LedTile *led_tile_list_get_next(LedTile *m)
 {
         if(!m)
                 NFT_LOG_NULL(NULL);
@@ -1022,7 +1022,7 @@ LedTile *led_tile_get_next_sibling(LedTile *m)
  * @param m LedTile descriptor
  * @result LedTile descriptor of previous sibling
  */
-LedTile *led_tile_get_prev_sibling(LedTile *m)
+LedTile *led_tile_list_get_prev(LedTile *m)
 {
         if(!m)
                 NFT_LOG_NULL(NULL);
@@ -1066,7 +1066,7 @@ NftResult led_tile_append_child(LedTile *m, LedTile *child)
                         return NFT_SUCCESS;
 
                 /* set child at last sibling-tile */
-                led_tile_append_sibling(m->relation.child, child);
+                led_tile_list_append_head(m->relation.child, child);
         }
         
         /* register parent with child */
