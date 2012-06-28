@@ -62,12 +62,18 @@
 #include "niftyled-pixel_format.h"
 
 
+/** type used to address a LedFrameComponent */
+#define LED_T_COMPONENT		short
+/** type used for frame coordinates (x/y) */
+#define LED_T_COORDINATE 	int
+
+
 /** model of one pixelframe */
 typedef struct _LedFrame LedFrame;
 /** type to define coordinates (x,y positions, width & height) */
-typedef int LedFrameCord;
+typedef LED_T_COORDINATE LedFrameCord;
 /** type to define the channelnumber for one portion of a pixel */
-typedef short LedFrameComponent;
+typedef LED_T_COMPONENT LedFrameComponent;
 
 
 
