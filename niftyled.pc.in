@@ -7,6 +7,8 @@ includedir=@includedir@
 Name: @PACKAGE@
 Description: @PACKAGE_DESCRIPTION@
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -l@PACKAGE@ @niftylog_LIBS@ @niftyprefs_LIBS@ @babl_LIBS@ -ldl
+Libs: -L${libdir} -l@PACKAGE@ -ldl
 Libs.private: 
-Cflags: -I@includedir@/lib@PACKAGE@-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ @niftylog_CFLAGS@ @niftyprefs_CFLAGS@ @babl_CFLAGS@
+Requires: babl niftyprefs niftylog
+Requires.private:
+Cflags: -I@includedir@/lib@PACKAGE@-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ 
