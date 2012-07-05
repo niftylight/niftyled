@@ -15,14 +15,13 @@ SUBDIRS = \
 
 EXTRA_DIST = Makefile.global.am
 
-# object files
-lib@PACKAGE@_la_SOURCES = \
-	version.c
-	
-
 
 # target library
 lib_LTLIBRARIES = lib@PACKAGE@.la
+
+# sources
+lib@PACKAGE@_la_SOURCES = \
+	version.c
 
 # cflags 
 lib@PACKAGE@_la_CFLAGS = \
