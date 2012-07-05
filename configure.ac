@@ -47,6 +47,7 @@ AC_SUBST([PACKAGE_GIT_VERSION], m4_esyscmd([./version.sh --git]), [git version])
 # --------------------------------
 LT_INIT
 AM_PROG_CC_C_O
+AM_PROG_LIBTOOL
 PKG_PROG_PKG_CONFIG([0.14])
 if test -z "$PKG_CONFIG"; then
   AC_MSG_ERROR([*** pkg-config not found. See http://www.freedesktop.org/software/pkgconfig/ or check your distribution.])
@@ -100,6 +101,17 @@ AC_C_BIGENDIAN
 # --------------------------------
 # Check for system-services
 # --------------------------------
+
+
+# --------------------------------
+# Check for target-specific stuff 
+# when cross-compiling
+# --------------------------------
+case "${host}" in
+    *-mingw32*|*-winnt*)
+        CFLAGS="${CFLAGS} -DWIN32"
+    ;;
+esac
 
 
 # --------------------------------
