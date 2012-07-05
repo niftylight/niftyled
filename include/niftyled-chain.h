@@ -91,6 +91,10 @@ typedef LED_T_GAIN LedGain;
 #include "niftyled-tile.h"
 
 
+
+
+
+
 /* LedChain API */
 LedChain *              led_chain_new(LedCount ledcount, const char *pixelformat);
 void                    led_chain_destroy(LedChain *c);
@@ -117,6 +121,7 @@ LedFrameCord            led_chain_get_max_x(LedChain *chain);
 LedFrameCord            led_chain_get_max_y(LedChain *chain);
 LedFrameComponent       led_chain_get_max_component(LedChain *chain);
 LedGain                 led_chain_get_max_gain(LedChain *chain);
+
 
 /* Led API */
 LedFrameCord            led_get_x(Led *l);

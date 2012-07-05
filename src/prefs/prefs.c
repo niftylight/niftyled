@@ -82,27 +82,27 @@
  */
 LedPrefs *led_prefs_init()
 {
-            /* initialize libniftyprefs */
+        /* initialize libniftyprefs */
         LedPrefs *p;
         if(!(p = nft_prefs_init()))
                 return NULL;
 
 
-            /* register overall setup class */
-            if(!(_prefs_setup_class_register(p)))
-                goto _lpi_error;
+	/* register overall setup class */
+	if(!(_prefs_setup_class_register(p)))
+	    	goto _lpi_error;
                  
         /* register hardware class */
-            if(!(_prefs_hardware_class_register(p)))
-                goto _lpi_error;
-
+	if(!(_prefs_hardware_class_register(p)))
+	    	goto _lpi_error;
+	
         /* register tile class */
         if(!(_prefs_tile_class_register(p)))
                 goto _lpi_error;
     
         /* register chain class */
-            if(!(_prefs_chain_class_register(p)))
-                goto _lpi_error;
+	if(!(_prefs_chain_class_register(p)))
+	    	goto _lpi_error;
 
         /* register LED class */
         if(!(_prefs_led_class_register(p)))
@@ -142,7 +142,7 @@ NftResult led_prefs_default_filename(char *dst, size_t size, const char *filenam
 {
         /* try to get environment variable */
         char *env;
-        if((env = getenv("NIFTY_SETTINGS")))
+        if((env = getenv("NIFTY_PREFS")))
         {
                 strncpy(dst, env, size);
                 return NFT_SUCCESS;

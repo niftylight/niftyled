@@ -60,9 +60,9 @@
 #define _LED_PREFS_CHAIN_H
 
 
-/** name of the LedChain object for NftSettings */
+/** name of the LedChain object for NftPrefs */
 #define LED_CHAIN_NAME  "chain"
-/** name of the Led object for NftSettings */
+/** name of the Led object for NftPrefs */
 #define LED_LED_NAME    "led"
 
 
