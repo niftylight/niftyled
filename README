@@ -1,3 +1,8 @@
+==============================
+Niftyled LED display framework
+==============================
+
 library designed to provide an abstract interface for LED/lighting hardware to easily control it using pixel data.
 
-http://wiki.niftylight.de/libniftyled for all further info
+See:
+* http://wiki.niftylight.de/libniftyled for all further info
