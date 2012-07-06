@@ -259,8 +259,15 @@ LedChain *led_chain_new(LedCount ledcount, const char *pixelformat)
                         ledcount, ((ledcount/components)+1)*components, led_pixel_format_to_string(c->format), components);
         }
         
-        int pixels = ledcount/components;
-
+        
+	/* amount of pixels */
+	int pixels = ledcount/components;
+	if(pixels == 0)
+	{
+		NFT_LOG(L_ERROR, "You didn't define enough LEDs to form a full %s pixel.", led_pixel_format_to_string(c->format));
+		goto _lcn_error;
+	}
+	
         /* remember our ledcount */
         c->ledcount = ledcount;
         
