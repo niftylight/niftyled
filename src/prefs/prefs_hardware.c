@@ -108,7 +108,7 @@ static NftResult _prefs_from_hardware(NftPrefs *p, NftPrefsNode *n, void *obj, v
 
         /* plugin family of hardware */
         if(!nft_prefs_node_prop_string_set(n, LED_HARDWARE_PROP_PLUGIN,
-                                          (char *) led_hardware_get_name(h)))
+                                          (char *) led_hardware_plugin_get_family(h)))
                 return NFT_FAILURE;
     
         
@@ -144,7 +144,7 @@ static NftResult _prefs_from_hardware(NftPrefs *p, NftPrefsNode *n, void *obj, v
 		}
 
 		/* name of property */
-		if(!nft_prefs_node_prop_string_set(n, LED_HARDWARE_PROPERTY_PROP_NAME,
+		if(!nft_prefs_node_prop_string_set(pnode, LED_HARDWARE_PROPERTY_PROP_NAME,
                                           (char *) led_hardware_plugin_prop_get_name(prop)))
                 	return NFT_FAILURE;
 
@@ -154,7 +154,7 @@ static NftResult _prefs_from_hardware(NftPrefs *p, NftPrefsNode *n, void *obj, v
 			case LED_HW_CUSTOM_PROP_STRING:
 			{
 				/* save type */
-				if(!nft_prefs_node_prop_string_set(n, LED_HARDWARE_PROPERTY_PROP_TYPE,
+				if(!nft_prefs_node_prop_string_set(pnode, LED_HARDWARE_PROPERTY_PROP_TYPE,
                                           "string"))
                 			return NFT_FAILURE;
 
@@ -166,7 +166,7 @@ static NftResult _prefs_from_hardware(NftPrefs *p, NftPrefsNode *n, void *obj, v
 					return NFT_FAILURE;
 				
 				/* save value */
-				if(!nft_prefs_node_prop_string_set(n, LED_HARDWARE_PROPERTY_PROP_VALUE,
+				if(!nft_prefs_node_prop_string_set(pnode, LED_HARDWARE_PROPERTY_PROP_VALUE,
                                           string))
                 			return NFT_FAILURE;
 
@@ -176,7 +176,7 @@ static NftResult _prefs_from_hardware(NftPrefs *p, NftPrefsNode *n, void *obj, v
 			case LED_HW_CUSTOM_PROP_INT:
 			{
 				/* save type */
-				if(!nft_prefs_node_prop_string_set(n, LED_HARDWARE_PROPERTY_PROP_TYPE,
+				if(!nft_prefs_node_prop_string_set(pnode, LED_HARDWARE_PROPERTY_PROP_TYPE,
                                           "int"))
                 			return NFT_FAILURE;
 
@@ -197,7 +197,7 @@ static NftResult _prefs_from_hardware(NftPrefs *p, NftPrefsNode *n, void *obj, v
 				snprintf(string, 64, "%d", integer);
 				
 				/* save value */
-				if(!nft_prefs_node_prop_string_set(n, LED_HARDWARE_PROPERTY_PROP_VALUE,
+				if(!nft_prefs_node_prop_string_set(pnode, LED_HARDWARE_PROPERTY_PROP_VALUE,
 					string))
 					return NFT_FAILURE;
 				break;
@@ -206,7 +206,7 @@ static NftResult _prefs_from_hardware(NftPrefs *p, NftPrefsNode *n, void *obj, v
 			case LED_HW_CUSTOM_PROP_FLOAT:
 			{
 				/* save type */
-				if(!nft_prefs_node_prop_string_set(n, LED_HARDWARE_PROPERTY_PROP_TYPE,
+				if(!nft_prefs_node_prop_string_set(pnode, LED_HARDWARE_PROPERTY_PROP_TYPE,
                                           "float"))
                 			return NFT_FAILURE;
 
@@ -227,7 +227,7 @@ static NftResult _prefs_from_hardware(NftPrefs *p, NftPrefsNode *n, void *obj, v
 				snprintf(string, 64, "%f", fp);
 				
 				/* save value */
-				if(!nft_prefs_node_prop_string_set(n, LED_HARDWARE_PROPERTY_PROP_VALUE,
+				if(!nft_prefs_node_prop_string_set(pnode, LED_HARDWARE_PROPERTY_PROP_VALUE,
 					string))
 					return NFT_FAILURE;
 				
