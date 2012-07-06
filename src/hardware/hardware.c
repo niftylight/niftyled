@@ -438,7 +438,7 @@ void led_hardware_destroy(LedHardware *h)
         /* unload plugin */
         _unload_plugin(h);
 
-        
+	
         /* free descriptor */
         free(h);
 }
@@ -1913,6 +1913,21 @@ int led_hardware_plugin_prop_count(LedHardware *h)
 		NFT_LOG_NULL(0);
 	
 	return _prop_list_count(h->first_prop, 0);
+}
+
+
+/**
+ * get next property of current property
+ *
+ * @param p current property
+ * @result next sibling property or NULL
+ */
+LedPluginCustomProp *	led_hardware_plugin_prop_next(LedPluginCustomProp *p)
+{
+	if(!p)
+		NFT_LOG_NULL(NULL);
+
+	return p->list.next;
 }
 
 

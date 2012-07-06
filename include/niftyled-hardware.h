@@ -392,6 +392,7 @@ NftResult               led_hardware_plugin_prop_register(LedHardware *h, const 
 void                    led_hardware_plugin_prop_unregister(LedHardware *h, const char *propname);
 int                     led_hardware_plugin_prop_count(LedHardware *h);
 LedPluginCustomProp *	led_hardware_plugin_prop_nth(LedHardware *h, int n);
+LedPluginCustomProp *	led_hardware_plugin_prop_next(LedPluginCustomProp *p);
 LedPluginCustomPropType led_hardware_plugin_prop_type_from_string(const char *type);
 
 NftResult               led_hardware_plugin_prop_set_string(LedHardware *h, const char *propname, const char *s);
