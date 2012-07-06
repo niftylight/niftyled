@@ -383,8 +383,8 @@ int main(int argc, char *argv[])
 
     
         /* first hardware */
-        LedHardware *first;
-        if(!(first = led_setup_get_hardware(s)))
+        LedHardware *firstHw;
+        if(!(firstHw = led_setup_get_hardware(s)))
         {
                 NFT_LOG(L_ERROR, "No hardware registered. Cannot send value.");
                 goto m_exit;
@@ -398,7 +398,7 @@ int main(int argc, char *argv[])
                         /** seek to hardware */
                         LedHardware *h;
                         LedCount n = _c.ledpos;
-                        for(h = first; h; h = led_hardware_list_get_next(h))
+                        for(h = firstHw; h; h = led_hardware_list_get_next(h))
                         {
                                 if(n < led_chain_get_ledcount(led_hardware_get_chain(h)))
                                         break;
@@ -424,7 +424,7 @@ int main(int argc, char *argv[])
                         
                         /* get hardware ledcount */
                         if(_c.ledcount == 0)
-                                _c.ledcount = led_chain_get_ledcount(led_hardware_get_chain(first));
+                                _c.ledcount = led_chain_get_ledcount(led_hardware_get_chain(firstHw));
                         if(_c.ledcount <= 0)
                         {
                                 NFT_LOG(L_ERROR, "ledcount must be > 0");
@@ -435,14 +435,14 @@ int main(int argc, char *argv[])
                                "Going through all %d LEDs on adapter \"%s\" as defined in \"%s\",\n"
                                "lighting one LED at a time. Please enter attributes of the LED that is currently lit.\n"
                                "=====================================================\n\n",
-                               _c.ledcount, led_hardware_get_name(first), _c.configfile);
+                               _c.ledcount, led_hardware_get_name(firstHw), _c.configfile);
                         
                         /* first run through all LEDs once */
                             NFT_LOG(L_INFO, "Turning off all LEDs...");
                         int l;
                         for(l=0; l < _c.ledcount; l++)
                         {
-                                _light_led_n(first, l, 0);
+                                _light_led_n(firstHw, l, 0);
                         }
                         NFT_LOG(L_INFO, "Done.");
                     
@@ -455,7 +455,7 @@ int main(int argc, char *argv[])
                         }
 
                             /* attach tile to hardware */
-                            if(!(led_hardware_append_tile(first, tile)))
+                            if(!(led_hardware_append_tile(firstHw, tile)))
                             {
                                 NFT_LOG(L_ERROR, "Failed to attach tile to hardware");
                                 goto m_exit;
@@ -465,7 +465,7 @@ int main(int argc, char *argv[])
                         LedChain *chain;
                         if(!(chain = led_chain_new(_c.ledcount, led_pixel_format_to_string(
                                                         led_chain_get_format(
-                                                                led_hardware_get_chain(first)))))
+                                                                led_hardware_get_chain(firstHw)))))
                            )
                         {
                                 NFT_LOG(L_ERROR, "Failed to create new chain.");
@@ -485,7 +485,7 @@ int main(int argc, char *argv[])
                                 int x,y,component;
                                 
                                 /* light LED n */
-                                _light_led_n(first, l, _c.ledval);
+                                _light_led_n(firstHw, l, _c.ledval);
                                 
                                 /* ask for channel of LED n */
                                 printf("Enter component of LED %d: ", l);
@@ -518,7 +518,7 @@ int main(int argc, char *argv[])
                                 }
 
                                 /* turn LED off */
-                                _light_led_n(first, l, 0);
+                                _light_led_n(firstHw, l, 0);
                                 
                                 /* update X/Y-values in config */
                                 Led *led = led_chain_get_nth(chain, l); 
@@ -529,14 +529,14 @@ int main(int argc, char *argv[])
 
                         /* apply stride */
                         NftResult r;
-                        if((r = led_chain_stride_unmap(chain, led_hardware_get_stride(first), 0)) != _c.ledcount)
+                        if((r = led_chain_stride_unmap(chain, led_hardware_get_stride(firstHw), 0)) != _c.ledcount)
                         {
                                 NFT_LOG(L_ERROR, "Amount of LEDs stride-mapped (%d) != total amount of LEDs (%d)",
                                         r, _c.ledcount);
                         }
                         
                         /* save config */
-                        if(!(pnode = led_prefs_hardware_to_node(p, first)))
+                        if(!(pnode = led_prefs_hardware_to_node(p, firstHw)))
                             {
                                 NFT_LOG(L_ERROR, "Failed to create prefs-node from hardware.");
                                 break;
