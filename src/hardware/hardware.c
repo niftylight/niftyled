@@ -1894,7 +1894,7 @@ void led_hardware_plugin_prop_unregister(LedHardware *h, const char *propname)
 
 	if(p == h->first_prop)
 	{
-		h->first_prop = NULL;
+		h->first_prop = p->list.next;
 	}
 	
 	free(p);
@@ -1922,7 +1922,7 @@ int led_hardware_plugin_prop_count(LedHardware *h)
  * @param p current property
  * @result next sibling property or NULL
  */
-LedPluginCustomProp *	led_hardware_plugin_prop_next(LedPluginCustomProp *p)
+LedPluginCustomProp *led_hardware_plugin_prop_next(LedPluginCustomProp *p)
 {
 	if(!p)
 		NFT_LOG_NULL(NULL);
