@@ -172,90 +172,92 @@ static NftResult _prefs_from_led(NftPrefs *p, NftPrefsNode *n, void *obj, void *
  */
 static NftResult _prefs_to_chain(LedPrefs *p, void **newObj, NftPrefsNode *n, void *userptr)
 {
-            if(!p || ! newObj)
-                NFT_LOG_NULL(NFT_FAILURE);
+	if(!p || ! newObj)
+		NFT_LOG_NULL(NFT_FAILURE);
 
 
 
 
-            /* LedCount of chain */
-            LedCount count;
-            if(!nft_prefs_node_prop_int_get(n, LED_CHAIN_PROP_LEDCOUNT, (int *) &count))
-            {
-                count = 0;
-                
-                NFT_LOG(L_WARNING, "chain has no \"%s\" property. Using %d as default.",
-                                LED_CHAIN_PROP_LEDCOUNT, count);
-        }
+	/* LedCount of chain */
+	LedCount count;
+	if(!nft_prefs_node_prop_int_get(n, LED_CHAIN_PROP_LEDCOUNT, (int *) &count))
+	{
+		count = 0;
 
-              /* new chain */
-            LedChain *c;
-    
-            /* get format of this chain */
-            char *format;
-        if(!(format = nft_prefs_node_prop_string_get(n, 
-                                                    LED_CHAIN_PROP_FORMAT)))
-            {        
+		NFT_LOG(L_WARNING, "chain has no \"%s\" property. Using %d as default.",
+		        LED_CHAIN_PROP_LEDCOUNT, count);
+	}
+
+	/* new chain */
+	LedChain *c;
+
+	/* get format of this chain */
+	char *format;
+	if(!(format = nft_prefs_node_prop_string_get(n, 
+	                                             LED_CHAIN_PROP_FORMAT)))
+	{        
 
 #define LED_CHAIN_DEFAULT_FORMAT "RGB u8"
-                
-                NFT_LOG(L_WARNING, "chain has no \"%s\" property. Using \"%s\" as default.",
-                        LED_CHAIN_PROP_FORMAT, LED_CHAIN_DEFAULT_FORMAT);
 
-                /* new chain (with default format) */
-                if(!(c = led_chain_new(count, LED_CHAIN_DEFAULT_FORMAT)))
-                {
-                        NFT_LOG(L_ERROR, "Failed to create new LedSetup object");
-                        return NFT_FAILURE;
-                }
-                
-                /* free string */
-                    nft_prefs_free(format);
-        }
-            /* create new chain with given format */
-            else
-            {
-            /* new chain */
-            if(!(c = led_chain_new(count, format)))
-            {
-                    NFT_LOG(L_ERROR, "Failed to create new LedSetup object");
-                    return NFT_FAILURE;
-            }
-        }
+		NFT_LOG(L_WARNING, "chain has no \"%s\" property. Using \"%s\" as default.",
+		        LED_CHAIN_PROP_FORMAT, LED_CHAIN_DEFAULT_FORMAT);
 
-    
-            /* process child nodes (LEDs) */
-            NftPrefsNode *child;
-            LedCount i = 0;
-            for(child = nft_prefs_node_get_first_child(n);
-            child;
-            child = nft_prefs_node_get_next(child))
-            {
-                /* check if node describes a Led object */
-                if(!led_prefs_is_led_node(child))
-                {
-                        NFT_LOG(L_ERROR, "\"chain\" may only contain \"%s\" children. Skipping \"%s\".", 
-                                LED_LED_NAME, nft_prefs_node_get_name(child));
-                            continue;
-                }
+		/* new chain (with default format) */
+		if(!(c = led_chain_new(count, LED_CHAIN_DEFAULT_FORMAT)))
+		{
+			NFT_LOG(L_ERROR, "Failed to create new LedSetup object");
+			return NFT_FAILURE;
+		}
 
-                /* create Led from node */
-                Led *l = led_chain_get_nth(c, i++);
-                if(!led_prefs_led_from_node(p, child, l))
-                        goto _ptc_error;
+		/* free string */
+		nft_prefs_free(format);
+	}
+	/* create new chain with given format */
+	else
+	{
+		/* new chain */
+		if(!(c = led_chain_new(count, format)))
+		{
+			NFT_LOG(L_ERROR, "Failed to create new LedSetup object");
+			return NFT_FAILURE;
+		}
+	}
 
-                
-        }
+        /* free string */
+	nft_prefs_free(format);
+        
+	/* process child nodes (LEDs) */
+	NftPrefsNode *child;
+	LedCount i = 0;
+	for(child = nft_prefs_node_get_first_child(n);
+	    child;
+	    child = nft_prefs_node_get_next(child))
+	{
+		/* check if node describes a Led object */
+		if(!led_prefs_is_led_node(child))
+		{
+			NFT_LOG(L_ERROR, "\"chain\" may only contain \"%s\" children. Skipping \"%s\".", 
+			        LED_LED_NAME, nft_prefs_node_get_name(child));
+			continue;
+		}
 
-            /* save new chain-object to "newObj" pointer */
-            *newObj = c;
-    
-        return NFT_SUCCESS;
+		/* create Led from node */
+		Led *l = led_chain_get_nth(c, i++);
+		if(!led_prefs_led_from_node(p, child, l))
+			goto _ptc_error;
 
-    
+
+	}
+
+	/* save new chain-object to "newObj" pointer */
+	*newObj = c;
+
+	return NFT_SUCCESS;
+
+
 _ptc_error:
-            led_chain_destroy(c);
-            return NFT_FAILURE;
+		led_chain_destroy(c);
+		return NFT_FAILURE;
 }
 
 
