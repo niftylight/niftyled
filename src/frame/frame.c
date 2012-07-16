@@ -351,7 +351,7 @@ void led_frame_print_buffer(LedFrame *f)
                                 strncat(tmp, "... ", P_BUFSIZE-strlen(tmp));
 
                         //strncat(tmp, "0x", P_BUFSIZE-strlen(tmp));
-                        int c;
+                        unsigned int c;
                         for(c=0; c<led_pixel_format_get_n_components(f->format); c++)
                         {
 

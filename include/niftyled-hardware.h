@@ -376,7 +376,7 @@ int                     led_hardware_plugin_total_count();
 void                    led_hardware_plugin_print(LedHardwarePlugin *p, NftLoglevel l);
 void *                  led_hardware_plugin_get_privdata(LedHardware *h);
 const char *            led_hardware_plugin_get_family(LedHardware *h);
-const char *            led_hardware_plugin_get_family_by_n(int num);
+const char *            led_hardware_plugin_get_family_by_n(unsigned int num);
 const char *            led_hardware_plugin_get_license(LedHardware *h);
 const char *            led_hardware_plugin_get_author(LedHardware *h);
 const char *            led_hardware_plugin_get_description(LedHardware *h);

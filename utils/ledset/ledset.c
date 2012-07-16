@@ -22,14 +22,14 @@
  *
  * Alternatively, the contents of this file may be used under the
  * GNU Lesser General Public License Version 2.1 (the "LGPL"), in
- * which case the following provisions apply instead of the ones
+	 * which case the following provisions apply instead of the ones
  * mentioned above:
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
- *
+	 *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -49,63 +49,63 @@
 
 typedef enum
 {
-        /* normal running-mode. Just set one LED to a defined brightness-value */
-        MODE_NORMAL,
-        /* interactively step through a chain to map LED->X/Y */
-        MODE_INTERACTIVE,
+	/* normal running-mode. Just set one LED to a defined brightness-value */
+	MODE_NORMAL,
+	/* interactively step through a chain to map LED->X/Y */
+	MODE_INTERACTIVE,
 }RunMode;
 
 
 /** local structure to hold various information */
 static struct
 {
-        /** name of config-file */
-        char configfile[1024];
-        /** pixel format */
-        //const char *format;
-        /** amount of total LEDs controlled by this instance */
-        LedCount ledcount;
-        /** chain that represents the whole current setup */
-        LedChain *chain;
-        /** position of LED to light in setup */
-        LedCount ledpos;
-        /** brightness value for this LED */
-        long long int ledval;
-        /** MODE_INTERACTIVE or MODE_NORMAL */
-        RunMode mode;
+	/** name of config-file */
+	char configfile[1024];
+	/** pixel format */
+	//const char *format;
+	/** amount of total LEDs controlled by this instance */
+	LedCount ledcount;
+	/** chain that represents the whole current setup */
+	LedChain *chain;
+	/** position of LED to light in setup */
+	LedCount ledpos;
+	/** brightness value for this LED */
+	long long int ledval;
+	/** MODE_INTERACTIVE or MODE_NORMAL */
+	RunMode mode;
 }_c;
 
 
 /** print a line with all valid logleves */
 void _print_loglevels()
 {
-        /* print loglevels */
-        printf("Valid loglevels:\n\t");
-        NftLoglevel i;
-        for(i = L_MAX+1; i<L_MIN-1; i++)
-                printf("%s ", nft_log_level_to_string(i));
-        printf("\n");
+	/* print loglevels */
+	printf("Valid loglevels:\n\t");
+	NftLoglevel i;
+	for(i = L_MAX+1; i<L_MIN-1; i++)
+		printf("%s ", nft_log_level_to_string(i));
+	printf("\n");
 }
 
 
 /** print commandline help */
 static void _print_help(char *name)
 {
-        printf("Set brightness of one LED using libniftyled - %s\n"
-               "Usage: %s [options]\n\n"
-               "Valid options:\n"
-               "\t--help\t\t\t-h\t\tThis help text\n"
-               "\t--plugin-help\t\t-p\t\tList of installed plugins + information\n"
-               "\t--config <file>\t\t-c <file>\tLoad this config file\n"
-               "\t--pos <pos>\t\t-P <pos>\tPosition of LED in chain\n"
-               "\t--value <value>\t\t-V <value>\tBrightness value (0 = lowest brightness)\n"
-               "\t--loglevel <level>\t-l <level>\tOnly show messages with loglevel <level>\n"
-               "\t--interactive\t\t-i\t\tInteractive tile-mapper\n\n",
-               PACKAGE_URL, name);
+	printf("Set brightness of one LED using libniftyled - %s\n"
+	       "Usage: %s [options]\n\n"
+	       "Valid options:\n"
+	       "\t--help\t\t\t-h\t\tThis help text\n"
+	       "\t--plugin-help\t\t-p\t\tList of installed plugins + information\n"
+	       "\t--config <file>\t\t-c <file>\tLoad this config file\n"
+	       "\t--pos <pos>\t\t-P <pos>\tPosition of LED in chain\n"
+	       "\t--value <value>\t\t-V <value>\tBrightness value (0 = lowest brightness)\n"
+	       "\t--loglevel <level>\t-l <level>\tOnly show messages with loglevel <level>\n"
+	       "\t--interactive\t\t-i\t\tInteractive tile-mapper\n\n",
+	       PACKAGE_URL, name);
 
-        /* print loglevels */
-        printf("\n");
-        _print_loglevels();
+	/* print loglevels */
+	printf("\n");
+	_print_loglevels();
 
 }
 
@@ -114,140 +114,140 @@ static void _print_help(char *name)
 static void _print_plugin_help()
 {
 
-        /* save current loglevel */
-        NftLoglevel ll_current = nft_log_level_get();
-        nft_log_level_set(L_INFO);
+	/* save current loglevel */
+	NftLoglevel ll_current = nft_log_level_get();
+	nft_log_level_set(L_INFO);
 
 
-        int i;
-        for(i = 0; i < led_hardware_plugin_total_count(); i++)
-        {
-                const char *name;
-                if(!(name = led_hardware_plugin_get_family_by_n(i)))
-                        continue;
+	int i;
+	for(i = 0; i < led_hardware_plugin_total_count(); i++)
+	{
+		const char *name;
+		if(!(name = led_hardware_plugin_get_family_by_n(i)))
+			continue;
 
-                printf("======================================\n\n");
-                
-                LedHardware *h;
-                if(!(h = led_hardware_new("tmp01", name)))
-                        continue;
-                
-                printf("\tID Example: %s\n",
-                       led_hardware_plugin_get_id_example(h));
+		printf("======================================\n\n");
 
-                
-                led_hardware_destroy(h);
-                       
-        }
+		LedHardware *h;
+		if(!(h = led_hardware_new("tmp01", name)))
+			continue;
 
-        /* restore logolevel */
-        nft_log_level_set(ll_current);
+		printf("\tID Example: %s\n",
+		       led_hardware_plugin_get_id_example(h));
+
+
+		led_hardware_destroy(h);
+
+	}
+
+	/* restore logolevel */
+	nft_log_level_set(ll_current);
 }
 
 
 /** parse commandline arguments */
 static NftResult _parse_args(int argc, char *argv[])
 {
-        int index, argument;
+	int index, argument;
 
-        static struct option loptions[] =
-        {
-                {"help", 0, 0, 'h'},
-                {"plugin-help", 0, 0, 'p'},
-                {"loglevel", required_argument, 0, 'l'},
-                {"config", required_argument, 0, 'c'},
-                {"pos", required_argument, 0, 'P'},
-                {"value", required_argument, 0, 'V'},
-                {"interactive", no_argument, 0, 'i'},
-                {0,0,0,0}
-        };
+	static struct option loptions[] =
+	{
+		{"help", 0, 0, 'h'},
+		{"plugin-help", 0, 0, 'p'},
+		{"loglevel", required_argument, 0, 'l'},
+		{"config", required_argument, 0, 'c'},
+		{"pos", required_argument, 0, 'P'},
+		{"value", required_argument, 0, 'V'},
+		{"interactive", no_argument, 0, 'i'},
+		{0,0,0,0}
+	};
 
-        while((argument = getopt_long(argc, argv, "hpl:c:P:V:i", loptions, &index)) >= 0)
-        {
-                
-                switch(argument)
-                {                        
-                        /* --help */
-                        case 'h':
-                        {
-                                _print_help(argv[0]);
-                                return NFT_FAILURE;
-                        }
+	while((argument = getopt_long(argc, argv, "hpl:c:P:V:i", loptions, &index)) >= 0)
+	{
 
-                        /* --plugin-help */
-                        case 'p':
-                        {
-                                _print_plugin_help();
-                                return NFT_FAILURE;
-                        }
-                                
-                        /* --config */
-                        case 'c':
-                        {
-                                /* save filename for later */
-                                strncpy(_c.configfile, optarg, sizeof(_c.configfile));
-                                break;
-                        }
+		switch(argument)
+		{                        
+			/* --help */
+			case 'h':
+			{
+				_print_help(argv[0]);
+				return NFT_FAILURE;
+			}
 
-                        /** --pos */
-                        case 'P':
-                        {
-                                if(sscanf(optarg, "%d", (int*) &_c.ledpos) != 1)
-                                {
-                                        NFT_LOG(L_ERROR, "Invalid led position \"%s\" (Use a numerical value)", optarg);
-                                        return NFT_FAILURE;
-                                }
-                                break;
-                        }
-                                
-                        /** --value */
-                        case 'V':
-                        {
-                                if(sscanf(optarg, "%Ld", &_c.ledval) != 1)
-                                {
-                                        NFT_LOG(L_ERROR, "Invalid greyscale-value \"%s\" (Use a numerical value)", optarg);
-                                        return NFT_FAILURE;
-                                }
-                                break;
-                        }
-                                                                
-                        /** --loglevel */
-                        case 'l':
-                        {
-                                if(!nft_log_level_set(nft_log_level_from_string(optarg)))
-                                {
-                                        _print_loglevels();
-                                        return NFT_FAILURE;
-                                }
-                                break;
-                        }
+				/* --plugin-help */
+			case 'p':
+			{
+				_print_plugin_help();
+				return NFT_FAILURE;
+			}
 
-                        /** run in interactive-mode */
-                        case 'i':
-                        {
-                                _c.mode = MODE_INTERACTIVE;
-                                break;
-                        }
-                                
-                        /* invalid argument */
-                        case '?':
-                        {
-                                NFT_LOG(L_ERROR, "argument %d is invalid", index);
-                                _print_help(argv[0]);
-                                return NFT_FAILURE;
-                        }
+				/* --config */
+			case 'c':
+			{
+				/* save filename for later */
+				strncpy(_c.configfile, optarg, sizeof(_c.configfile));
+				break;
+			}
 
-                        /* unhandled arguments */
-                        default:
-                        {
-                                NFT_LOG(L_ERROR, "argument %d is invalid", index);
-                                break;
-                        }
-                }
-        }
+				/** --pos */
+			case 'P':
+			{
+				if(sscanf(optarg, "%d", (int*) &_c.ledpos) != 1)
+				{
+					NFT_LOG(L_ERROR, "Invalid led position \"%s\" (Use a numerical value)", optarg);
+					return NFT_FAILURE;
+				}
+				break;
+			}
 
-        
-        return NFT_SUCCESS;
+				/** --value */
+			case 'V':
+			{
+				if(sscanf(optarg, "%Ld", &_c.ledval) != 1)
+				{
+					NFT_LOG(L_ERROR, "Invalid greyscale-value \"%s\" (Use a numerical value)", optarg);
+					return NFT_FAILURE;
+				}
+				break;
+			}
+
+				/** --loglevel */
+			case 'l':
+			{
+				if(!nft_log_level_set(nft_log_level_from_string(optarg)))
+				{
+					_print_loglevels();
+					return NFT_FAILURE;
+				}
+				break;
+			}
+
+				/** run in interactive-mode */
+			case 'i':
+			{
+				_c.mode = MODE_INTERACTIVE;
+				break;
+			}
+
+				/* invalid argument */
+			case '?':
+			{
+				NFT_LOG(L_ERROR, "argument %d is invalid", index);
+				_print_help(argv[0]);
+				return NFT_FAILURE;
+			}
+
+				/* unhandled arguments */
+			default:
+			{
+				NFT_LOG(L_ERROR, "argument %d is invalid", index);
+				break;
+			}
+		}
+	}
+
+
+	return NFT_SUCCESS;
 }
 
 
@@ -257,70 +257,70 @@ static NftResult _parse_args(int argc, char *argv[])
 /** light LED n of a certain hardware adapter */
 static NftResult _light_led_n(LedHardware *h, LedCount n, long long int val)
 {
-        /* get chain */
-        LedChain *chain;
-        if(!(chain = led_hardware_get_chain(h)))
-        {
-                NFT_LOG(L_ERROR, "Hardware has no chain.");
-                return NFT_FAILURE;
-        }
+	/* get chain */
+	LedChain *chain;
+	if(!(chain = led_hardware_get_chain(h)))
+	{
+		NFT_LOG(L_ERROR, "Hardware has no chain.");
+		return NFT_FAILURE;
+	}
 
-        /** set greyscale value */
-        if(!led_chain_set_greyscale(chain, n, val))
-        {
-                NFT_LOG(L_ERROR, "Failed to set grayscale value");
-                return NFT_FAILURE;
-        }
+	/** set greyscale value */
+	if(!led_chain_set_greyscale(chain, n, val))
+	{
+		NFT_LOG(L_ERROR, "Failed to set grayscale value");
+		return NFT_FAILURE;
+	}
 
-        /* send chain to hardware */
-        if(!led_hardware_send(h))
-        {
-                NFT_LOG(L_ERROR, "Failed to send data to hardware.");
-                return NFT_FAILURE;
-        }
+	/* send chain to hardware */
+	if(!led_hardware_send(h))
+	{
+		NFT_LOG(L_ERROR, "Failed to send data to hardware.");
+		return NFT_FAILURE;
+	}
 
-        /* latch hardware */
-        if(!led_hardware_show(h))
-        {
-                NFT_LOG(L_ERROR, "Failed to latch hardware.");
-                return NFT_FAILURE;
-        }
+	/* latch hardware */
+	if(!led_hardware_show(h))
+	{
+		NFT_LOG(L_ERROR, "Failed to latch hardware.");
+		return NFT_FAILURE;
+	}
 
-        return NFT_SUCCESS;
+	return NFT_SUCCESS;
 }
 
 /** read string from stdin into buf */
 static int _readstr(char *buf, size_t bufsize)
 {
-        int result = - 1;
-        
-        /* display the previous "printf" - 
-            this is the wrong place for doing that ;) */
-        fflush(stdout);
+	int result = - 1;
 
-        if((result = read(STDIN_FILENO, buf, bufsize)) == -1)
-        {
-                NFT_LOG_PERROR("read()");
-        }
+	/* display the previous "printf" - 
+	 this is the wrong place for doing that ;) */
+	fflush(stdout);
 
-        return result;
+	if((result = read(STDIN_FILENO, buf, bufsize)) == -1)
+	{
+		NFT_LOG_PERROR("read()");
+	}
+
+	return result;
 }
 
 /** read integer value from stdin */
 static NftResult _readint(int *i)
 {        
-        /* display the previous "printf" - 
-            this is the wrong place for doing that ;) */
-        fflush(stdout);
-        
-        char tmp[64];
-        if(_readstr(tmp, sizeof(tmp)) < 0)
-                return NFT_FAILURE;
+	/* display the previous "printf" - 
+	 this is the wrong place for doing that ;) */
+	fflush(stdout);
 
-        if(sscanf(tmp, "%d", i) != 1)
-                return NFT_FAILURE;
+	char tmp[64];
+	if(_readstr(tmp, sizeof(tmp)) < 0)
+		return NFT_FAILURE;
 
-        return NFT_SUCCESS;
+	if(sscanf(tmp, "%d", i) != 1)
+		return NFT_FAILURE;
+
+	return NFT_SUCCESS;
 }
 
 /******************************************************************************/
@@ -329,233 +329,244 @@ static NftResult _readint(int *i)
 
 int main(int argc, char *argv[])
 {    
-        /* check binary version compatibility */
-        NFT_LED_CHECK_VERSION
-                
-        /* set default loglevel */
-        nft_log_level_set(L_INFO);
+	/* check binary version compatibility */
+	NFT_LED_CHECK_VERSION
+
+		/* set default loglevel */
+		nft_log_level_set(L_INFO);
 
 
-        /* default values */
-            LedPrefs *p = NULL;
-            LedSetup *s = NULL;
-        _c.mode = MODE_NORMAL;
-        _c.ledcount = 0;
-        _c.ledpos = 0;
-        _c.ledval = 255;
+	/* default values */
+	LedPrefs *p = NULL;
+	LedSetup *s = NULL;
+	_c.mode = MODE_NORMAL;
+	_c.ledcount = 0;
+	_c.ledpos = 0;
+	_c.ledval = 255;
 
-            /* default prefs-filename */
-        if(!led_prefs_default_filename(_c.configfile, sizeof(_c.configfile), ".ledset.xml"))
-                return -1;
-                
-        /* parse commandline arguments */
-        if(!_parse_args(argc, argv))
-                return -1;
+	/* default prefs-filename */
+	if(!led_prefs_default_filename(_c.configfile, sizeof(_c.configfile), ".ledset.xml"))
+		return -1;
 
-        
-        /* print welcome msg */
-        NFT_LOG(L_INFO, "%s %s (c) D.Hiepler 2006-2011", PACKAGE_NAME, PACKAGE_VERSION);
-        NFT_LOG(L_VERBOSE, "Loglevel: %s", nft_log_level_to_string(nft_log_level_get()));
+	/* parse commandline arguments */
+	if(!_parse_args(argc, argv))
+		return -1;
 
 
-            /* initialize settings context */
-            if(!(p = led_prefs_init()))
-                    goto m_exit;
+	/* print welcome msg */
+	NFT_LOG(L_INFO, "%s %s (c) D.Hiepler 2006-2011", PACKAGE_NAME, PACKAGE_VERSION);
+	NFT_LOG(L_VERBOSE, "Loglevel: %s", nft_log_level_to_string(nft_log_level_get()));
 
-            /* parse prefs-file */
-            LedPrefsNode *pnode;
-            if(!(pnode = nft_prefs_node_from_file(p, _c.configfile)))
-            {
-                NFT_LOG(L_ERROR, "Failed to open configfile \"%s\"", _c.configfile);
-                goto m_exit;
-        }
-    
-        /* create setup from prefs-node */
-            if(!(s = led_prefs_setup_from_node(p, pnode)))
-            {
-                NFT_LOG(L_ERROR, "No valid setup found in preferences file.");
-                nft_prefs_node_free(pnode);
-                goto m_exit;
-        }
 
-            /* free preferences node */
-            nft_prefs_node_free(pnode);
+	/* initialize settings context */
+	if(!(p = led_prefs_init()))
+		goto m_exit;
 
-    
-        /* first hardware */
-        LedHardware *firstHw;
-        if(!(firstHw = led_setup_get_hardware(s)))
-        {
-                NFT_LOG(L_ERROR, "No hardware registered. Cannot send value.");
-                goto m_exit;
-        }
+	/* parse prefs-file */
+	LedPrefsNode *pnode;
+	if(!(pnode = nft_prefs_node_from_file(p, _c.configfile)))
+	{
+		NFT_LOG(L_ERROR, "Failed to open configfile \"%s\"", _c.configfile);
+		goto m_exit;
+	}
 
-        /** decide about the mode we are running in */
-        switch(_c.mode)
-        {
-                case MODE_NORMAL:
-                {
-                        /** seek to hardware */
-                        LedHardware *h;
-                        LedCount n = _c.ledpos;
-                        for(h = firstHw; h; h = led_hardware_list_get_next(h))
-                        {
-                                if(n < led_chain_get_ledcount(led_hardware_get_chain(h)))
-                                        break;
-                                
-                                n -= led_chain_get_ledcount(led_hardware_get_chain(h));
-                        }
+	/* create setup from prefs-node */
+	if(!(s = led_prefs_setup_from_node(p, pnode)))
+	{
+		NFT_LOG(L_ERROR, "No valid setup found in preferences file.");
+		nft_prefs_node_free(pnode);
+		goto m_exit;
+	}
 
-                            NFT_LOG(L_INFO, 
-                                    "Setting LED %d on hardware \"%s\" to brightness %lld [%d-%d]",
-                                            n, led_hardware_get_name(h), _c.ledval, 
-                                            LED_GAIN_MIN, LED_GAIN_MAX);
-                    
-                        _light_led_n(h, n, _c.ledval);
-                        
-                        break;
-                }
+	/* free preferences node */
+	nft_prefs_node_free(pnode);
 
-                case MODE_INTERACTIVE:
-                {
 
-                        /* set hardware-stride to 0 while doing this */
-                        /*led_hardware_set_stride(first, 0);*/
-                        
-                        /* get hardware ledcount */
-                        if(_c.ledcount == 0)
-                                _c.ledcount = led_chain_get_ledcount(led_hardware_get_chain(firstHw));
-                        if(_c.ledcount <= 0)
-                        {
-                                NFT_LOG(L_ERROR, "ledcount must be > 0");
-                                goto m_exit;
-                        }
-                        
-                        printf("\n=====================================================\n"
-                               "Going through all %d LEDs on adapter \"%s\" as defined in \"%s\",\n"
-                               "lighting one LED at a time. Please enter attributes of the LED that is currently lit.\n"
-                               "=====================================================\n\n",
-                               _c.ledcount, led_hardware_get_name(firstHw), _c.configfile);
-                        
-                        /* first run through all LEDs once */
-                            NFT_LOG(L_INFO, "Turning off all LEDs...");
-                        int l;
-                        for(l=0; l < _c.ledcount; l++)
-                        {
-                                _light_led_n(firstHw, l, 0);
-                        }
-                        NFT_LOG(L_INFO, "Done.");
-                    
-                        /* initialize new tile */
-                        LedTile *tile;
-                        if(!(tile = led_tile_new()))
-                        {
-                                NFT_LOG(L_ERROR, "Failed to create new tile");
-                                goto m_exit;
-                        }
+	/* first hardware */
+	LedHardware *firstHw;
+	if(!(firstHw = led_setup_get_hardware(s)))
+	{
+		NFT_LOG(L_ERROR, "No hardware registered. Cannot send value.");
+		goto m_exit;
+	}
 
-                            /* attach tile to hardware */
-                            if(!(led_hardware_append_tile(firstHw, tile)))
-                            {
-                                NFT_LOG(L_ERROR, "Failed to attach tile to hardware");
-                                goto m_exit;
-                        }
-                    
-                        /* initialize new chain */
-                        LedChain *chain;
-                        if(!(chain = led_chain_new(_c.ledcount, led_pixel_format_to_string(
-                                                        led_chain_get_format(
-                                                                led_hardware_get_chain(firstHw)))))
-                           )
-                        {
-                                NFT_LOG(L_ERROR, "Failed to create new chain.");
-                                goto m_exit;
-                        }
+	/** decide about the mode we are running in */
+	switch(_c.mode)
+	{
+		case MODE_NORMAL:
+		{
+			/** seek to hardware */
+			LedHardware *h;
+			LedCount n = _c.ledpos;
+			for(h = firstHw; h; h = led_hardware_list_get_next(h))
+			{
+				if(n < led_chain_get_ledcount(led_hardware_get_chain(h)))
+					break;
 
-                        /* attach chain to tile */
-                        if(!led_tile_set_chain(tile, chain))
-                        {
-                                NFT_LOG(L_ERROR, "Failed to attach chain to tile.");
-                                goto m_exit;
-                        }
+				n -= led_chain_get_ledcount(led_hardware_get_chain(h));
+			}
 
-                        /* loop through all LEDs */
-                        for(l = 0; l < _c.ledcount; l++)
-                        {
-                                int x,y,component;
-                                
-                                /* light LED n */
-                                _light_led_n(firstHw, l, _c.ledval);
-                                
-                                /* ask for channel of LED n */
-                                printf("Enter component of LED %d: ", l);
-                                if(!_readint(&component))
-                                {
-                                        NFT_LOG(L_ERROR, "Parsing error. Please enter valid integer.");
-                                        /** start over with same LED */
-                                        l--;
-                                        continue;
-                                }
-                                
-                                /* ask for X of LED n */
-                                printf("Enter X for LED %d: ", l);
-                                if(!_readint(&x))
-                                {
-                                        NFT_LOG(L_ERROR, "Parsing error. Please enter valid integer.");
-                                        /** start over with same LED */
-                                        l--;
-                                        continue;
-                                }
+			NFT_LOG(L_INFO, 
+			        "Setting LED %d on hardware \"%s\" to brightness %lld [%d-%d]",
+			        n, led_hardware_get_name(h), _c.ledval, 
+			        LED_GAIN_MIN, LED_GAIN_MAX);
 
-                                /* ask for Y of LED n */
-                                printf("Enter Y for LED %d: ", l);
-                                if(!_readint(&y))
-                                {
-                                        NFT_LOG(L_ERROR, "Parsing error. Please enter valid integer.");
-                                        /** start over with same LED */
-                                        l--;
-                                        continue;
-                                }
+			_light_led_n(h, n, _c.ledval);
 
-                                /* turn LED off */
-                                _light_led_n(firstHw, l, 0);
-                                
-                                /* update X/Y-values in config */
-                                Led *led = led_chain_get_nth(chain, l); 
-                                led_set_x(led, (LedFrameCord) x);
-                                led_set_y(led, (LedFrameCord) y);
-                                led_set_component(led, (LedFrameComponent) component);
-                        }
+			break;
+		}
 
-                        /* apply stride */
-                        NftResult r;
-                        if((r = led_chain_stride_unmap(chain, led_hardware_get_stride(firstHw), 0)) != _c.ledcount)
-                        {
-                                NFT_LOG(L_ERROR, "Amount of LEDs stride-mapped (%d) != total amount of LEDs (%d)",
-                                        r, _c.ledcount);
-                        }
-                        
-                        /* save config */
-                        if(!(pnode = led_prefs_hardware_to_node(p, firstHw)))
-                            {
-                                NFT_LOG(L_ERROR, "Failed to create prefs-node from hardware.");
-                                break;
-                        }
-                            nft_prefs_node_to_file(p, pnode, "-");
-                            nft_prefs_node_free(pnode);
-                        break;
-                }
-        }
-        
+		case MODE_INTERACTIVE:
+		{
+
+			/* set hardware-stride to 0 while doing this */
+			/*led_hardware_set_stride(first, 0);*/
+
+			/* get hardware ledcount */
+			if(_c.ledcount == 0)
+				_c.ledcount = led_chain_get_ledcount(led_hardware_get_chain(firstHw));
+			if(_c.ledcount <= 0)
+			{
+				NFT_LOG(L_ERROR, "ledcount must be > 0");
+				goto m_exit;
+			}
+
+			printf("\n=====================================================\n"
+			       "Going through all %d LEDs on adapter \"%s\" as defined in \"%s\",\n"
+			       "lighting one LED at a time. Please enter attributes of the LED that is currently lit.\n"
+			       "=====================================================\n\n",
+			       _c.ledcount, led_hardware_get_name(firstHw), _c.configfile);
+
+			/* first run through all LEDs once */
+			NFT_LOG(L_INFO, "Turning off all LEDs...");
+			int l;
+			for(l=0; l < _c.ledcount; l++)
+			{
+				_light_led_n(firstHw, l, 0);
+			}
+			NFT_LOG(L_INFO, "Done.");
+
+			/* initialize new tile */
+			LedTile *tile;
+			if(!(tile = led_tile_new()))
+			{
+				NFT_LOG(L_ERROR, "Failed to create new tile");
+				goto m_exit;
+			}
+
+			/* attach tile to hardware */
+			if(!(led_hardware_append_tile(firstHw, tile)))
+			{
+				NFT_LOG(L_ERROR, "Failed to attach tile to hardware");
+				goto m_exit;
+			}
+
+			/* initialize new chain */
+			LedChain *chain;
+			if(!(chain = led_chain_new(_c.ledcount, led_pixel_format_to_string(
+			                                                                   led_chain_get_format(
+			                                                                                        led_hardware_get_chain(firstHw)))))
+			   )
+			{
+				NFT_LOG(L_ERROR, "Failed to create new chain.");
+				goto m_exit;
+			}
+
+			/* attach chain to tile */
+			if(!led_tile_set_chain(tile, chain))
+			{
+				NFT_LOG(L_ERROR, "Failed to attach chain to tile.");
+				goto m_exit;
+			}
+
+			/* loop through all LEDs */
+			for(l = 0; l < _c.ledcount; l++)
+			{
+				int x,y,component;
+
+				/* light LED n */
+				_light_led_n(firstHw, l, _c.ledval);
+
+
+				/* ask for channel of LED n (if format uses more than one channel) */
+				if(led_pixel_format_get_n_components(led_chain_get_format(led_hardware_get_chain(firstHw))) != 1)
+				{
+					printf("Enter component of LED %d: ", l);
+					if(!_readint(&component))
+					{
+						NFT_LOG(L_ERROR, "Parsing error. Please enter valid integer.");
+						/** start over with same LED */
+						l--;
+						continue;
+					}
+				}
+				/* if we only have one component, we can choose it for the user */
+				else
+				{
+					component = 0;
+				}
+
+
+				/* ask for X of LED n */
+				printf("Enter X for LED %d: ", l);
+				if(!_readint(&x))
+				{
+					NFT_LOG(L_ERROR, "Parsing error. Please enter valid integer.");
+					/** start over with same LED */
+					l--;
+					continue;
+				}
+
+
+				/* ask for Y of LED n */
+				printf("Enter Y for LED %d: ", l);
+				if(!_readint(&y))
+				{
+					NFT_LOG(L_ERROR, "Parsing error. Please enter valid integer.");
+					/** start over with same LED */
+					l--;
+					continue;
+				}
+
+
+				/* turn LED off */
+				_light_led_n(firstHw, l, 0);
+
+				/* update X/Y-values in config */
+				Led *led = led_chain_get_nth(chain, l); 
+				led_set_x(led, (LedFrameCord) x);
+				led_set_y(led, (LedFrameCord) y);
+				led_set_component(led, (LedFrameComponent) component);
+			}
+
+			/* apply stride */
+			NftResult r;
+			if((r = led_chain_stride_unmap(chain, led_hardware_get_stride(firstHw), 0)) != _c.ledcount)
+			{
+				NFT_LOG(L_ERROR, "Amount of LEDs stride-mapped (%d) != total amount of LEDs (%d)",
+				        r, _c.ledcount);
+			}
+
+			/* save config */
+			if(!(pnode = led_prefs_hardware_to_node(p, firstHw)))
+			{
+				NFT_LOG(L_ERROR, "Failed to create prefs-node from hardware.");
+				break;
+			}
+			nft_prefs_node_to_file(p, pnode, "-");
+			break;
+		}
+	}
+
 
 
 m_exit:
-            /* destroy setup */
-            led_setup_destroy(s);
-    
-        /* destroy prefs */
-        led_prefs_deinit(p);
+		/* destroy setup */
+		led_setup_destroy(s);
 
-        
-        return 0;
+		/* destroy prefs */
+		led_prefs_deinit(p);
+
+
+		return 0;
 }

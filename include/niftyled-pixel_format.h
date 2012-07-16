@@ -82,7 +82,7 @@ size_t                          led_pixel_format_get_bytes_per_pixel(LedPixelFor
 size_t                          led_pixel_format_get_buffer_size(LedPixelFormat *f, int n);
 LedPixelFormatConverter *       led_pixel_format_get_converter(LedPixelFormat *src, LedPixelFormat *dst);
 size_t                          led_pixel_format_get_n_components(LedPixelFormat *f);
-const char *                    led_pixel_format_get_component_type(LedPixelFormat *f, int component);
+const char *                    led_pixel_format_get_component_type(LedPixelFormat *f, unsigned int component);
 size_t                          led_pixel_format_get_component_offset(LedPixelFormat *f, size_t n);
 /*size_t                          led_pixel_format_get_pixel_offset(LedPixelFormat *f, size_t n);*/
 

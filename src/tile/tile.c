@@ -901,7 +901,7 @@ NftResult led_tile_set_privdata(LedTile *t, void *privdata)
 LedCount led_tile_get_ledcount(LedTile *m)
 {
         if(!m)
-                NFT_LOG_NULL(-1);
+                NFT_LOG_NULL(0);
 
         
         LedCount r = 0;
@@ -910,8 +910,8 @@ LedCount led_tile_get_ledcount(LedTile *m)
         for(child = m->relation.child; child; child = child->relation.next)
         {
                 LedCount t;
-                if((t = led_tile_get_ledcount(child)) < 0)
-                        return -1;
+                if((t = led_tile_get_ledcount(child)) == 0)
+                        return 0;
                 r += t;
         }
 
@@ -1102,12 +1102,12 @@ LedTile *led_tile_get_child(LedTile *t)
  * @param offset Start writing LEDs at this 
  *      position in dst-chain (to map multiple 
  *      tiles to the same destination-chain)
- * @result The amount of LEDs written to dst (or -1 upon error)
+ * @result The amount of LEDs written to dst (or 0 upon error)
  */
 LedCount led_tile_to_chain(LedTile *m, LedChain *dst, LedCount offset)
 {       
         if(!m || !dst)
-                NFT_LOG_NULL(-1);
+                NFT_LOG_NULL(0);
 
         
         /* result will be the amount of total LEDs processed */
@@ -1117,8 +1117,11 @@ LedCount led_tile_to_chain(LedTile *m, LedChain *dst, LedCount offset)
         LedTile *c;
         for(c = m->relation.child; c; c = c->relation.next)
         {
-                if((leds_total += led_tile_to_chain(c, dst, offset+leds_total)) < 0)
-                        return -1;
+		LedCount res;
+                if((res = led_tile_to_chain(c, dst, offset+leds_total)) == 0)
+                        return 0;
+		
+		leds_total += res;
         }
 
         /* if there's a chain in this tile, process it */
@@ -1134,7 +1137,7 @@ LedCount led_tile_to_chain(LedTile *m, LedChain *dst, LedCount offset)
                 }
                                 
                 /* copy all LEDs of this tile to dst-chain one by one & shift according to offset */
-                int i;
+                LedCount i;
                 for(i = 0; i < led_chain_get_ledcount(m->relation.chain); i++)
                 {
                         if(i+offset >= led_chain_get_ledcount(dst))

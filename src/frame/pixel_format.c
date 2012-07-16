@@ -91,7 +91,7 @@ void led_pixel_format_destroy()
  * @param component the component-number starting from 0 (e.g. 1 to get "G" type in "RGB")
  * @result printable name of format (e.g. "u8") or NULL upon error
  */
-const char *led_pixel_format_get_component_type(LedPixelFormat *f, int component)
+const char *led_pixel_format_get_component_type(LedPixelFormat *f, unsigned int component)
 {
         if(component >= led_pixel_format_get_n_components(f))
         {
@@ -135,7 +135,7 @@ const char *led_pixel_format_colorspace_to_string(LedPixelFormat *f)
         strncpy(colorspace, led_pixel_format_to_string(f), sizeof(colorspace));
 
         /* find space */
-        int i;
+        size_t i;
         for(i = 0; i < sizeof(colorspace); i++)
         {
                 if(colorspace[i] == ' ')

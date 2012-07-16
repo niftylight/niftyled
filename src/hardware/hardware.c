@@ -224,7 +224,7 @@ static LedHardware *_load_plugin(const char *name, const char *family)
         
         /* search all prefixes for plugin library */
         void *handle;
-        int i;
+        unsigned int i;
         for(i=0; i < sizeof(_prefixes)/sizeof(char *); i++)
         {
                 NFT_LOG(L_NOISY, "\tTrying to load \"%s\"", _lib_path(_prefixes[i], libname));
@@ -1223,7 +1223,7 @@ int led_hardware_plugin_total_count()
         
         
         /* count plugins in all possible dirs */
-        int i;
+        unsigned int i;
         for(i=0; i < sizeof(_prefixes)/sizeof(char *); i++)
         {
                 DIR *dir;
@@ -1306,7 +1306,7 @@ const char *led_hardware_plugin_get_family(LedHardware *h)
  *        A value of 0 will always bring the "dummy" hardware-plugin
  * @result string holding the name of this plugin or NULL
  */
-const char *led_hardware_plugin_get_family_by_n(int num)
+const char *led_hardware_plugin_get_family_by_n(unsigned int num)
 {
         int index = num;
         
@@ -1314,7 +1314,7 @@ const char *led_hardware_plugin_get_family_by_n(int num)
                 return "dummy";
 
         /* search all possible dirs */
-        int i, amount = 0;
+        unsigned int i, amount = 0;
         for(i=0; i < sizeof(_prefixes)/sizeof(char *); i++)
         {
                 DIR *dir;
@@ -1514,14 +1514,17 @@ NftResult led_hardware_refresh_mapping(LedHardware *h)
 
         /* map tiles to chain */
         LedTile *t;
-        int mapped = 0;
+        LedCount mapped = 0;
         for(t = h->relation.first_tile; t; t = led_tile_list_get_next(t))
         {
-                if((mapped += led_tile_to_chain(t, h->relation.chain, mapped)) == -1)
+		LedCount res;
+                if((res = led_tile_to_chain(t, h->relation.chain, mapped)) == 0)
                 {
                         NFT_LOG(L_WARNING, "Failed to map hardware-tile(s) to hardware-chain");
                         return NFT_SUCCESS;
                 }
+
+		mapped += res;
         }
         
         if(mapped != led_hardware_get_ledcount(h))
@@ -1573,7 +1576,7 @@ NftResult led_hardware_refresh_gain(LedHardware *h)
         
         
         /* walk all LEDs of hardware */
-        int r;
+        LedCount r;
         for(r = 0; r < led_chain_get_ledcount(h->relation.chain); r++)
         {
                 Led *led = led_chain_get_nth(h->relation.chain, r);

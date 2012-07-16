@@ -93,8 +93,8 @@ NftResult led_fps_delay(int fps)
         }
 
         /* calc delay from fps */
-        unsigned long fps_sec =  (1/fps);
-        unsigned long fps_usec = (1000000/fps);
+        long fps_sec =  (1/fps);
+        long fps_usec = (1000000/fps);
                 
         /* delay if frame isn't due yet */
         if(((_last.tv_sec+fps_sec) >= current.tv_sec) &&

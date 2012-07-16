@@ -342,11 +342,6 @@ LedChain *led_chain_dup(LedChain *c)
         /* copy LEDs */
         if(!c->leds || !r->leds)
                 NFT_LOG_NULL(NFT_FAILURE);
-        if(r->ledcount < 0)
-        {
-                NFT_LOG(L_ERROR, "invalid copy-size");
-                return NFT_FAILURE;
-        }
 
         /* copy LED descriptors */
         memcpy(r->leds, c->leds, r->ledcount*sizeof(Led));
@@ -432,7 +427,7 @@ NftResult led_chain_set_ledcount(LedChain *c, LedCount ledcount)
         }
         
         /** copy old LEDs to new buffer */
-        int i;
+        LedCount i;
         for(i = 0; i < MIN(ledcount, c->ledcount); i++)
         {
                 led_copy(&newleds[i], &c->leds[i]);
@@ -525,7 +520,7 @@ void led_chain_print(LedChain *c, NftLoglevel l)
 
         if(nft_log_level_get() < L_DEBUG)
         {
-                int i;
+                LedCount i;
                 for(i=0; i < c->ledcount; i++)
                 {
                         NFT_LOG(l, "Pos: %d\tX: %d\tY: %d\tComponent: %d\tGain: %hu" ,
@@ -881,11 +876,6 @@ LedCount led_chain_stride_map(LedChain *c, LedCount stride, LedCount offset)
                 return -1;
         }
 
-        if(offset < 0)
-        {
-                NFT_LOG(L_ERROR, "offset (%d) < 0", offset);
-                return -1;
-        }
 
         /* calculate amount of LEDs to process */
         LedCount count = led_chain_get_ledcount(c)-offset;
@@ -951,12 +941,7 @@ LedCount led_chain_stride_unmap(LedChain *c, LedCount stride, LedCount offset)
                 return -1;
         }
 
-        if(offset < 0)
-        {
-                NFT_LOG(L_ERROR, "offset (%d) < 0", offset);
-                return -1;
-        }
-
+	
         /* calculate amount of LEDs to process */
         LedCount count = led_chain_get_ledcount(c)-offset;
                 
@@ -1221,7 +1206,7 @@ NftResult led_chain_set_greyscale(LedChain *c, LedCount pos, long long int value
         if(!c)
                 NFT_LOG_NULL(NFT_FAILURE);
 
-        if(pos < 0 || pos >= c->ledcount)
+        if(pos >= c->ledcount)
         {
                 NFT_LOG(L_ERROR, "Invalid LED position: %d (Chainlength is: %d)", pos, c->ledcount);
                 return NFT_FAILURE;
