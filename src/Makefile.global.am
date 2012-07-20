@@ -23,6 +23,7 @@ INCLUDE_DIRS = \
 # global cflags
 COMMON_CFLAGS_N = \
        -Wall -Wextra -Werror -Wno-unused-parameter -Wno-missing-field-initializers \
+       -fno-strict-aliasing \
        -D_BSD_SOURCE \
        -DPLUGINDIR=\"@PACKAGE@-plugins\" \
        $(OPT_CFLAGS) \
