@@ -285,6 +285,8 @@ static NftResult _prefs_to_hardware(LedPrefs *p, void **newObj, NftPrefsNode *n,
         char *name = NULL;
         char *id = NULL;
         char *plugin_name = NULL;
+	LedHardware *h = NULL;
+
 
         /* get hardware name */
         if(!(name = nft_prefs_node_prop_string_get(n, LED_HARDWARE_PROP_NAME)))
@@ -316,7 +318,6 @@ static NftResult _prefs_to_hardware(LedPrefs *p, void **newObj, NftPrefsNode *n,
         }
         
         /* create new hardware object */
-            LedHardware *h;
         if(!(h = led_hardware_new(name, plugin_name)))
         {
                     NFT_LOG(L_ERROR, "Failed to initialize \"%s\" from \"%s\" plugin.",
@@ -497,8 +498,8 @@ _pth_end:
         nft_prefs_free(plugin_name);
         nft_prefs_free(name);
 
-            /* newly created hardware object */
-            *newObj = h;
+        /* newly created hardware object */
+        *newObj = h;
     
         return r;
 }
