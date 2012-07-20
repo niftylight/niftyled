@@ -164,42 +164,42 @@ LedPixelFormat *led_pixel_format_from_string(const char *s)
         /* register some extra formats to libbabl */
         if(strcmp(s, "BGR u8") == 0)
         {
-                return babl_format_new(babl_model("RGB"), babl_type ("u8"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
+                return (LedPixelFormat *) babl_format_new(babl_model("RGB"), babl_type ("u8"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
         }
         if(strcmp(s, "BGR u16") == 0)
         {
-                return babl_format_new(babl_model("RGB"), babl_type ("u16"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
+                return (LedPixelFormat *) babl_format_new(babl_model("RGB"), babl_type ("u16"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
         }
         if(strcmp(s, "BGR u32") == 0)
         {
-                return babl_format_new(babl_model("RGB"), babl_type ("u32"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
+                return (LedPixelFormat *) babl_format_new(babl_model("RGB"), babl_type ("u32"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
         }
         else if(strcmp(s, "ARGB u8") == 0)
         {       
-                return babl_format_new(babl_model("RGBA"), babl_type ("u8"), babl_component ("A"), babl_component ("R"), babl_component ("G"), babl_component ("B"), NULL);
+                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("u8"), babl_component ("A"), babl_component ("R"), babl_component ("G"), babl_component ("B"), NULL);
         }
         else if(strcmp(s, "ARGB u16") == 0)
         {       
-                return babl_format_new(babl_model("RGBA"), babl_type ("u16"), babl_component ("A"), babl_component ("R"), babl_component ("G"), babl_component ("B"), NULL);
+                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("u16"), babl_component ("A"), babl_component ("R"), babl_component ("G"), babl_component ("B"), NULL);
         }
         else if(strcmp(s, "ARGB u32") == 0)
         {       
-                return babl_format_new(babl_model("RGBA"), babl_type ("u32"), babl_component ("A"), babl_component ("R"), babl_component ("G"), babl_component ("B"), NULL);
+                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("u32"), babl_component ("A"), babl_component ("R"), babl_component ("G"), babl_component ("B"), NULL);
         }
         else if(strcmp(s, "ABGR u8") == 0)
         {
-                return babl_format_new(babl_model("RGBA"), babl_type ("u8"), babl_component ("A"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
+                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("u8"), babl_component ("A"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
         }
         else if(strcmp(s, "ABGR u16") == 0)
         {
-                return babl_format_new(babl_model("RGBA"), babl_type ("u16"), babl_component ("A"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
+                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("u16"), babl_component ("A"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
         }
         else if(strcmp(s, "ABGR u32") == 0)
         {
-                return babl_format_new(babl_model("RGBA"), babl_type ("u32"), babl_component ("A"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
+                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("u32"), babl_component ("A"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
         }
         
-        return babl_format(s);
+        return (LedPixelFormat *) babl_format(s);
 }
 
 
@@ -264,7 +264,7 @@ size_t led_pixel_format_get_buffer_size(LedPixelFormat *f, LedFrameCord n)
  */
 LedPixelFormatConverter *led_pixel_format_get_converter(LedPixelFormat *src, LedPixelFormat *dst)
 {                          
-        return babl_fish(src, dst);
+        return (LedPixelFormatConverter *) babl_fish(src, dst);
 }
 
 
