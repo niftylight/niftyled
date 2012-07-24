@@ -1,6 +1,6 @@
 # libniftyled Makefile.am - v0.3 - Daniel Hiepler <daniel@niftylight.de> 
 
-include ../Makefile.global.am
+include $(top_srcdir)/src/Makefile.global.am
 
 
 # targets
