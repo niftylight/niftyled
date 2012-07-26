@@ -261,7 +261,19 @@ static NftResult _prefs_from_hardware(NftPrefs *p, NftPrefsNode *n, void *obj, v
 		nft_prefs_node_add_child(n, node);
         }
     
-        
+        /* tiles of this hardware */
+	LedTile *t;
+	if((t = led_hardware_get_tile(h)))
+	{
+		NftPrefsNode *node;
+		if(!(node = led_prefs_tile_to_node(p, t)))
+			return NFT_FAILURE;
+
+		/* add node as child of this node */
+		nft_prefs_node_add_child(n, node);
+	}
+
+	
         /* all OK */
         return NFT_SUCCESS;
 }
