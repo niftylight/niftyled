@@ -2285,8 +2285,8 @@ NftResult led_hardware_plugin_prop_get_int(LedHardware *h, const char *propname,
         if(h->plugin->get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
         {
                 /* buffer id from hardware */
-                NFT_LOG(L_DEBUG, "Got \"%s\"=\"%s\" from %s", 
-                        propname, get_custom.custom.value.s, h->params.name);
+                NFT_LOG(L_DEBUG, "Got \"%s\"=\"%d\" from %s", 
+                        propname, get_custom.custom.value.i, h->params.name);
         }
         else
                 NFT_LOG(L_WARNING, "Failed to get \"%s\" from %s.",
@@ -2344,8 +2344,8 @@ NftResult led_hardware_plugin_prop_get_float(LedHardware *h, const char *propnam
         if(h->plugin->get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
         {
                 /* buffer id from hardware */
-                NFT_LOG(L_DEBUG, "Got \"%s\"=\"%s\" from %s", 
-                        propname, get_custom.custom.value.s, h->params.name);
+                NFT_LOG(L_DEBUG, "Got \"%s\"=\"%f\" from %s", 
+                        propname, get_custom.custom.value.f, h->params.name);
         }
         else
                 NFT_LOG(L_WARNING, "Failed to get \"%s\" from %s.",

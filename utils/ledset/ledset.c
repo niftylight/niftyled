@@ -532,6 +532,11 @@ int main(int argc, char *argv[])
 				/* turn LED off */
 				_light_led_n(firstHw, l, 0);
 
+				/**
+				 * @todo if we notice the user starts counting from 1 instead of 0,
+				 * set a flag to remember and later subtract -1 + notify the user
+				 */
+				
 				/* update X/Y-values in config */
 				Led *led = led_chain_get_nth(chain, l); 
 				led_set_x(led, (LedFrameCord) x);
