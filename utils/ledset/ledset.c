@@ -461,7 +461,7 @@ int main(int argc, char *argv[])
 				goto m_exit;
 			}
 
-			/* initialize new chain */
+			/* initialize new chain for new hardware */
 			LedChain *chain;
 			if(!(chain = led_chain_new(_c.ledcount, led_pixel_format_to_string(
 			                                                                   led_chain_get_format(
