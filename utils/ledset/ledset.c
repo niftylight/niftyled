@@ -61,6 +61,8 @@ static struct
 {
 	/** name of config-file */
 	char configfile[1024];
+	/** name ouf output file */
+	char outputfile[1024];
 	/** pixel format */
 	//const char *format;
 	/** amount of total LEDs controlled by this instance */
@@ -101,6 +103,7 @@ static void _print_help(char *name)
 	       "\t--value <value>\t\t-V <value>\tBrightness value (0 = lowest brightness)\n"
 	       "\t--loglevel <level>\t-l <level>\tOnly show messages with loglevel <level>\n"
 	       "\t--interactive\t\t-i\t\tInteractive tile-mapper\n\n",
+	       /** @todo optionally output to file instead only stdout when in -i mode */
 	       PACKAGE_URL, name);
 
 	/* print loglevels */
@@ -336,9 +339,13 @@ int main(int argc, char *argv[])
 		nft_log_level_set(L_INFO);
 
 
-	/* default values */
+	/* for preferences context */
 	LedPrefs *p = NULL;
+	/* for setup created from input file */
 	LedSetup *s = NULL;
+
+	
+	/* default values */
 	_c.mode = MODE_NORMAL;
 	_c.ledcount = 0;
 	_c.ledpos = 0;
@@ -347,7 +354,10 @@ int main(int argc, char *argv[])
 	/* default prefs-filename */
 	if(!led_prefs_default_filename(_c.configfile, sizeof(_c.configfile), ".ledset.xml"))
 		return -1;
-
+	
+	/* default output filename (stdout) */
+	strncpy(_c.outputfile, "-", sizeof(_c.outputfile));
+	
 	/* parse commandline arguments */
 	if(!_parse_args(argc, argv))
 		return -1;
@@ -446,7 +456,8 @@ int main(int argc, char *argv[])
 			}
 			NFT_LOG(L_INFO, "Done.");
 
-			/* initialize new tile */
+			
+			/* initialize a new tile */
 			LedTile *tile;
 			if(!(tile = led_tile_new()))
 			{
@@ -553,12 +564,12 @@ int main(int argc, char *argv[])
 			}
 
 			/* save config */
-			if(!(pnode = led_prefs_hardware_to_node(p, firstHw)))
+			if(!(pnode = led_prefs_setup_to_node(p, s)))
 			{
-				NFT_LOG(L_ERROR, "Failed to create prefs-node from hardware.");
+				NFT_LOG(L_ERROR, "Failed to create prefs-node from setup.");
 				break;
 			}
-			nft_prefs_node_to_file(p, pnode, "-");
+			nft_prefs_node_to_file(p, pnode, _c.outputfile);
 			break;
 		}
 	}
@@ -568,7 +579,7 @@ int main(int argc, char *argv[])
 m_exit:
 		/* destroy setup */
 		led_setup_destroy(s);
-
+	
 		/* destroy prefs */
 		led_prefs_deinit(p);
 
