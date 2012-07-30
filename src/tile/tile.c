@@ -252,7 +252,8 @@ static void _transformed_dimensions(LedTile *m,
         _rotate_pivot(matrix, m->geometry.rotation, m->geometry.pivot_x, m->geometry.pivot_y);
 
         double w_min = 0, h_min = 0, w_max = 0, h_max = 0;
-        
+
+	/* four corners */
         int i;
         for(i = 0; i<4; i++)
         {
@@ -313,7 +314,7 @@ static void _dimensions(LedTile *m,
                 *width = MAX(*width, led_chain_get_max_x(m->relation.chain)+1);
                 *height = MAX(*height, led_chain_get_max_y(m->relation.chain)+1);
         }
-
+	
 }
 
 

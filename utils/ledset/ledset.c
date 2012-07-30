@@ -568,11 +568,12 @@ int main(int argc, char *argv[])
 				        r, _c.ledcount);
 			}
 
-			/* handle users that can't count... */
+			/* check if user did count correctly */
 			bool user_can_count = FALSE;
 			for(l = 0; l < _c.ledcount; l++)
 			{
-				if(led_get_x(led_chain_get_nth(chain, l)) == 0 &&
+				/* find 0 coordinate */
+				if(led_get_x(led_chain_get_nth(chain, l)) == 0 ||
 				   led_get_y(led_chain_get_nth(chain, l)) == 0)
 				{
 					user_can_count = TRUE;
@@ -581,7 +582,7 @@ int main(int argc, char *argv[])
 			}
 
 			/* subtract -1 from every coordinate & notify user */
-			if(user_can_count)
+			if(!user_can_count)
 			{
 				NFT_LOG(L_NOTICE, "It seems you started counting from 1 instead of 0. Trying to correct that error...");
 				for(l=0; l < _c.ledcount; l++)
