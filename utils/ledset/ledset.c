@@ -47,6 +47,7 @@
 #include "config.h"
 
 
+/** we support 2 different modes */
 typedef enum
 {
 	/* normal running-mode. Just set one LED to a defined brightness-value */
@@ -54,6 +55,7 @@ typedef enum
 	/* interactively step through a chain to map LED->X/Y */
 	MODE_INTERACTIVE,
 }RunMode;
+
 
 
 /** local structure to hold various information */
@@ -98,12 +100,12 @@ static void _print_help(char *name)
 	       "Valid options:\n"
 	       "\t--help\t\t\t-h\t\tThis help text\n"
 	       "\t--plugin-help\t\t-p\t\tList of installed plugins + information\n"
-	       "\t--config <file>\t\t-c <file>\tLoad this config file\n"
-	       "\t--pos <pos>\t\t-P <pos>\tPosition of LED in chain\n"
-	       "\t--value <value>\t\t-V <value>\tBrightness value (0 = lowest brightness)\n"
-	       "\t--loglevel <level>\t-l <level>\tOnly show messages with loglevel <level>\n"
-	       "\t--interactive\t\t-i\t\tInteractive tile-mapper\n\n",
-	       /** @todo optionally output to file instead only stdout when in -i mode */
+	       "\t--config <file>\t\t-c <file>\tLoad this config file [~/.ledset.xml]\n"
+	       "\t--pos <pos>\t\t-P <pos>\tPosition of LED in chain [0]\n"
+	       "\t--value <value>\t\t-V <value>\tBrightness value [255] (0 = lowest brightness, maximum brightness depends on pixelformat of chain)\n"
+	       "\t--loglevel <level>\t-l <level>\tOnly show messages with loglevel <level> [warning]\n"
+	       "\t--interactive\t\t-i\t\tInteractive tile-mapper\n"
+	       "\t--output <file>\t\t-o <file>\tName of file to write XML config to when in \"interactive\" mode [stdout]\n\n",
 	       PACKAGE_URL, name);
 
 	/* print loglevels */
@@ -162,10 +164,11 @@ static NftResult _parse_args(int argc, char *argv[])
 		{"pos", required_argument, 0, 'P'},
 		{"value", required_argument, 0, 'V'},
 		{"interactive", no_argument, 0, 'i'},
+		{"output", required_argument, 0, 'o'},
 		{0,0,0,0}
 	};
 
-	while((argument = getopt_long(argc, argv, "hpl:c:P:V:i", loptions, &index)) >= 0)
+	while((argument = getopt_long(argc, argv, "hpl:c:P:V:io:", loptions, &index)) >= 0)
 	{
 
 		switch(argument)
@@ -192,7 +195,7 @@ static NftResult _parse_args(int argc, char *argv[])
 				break;
 			}
 
-				/** --pos */
+				/* --pos */
 			case 'P':
 			{
 				if(sscanf(optarg, "%d", (int*) &_c.ledpos) != 1)
@@ -203,7 +206,7 @@ static NftResult _parse_args(int argc, char *argv[])
 				break;
 			}
 
-				/** --value */
+				/* --value */
 			case 'V':
 			{
 				if(sscanf(optarg, "%Ld", &_c.ledval) != 1)
@@ -214,7 +217,7 @@ static NftResult _parse_args(int argc, char *argv[])
 				break;
 			}
 
-				/** --loglevel */
+				/* --loglevel */
 			case 'l':
 			{
 				if(!nft_log_level_set(nft_log_level_from_string(optarg)))
@@ -225,13 +228,21 @@ static NftResult _parse_args(int argc, char *argv[])
 				break;
 			}
 
-				/** run in interactive-mode */
+				/* run in interactive-mode */
 			case 'i':
 			{
 				_c.mode = MODE_INTERACTIVE;
 				break;
 			}
 
+			/* --output */
+			case 'o':
+			{
+				/* save filename for later */
+				strncpy(_c.outputfile, optarg, sizeof(_c.outputfile));
+				break;
+			}
+				
 				/* invalid argument */
 			case '?':
 			{
@@ -332,13 +343,13 @@ static NftResult _readint(int *i)
 
 int main(int argc, char *argv[])
 {    
+	
+		/* set default loglevel */
+		nft_log_level_set(L_WARNING);
+
 	/* check binary version compatibility */
 	NFT_LED_CHECK_VERSION
-
-		/* set default loglevel */
-		nft_log_level_set(L_INFO);
-
-
+		
 	/* for preferences context */
 	LedPrefs *p = NULL;
 	/* for setup created from input file */
