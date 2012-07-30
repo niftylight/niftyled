@@ -22,14 +22,14 @@
  *
  * Alternatively, the contents of this file may be used under the
  * GNU Lesser General Public License Version 2.1 (the "LGPL"), in
-	 * which case the following provisions apply instead of the ones
+ * which case the following provisions apply instead of the ones
  * mentioned above:
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
-	 *
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -65,8 +65,6 @@ static struct
 	char configfile[1024];
 	/** name ouf output file */
 	char outputfile[1024];
-	/** pixel format */
-	//const char *format;
 	/** amount of total LEDs controlled by this instance */
 	LedCount ledcount;
 	/** chain that represents the whole current setup */
@@ -103,7 +101,7 @@ static void _print_help(char *name)
 	       "\t--config <file>\t\t-c <file>\tLoad this config file [~/.ledset.xml]\n"
 	       "\t--pos <pos>\t\t-P <pos>\tPosition of LED in chain [0]\n"
 	       "\t--value <value>\t\t-V <value>\tBrightness value [255] (0 = lowest brightness, maximum brightness depends on pixelformat of chain)\n"
-	       "\t--loglevel <level>\t-l <level>\tOnly show messages with loglevel <level> [warning]\n"
+	       "\t--loglevel <level>\t-l <level>\tOnly show messages with loglevel <level> [notice]\n"
 	       "\t--interactive\t\t-i\t\tInteractive tile-mapper\n"
 	       "\t--output <file>\t\t-o <file>\tName of file to write XML config to when in \"interactive\" mode [stdout]\n\n",
 	       PACKAGE_URL, name);
@@ -121,7 +119,7 @@ static void _print_plugin_help()
 
 	/* save current loglevel */
 	NftLoglevel ll_current = nft_log_level_get();
-	nft_log_level_set(L_INFO);
+	nft_log_level_set(L_NOTICE);
 
 
 	int i;
@@ -235,14 +233,14 @@ static NftResult _parse_args(int argc, char *argv[])
 				break;
 			}
 
-			/* --output */
+				/* --output */
 			case 'o':
 			{
 				/* save filename for later */
 				strncpy(_c.outputfile, optarg, sizeof(_c.outputfile));
 				break;
 			}
-				
+
 				/* invalid argument */
 			case '?':
 			{
@@ -343,19 +341,19 @@ static NftResult _readint(int *i)
 
 int main(int argc, char *argv[])
 {    
-	
-		/* set default loglevel */
-		nft_log_level_set(L_WARNING);
+
+	/* set default loglevel */
+	nft_log_level_set(L_NOTICE);
 
 	/* check binary version compatibility */
 	NFT_LED_CHECK_VERSION
-		
+
 	/* for preferences context */
 	LedPrefs *p = NULL;
 	/* for setup created from input file */
 	LedSetup *s = NULL;
 
-	
+
 	/* default values */
 	_c.mode = MODE_NORMAL;
 	_c.ledcount = 0;
@@ -365,10 +363,10 @@ int main(int argc, char *argv[])
 	/* default prefs-filename */
 	if(!led_prefs_default_filename(_c.configfile, sizeof(_c.configfile), ".ledset.xml"))
 		return -1;
-	
+
 	/* default output filename (stdout) */
 	strncpy(_c.outputfile, "-", sizeof(_c.outputfile));
-	
+
 	/* parse commandline arguments */
 	if(!_parse_args(argc, argv))
 		return -1;
@@ -467,7 +465,7 @@ int main(int argc, char *argv[])
 			}
 			NFT_LOG(L_INFO, "Done.");
 
-			
+
 			/* initialize a new tile */
 			LedTile *tile;
 			if(!(tile = led_tile_new()))
@@ -554,11 +552,7 @@ int main(int argc, char *argv[])
 				/* turn LED off */
 				_light_led_n(firstHw, l, 0);
 
-				/**
-				 * @todo if we notice the user starts counting from 1 instead of 0,
-				 * set a flag to remember and later subtract -1 + notify the user
-				 */
-				
+
 				/* update X/Y-values in config */
 				Led *led = led_chain_get_nth(chain, l); 
 				led_set_x(led, (LedFrameCord) x);
@@ -574,13 +568,42 @@ int main(int argc, char *argv[])
 				        r, _c.ledcount);
 			}
 
-			/* save config */
+			/* handle users that can't count... */
+			bool user_can_count = FALSE;
+			for(l = 0; l < _c.ledcount; l++)
+			{
+				if(led_get_x(led_chain_get_nth(chain, l)) == 0 &&
+				   led_get_y(led_chain_get_nth(chain, l)) == 0)
+				{
+					user_can_count = TRUE;
+					break;
+				}
+			}
+
+			/* subtract -1 from every coordinate & notify user */
+			if(user_can_count)
+			{
+				NFT_LOG(L_NOTICE, "It seems you started counting from 1 instead of 0. Trying to correct that error...");
+				for(l=0; l < _c.ledcount; l++)
+				{
+					led_set_x(led_chain_get_nth(chain, l), led_get_x(led_chain_get_nth(chain, l))-1);
+					led_set_y(led_chain_get_nth(chain, l), led_get_y(led_chain_get_nth(chain, l))-1);
+				}
+				NFT_LOG(L_NOTICE, "corrected... Please doublecheck the result.");
+			}
+			
+			/* create config */
 			if(!(pnode = led_prefs_setup_to_node(p, s)))
 			{
 				NFT_LOG(L_ERROR, "Failed to create prefs-node from setup.");
 				break;
 			}
+
+			/* write config file */
 			nft_prefs_node_to_file(p, pnode, _c.outputfile);
+
+			NFT_LOG(L_NOTICE, "Written config file for %dx%d tile.",
+			        led_tile_get_width(tile), led_tile_get_height(tile));
 			break;
 		}
 	}
@@ -588,12 +611,12 @@ int main(int argc, char *argv[])
 
 
 m_exit:
-		/* destroy setup */
-		led_setup_destroy(s);
-	
-		/* destroy prefs */
-		led_prefs_deinit(p);
+	/* destroy setup */
+	led_setup_destroy(s);
+
+	/* destroy prefs */
+	led_prefs_deinit(p);
 
 
-		return 0;
+	return 0;
 }
