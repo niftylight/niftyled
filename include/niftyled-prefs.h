@@ -64,28 +64,34 @@
 
 /** model to hold LedPrefs */
 typedef NftPrefs LedPrefs;
-/** wrappel model for niftyprefs */
+/** wrapper model for niftyprefs */
 typedef NftPrefsNode LedPrefsNode;
 
 
 /* integer representation of niftyled elements */
 typedef enum
 {
-        T_LED_HARDWARE = 1,
-        T_LED_TILE,
-        T_LED_CHAIN,
-        T_LED,
-        T_LED_INVALID,
+        LED_HARDWARE_T = 1,
+        LED_TILE_T,
+        LED_CHAIN_T,
+        LED_T,
+        LED_INVALID_T,
 }NIFTYLED_TYPE;
 
 
 
 
-NftResult               led_prefs_default_filename(char *dst, size_t size, const char *filename);
+NftResult       led_prefs_default_filename(char *dst, size_t size, const char *filename);
 
-LedPrefs *              led_prefs_init();
-void                    led_prefs_deinit(LedPrefs *c);
+LedPrefs *      led_prefs_init();
+void            led_prefs_deinit(LedPrefs *c);
 
+char *		led_prefs_node_to_buffer(LedPrefs *p, LedPrefsNode *n);
+NftResult 	led_prefs_node_to_file(LedPrefs *p, LedPrefsNode *n, const char *filename);
+LedPrefsNode *	led_prefs_node_from_buffer(LedPrefs *p, char *buffer, size_t bufsize);
+LedPrefsNode *	led_prefs_node_from_file(LedPrefs *p, const char *filename);
+
+void 		led_prefs_node_free(LedPrefsNode *n);
 
 
 

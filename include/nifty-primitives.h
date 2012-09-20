@@ -49,6 +49,7 @@
 /**
  * @defgroup primitives NftPrimitives
  * @brief arbitrary primitive datatypes
+ * @todo move all NFT_* to LED_* namespace
  * @{
  */
 

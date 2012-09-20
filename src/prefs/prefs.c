@@ -172,6 +172,69 @@ NftResult led_prefs_default_filename(char *dst, size_t size, const char *filenam
 }
 
 
+/**
+ * dump LedPrefsNode and all children to a printable buffer
+ *
+ * @param p LedPrefs descriptor
+ * @param n LedPrefsNode to dump
+ * @result newly allocated buffer. (use free() to deallocate)
+ */
+char *led_prefs_node_to_buffer(LedPrefs *p, LedPrefsNode *n)
+{
+	return nft_prefs_node_to_buffer(p, n);
+}
+
+
+/**
+ * dump LedPrefsNode and all children to a file
+ *
+ * @param p LedPrefs descriptor
+ * @param n LedPrefsNode to dump
+ * @param filename full path of file to be written 
+ * @result NFT_SUCCESS or NFT_FAILURE
+ */
+NftResult led_prefs_node_to_file(LedPrefs *p, LedPrefsNode *n, const char *filename)
+{
+	return nft_prefs_node_to_file(p, n, filename);
+}
+
+
+/**
+ * parse buffer and create LedPrefsNode accordingly
+ *
+ * @param p LedPrefs descriptor
+ * @param buffer src buffer to parse
+ * @param bufsize size of buffer in bytes
+ * @result newly created LedPrefsNode (use led_prefs_node_free() to deallocate) 
+ */
+LedPrefsNode *led_prefs_node_from_buffer(LedPrefs *p, char *buffer, size_t bufsize)
+{
+	return nft_prefs_node_from_buffer(p, buffer, bufsize);
+}
+
+
+/**
+ * parse file and create LedPrefsNode accordingly
+ *
+ * @param p LedPrefs descriptor
+ * @param filename full path of file to parse
+ 
+ */
+LedPrefsNode *	led_prefs_node_from_file(LedPrefs *p, const char *filename)
+{
+	return nft_prefs_node_from_file(p, filename);
+}
+
+
+/**
+ * free resources of a LedPrefsNode + all children
+ *
+ * @param n LedPrefsNode to deallocate
+ */
+void led_prefs_node_free(LedPrefsNode *n)
+{
+	nft_prefs_node_free(n);
+}
 
 
 /**
