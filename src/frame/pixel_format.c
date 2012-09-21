@@ -65,14 +65,51 @@
 
 
 
-
 /**
  * initialize babl instance
  */
 void led_pixel_format_new()
 {
         babl_init();
+
+	/* register our "custom" formats */
+	const char *types[] = { "u8", "u16", "u32", "float", "double", NULL };
+	
+	int t;
+
+	/* create BGR formats */
+	for(t=0; types[t]; t++)
+	{
+		babl_format_new(babl_model("RGB"), 
+				babl_type (types[t]), 
+				babl_component ("B"), 
+				babl_component ("G"), 
+				babl_component ("R"), NULL);
+	}
+
+	/* create ARGB formats */
+	for(t=0; types[t]; t++)
+	{
+		babl_format_new(babl_model("RGBA"), 
+				babl_type (types[t]), 
+		                babl_component ("A"),
+				babl_component ("R"), 
+				babl_component ("G"), 
+				babl_component ("B"), NULL);
+	}
+	
+	/* create ABGR formats */
+	for(t=0; types[t]; t++)
+	{
+		babl_format_new(babl_model("RGBA"), 
+				babl_type (types[t]), 
+		                babl_component ("A"),
+				babl_component ("B"), 
+				babl_component ("G"), 
+				babl_component ("R"), NULL);
+	}
 }
+
 
 
 /**
@@ -158,71 +195,7 @@ const char *led_pixel_format_colorspace_to_string(LedPixelFormat *f)
 LedPixelFormat *led_pixel_format_from_string(const char *s)
 {       
         if(!s)
-                NFT_LOG_NULL(NULL);
-
-
-        /* register some extra formats to libbabl */
-        if(strcmp(s, "BGR u8") == 0)
-        {
-                return (LedPixelFormat *) babl_format_new(babl_model("RGB"), babl_type ("u8"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
-        }
-        else if(strcmp(s, "BGR u16") == 0)
-        {
-                return (LedPixelFormat *) babl_format_new(babl_model("RGB"), babl_type ("u16"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
-        }
-        else if(strcmp(s, "BGR u32") == 0)
-        {
-                return (LedPixelFormat *) babl_format_new(babl_model("RGB"), babl_type ("u32"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
-        }
-	else if(strcmp(s, "BGR float") == 0)
-        {
-                return (LedPixelFormat *) babl_format_new(babl_model("RGB"), babl_type ("float"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
-        }
-	else if(strcmp(s, "BGR double") == 0)
-        {
-                return (LedPixelFormat *) babl_format_new(babl_model("RGB"), babl_type ("double"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
-        }
-        else if(strcmp(s, "ARGB u8") == 0)
-        {       
-                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("u8"), babl_component ("A"), babl_component ("R"), babl_component ("G"), babl_component ("B"), NULL);
-        }
-        else if(strcmp(s, "ARGB u16") == 0)
-        {       
-                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("u16"), babl_component ("A"), babl_component ("R"), babl_component ("G"), babl_component ("B"), NULL);
-        }
-        else if(strcmp(s, "ARGB u32") == 0)
-        {       
-                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("u32"), babl_component ("A"), babl_component ("R"), babl_component ("G"), babl_component ("B"), NULL);
-        }
-	else if(strcmp(s, "ARGB float") == 0)
-        {       
-                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("float"), babl_component ("A"), babl_component ("R"), babl_component ("G"), babl_component ("B"), NULL);
-        }
-	else if(strcmp(s, "ARGB double") == 0)
-        {       
-                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("double"), babl_component ("A"), babl_component ("R"), babl_component ("G"), babl_component ("B"), NULL);
-        }
-        else if(strcmp(s, "ABGR u8") == 0)
-        {
-                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("u8"), babl_component ("A"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
-        }
-        else if(strcmp(s, "ABGR u16") == 0)
-        {
-                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("u16"), babl_component ("A"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
-        }
-        else if(strcmp(s, "ABGR u32") == 0)
-        {
-                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("u32"), babl_component ("A"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
-        }
-        else if(strcmp(s, "ABGR float") == 0)
-        {
-                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("float"), babl_component ("A"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
-        }
-	else if(strcmp(s, "ABGR double") == 0)
-        {
-                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("double"), babl_component ("A"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
-        }
-	
+                NFT_LOG_NULL(NULL);	
 	
         return (LedPixelFormat *) babl_format(s);
 }
@@ -363,6 +336,76 @@ size_t led_pixel_format_get_component_offset(LedPixelFormat *f, size_t n)
 
 
 
+
+
+
+
+/** libbabl internal API */
+typedef int  (*BablEachFunction) (Babl *entry, void *data);
+void babl_format_class_for_each(BablEachFunction each_fun, void *user_data);
+
+/* structure to pass argument to BablEachFunction */
+struct _foreach_arg
+{
+	LedPixelFormat *format;
+	size_t n;
+};
+
+
+/** foreach function to count all formats supported by babl */
+static int _count_format(LedPixelFormat *f, void *udata)
+{
+	struct _foreach_arg *arg = udata;
+	
+	arg->n++;
+	return 0;
+}
+
+
+/** foreach function to get nth format supported by babl */
+static int _get_format(LedPixelFormat *f, void *udata)
+{
+	struct _foreach_arg *arg = udata;
+	
+	if(arg->n > 0)
+	{
+		arg->n--;
+		return FALSE;
+	}
+
+	arg->format = f;
+	return TRUE;
+}
+
+
+/**
+ * return amount of supported pixel formats
+ *
+ * @result amount of formats supported. This is the maximum value to be passed
+ * to @ref led_pixel_format_n()
+ */
+size_t led_pixel_format_get_n_formats()
+{
+	struct _foreach_arg arg = { NULL, 0 };
+	babl_format_class_for_each(_count_format, &arg);
+
+	return arg.n;
+}
+
+
+/**
+ * get nth supported LedPixelFormat
+ *
+ * @param n value from 0 to led_pixel_format_get_n_formats()-1
+ * @result nth LedPixelFormat or NULL
+ */ 
+LedPixelFormat *led_pixel_format_get_nth(size_t n)
+{
+	struct _foreach_arg arg = { NULL, n };
+	babl_format_class_for_each(_get_format, &arg);
+
+	return arg.format;
+}
 
 
 /**

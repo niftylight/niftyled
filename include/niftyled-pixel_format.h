@@ -84,6 +84,9 @@ LedPixelFormatConverter *       led_pixel_format_get_converter(LedPixelFormat *s
 size_t                          led_pixel_format_get_n_components(LedPixelFormat *f);
 const char *                    led_pixel_format_get_component_type(LedPixelFormat *f, unsigned int component);
 size_t                          led_pixel_format_get_component_offset(LedPixelFormat *f, size_t n);
+size_t				led_pixel_format_get_n_formats();
+LedPixelFormat *		led_pixel_format_get_nth(size_t n);
+
 /*size_t                          led_pixel_format_get_pixel_offset(LedPixelFormat *f, size_t n);*/
 
 #endif          /* _LED_PIXEL_FORMAT_H */
