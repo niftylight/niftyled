@@ -495,7 +495,8 @@ NftResult led_hardware_init(LedHardware *h, const char *id, LedCount ledcount, c
                 return NFT_SUCCESS;
         }
 
-        /** if we are re-initializing, we already have a chain */
+        /* if we are re-initializing, we already have a chain, otherwise
+	   we'll initialize a new one */
         if(!h->relation.chain)
         {
                 /** initialize LedChain of this hardware */

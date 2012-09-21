@@ -166,13 +166,21 @@ LedPixelFormat *led_pixel_format_from_string(const char *s)
         {
                 return (LedPixelFormat *) babl_format_new(babl_model("RGB"), babl_type ("u8"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
         }
-        if(strcmp(s, "BGR u16") == 0)
+        else if(strcmp(s, "BGR u16") == 0)
         {
                 return (LedPixelFormat *) babl_format_new(babl_model("RGB"), babl_type ("u16"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
         }
-        if(strcmp(s, "BGR u32") == 0)
+        else if(strcmp(s, "BGR u32") == 0)
         {
                 return (LedPixelFormat *) babl_format_new(babl_model("RGB"), babl_type ("u32"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
+        }
+	else if(strcmp(s, "BGR float") == 0)
+        {
+                return (LedPixelFormat *) babl_format_new(babl_model("RGB"), babl_type ("float"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
+        }
+	else if(strcmp(s, "BGR double") == 0)
+        {
+                return (LedPixelFormat *) babl_format_new(babl_model("RGB"), babl_type ("double"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
         }
         else if(strcmp(s, "ARGB u8") == 0)
         {       
@@ -186,6 +194,14 @@ LedPixelFormat *led_pixel_format_from_string(const char *s)
         {       
                 return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("u32"), babl_component ("A"), babl_component ("R"), babl_component ("G"), babl_component ("B"), NULL);
         }
+	else if(strcmp(s, "ARGB float") == 0)
+        {       
+                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("float"), babl_component ("A"), babl_component ("R"), babl_component ("G"), babl_component ("B"), NULL);
+        }
+	else if(strcmp(s, "ARGB double") == 0)
+        {       
+                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("double"), babl_component ("A"), babl_component ("R"), babl_component ("G"), babl_component ("B"), NULL);
+        }
         else if(strcmp(s, "ABGR u8") == 0)
         {
                 return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("u8"), babl_component ("A"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
@@ -198,7 +214,16 @@ LedPixelFormat *led_pixel_format_from_string(const char *s)
         {
                 return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("u32"), babl_component ("A"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
         }
-        
+        else if(strcmp(s, "ABGR float") == 0)
+        {
+                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("float"), babl_component ("A"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
+        }
+	else if(strcmp(s, "ABGR double") == 0)
+        {
+                return (LedPixelFormat *) babl_format_new(babl_model("RGBA"), babl_type ("double"), babl_component ("A"), babl_component ("B"), babl_component ("G"), babl_component ("R"), NULL);
+        }
+	
+	
         return (LedPixelFormat *) babl_format(s);
 }
 
