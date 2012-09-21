@@ -78,6 +78,7 @@
 
 
 
+
 /** dynamic runtime plugin property */
 struct _LedPluginCustomProp
 {
@@ -328,6 +329,9 @@ static void _reinitialize(LedHardware *h)
 
 
 
+/**************************** INTERNAL FUNCTIONS ******************************/
+
+
 /******************************************************************************
  ****************************** API FUNCTIONS *********************************
  ******************************************************************************/
@@ -419,7 +423,8 @@ void led_hardware_destroy(LedHardware *h)
                 h->relation.next->relation.prev = h->relation.prev;
         if(h->relation.prev)
                 h->relation.prev->relation.next = h->relation.next;
-        
+
+	
         /* deinitialize hardware */
         led_hardware_deinit(h);
 

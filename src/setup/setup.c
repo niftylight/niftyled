@@ -102,7 +102,7 @@ void led_setup_destroy(LedSetup *s)
             if(s->firstHw)
             {
                 led_hardware_list_destroy(s->firstHw);
-        }
+            }
 
             /* be really tidy :) */
             s->firstHw = NULL;
@@ -123,7 +123,7 @@ void led_setup_set_hardware(LedSetup *s, LedHardware *h)
         if(!s)
                 NFT_LOG_NULL();
 
-            s->firstHw = h;
+	s->firstHw = h;
 }
 
 
