@@ -833,27 +833,33 @@ NftResult led_hardware_set_ledcount(LedHardware *h, LedCount leds)
 
         NFT_LOG(L_DEBUG, "Setting ledcount of %s (%s) to %d", h->params.name, h->params.id, leds);
 
-
-        /* set operation */
-        if(LED_HARDWARE_PLUGIN_HAS_FUNC(h,set))
-        {
-                LedPluginParamData set_ledcount = { .ledcount = leds };
-                
-                if(!(h->plugin->set(h->plugin_privdata, LED_HW_LEDCOUNT, &set_ledcount)))
-                {
-                        NFT_LOG(L_ERROR, "Plugin %s (\"%s\") failed ledcount (%d) event", h->params.name, h->params.id, leds);
-                        return NFT_FAILURE;
-                }
-        }
-        else
-        {
-                NFT_LOG(L_WARNING, "Plugin family %s has no set-handler.", h->params.name);
-        }
-        
+	/* just save ledcount in model if we aren't initialized */
+	if(led_hardware_is_initialized(h))
+	{	
+		/* set operation */
+		if(LED_HARDWARE_PLUGIN_HAS_FUNC(h,set))
+		{
+			LedPluginParamData set_ledcount = { .ledcount = leds };
+			
+			if(!(h->plugin->set(h->plugin_privdata, LED_HW_LEDCOUNT, &set_ledcount)))
+			{
+				NFT_LOG(L_ERROR, "Plugin %s (\"%s\") failed ledcount (%d) event", h->params.name, h->params.id, leds);
+				return NFT_FAILURE;
+			}
+		}
+		else
+		{
+			NFT_LOG(L_WARNING, "Plugin family %s has no set-handler.", h->params.name);
+		}
+	}
+	
         /* save in model */
         if(!(led_chain_set_ledcount(h->relation.chain, leds)))
+	{
+		NFT_LOG(L_ERROR, "Failed to set chain of hardware to new ledcount (%d)", leds);
                 return NFT_FAILURE;
-                                
+	}
+	
         return NFT_SUCCESS;
 }
 
