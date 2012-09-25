@@ -624,6 +624,48 @@ LedGain led_chain_get_max_gain(LedChain *chain)
 
 
 /**
+ * get parent of this chain
+ *
+ * @param chain LedChain descriptor
+ * @result parent LedHardware of this chain or NULL
+ */
+LedHardware *led_chain_get_parent_hardware(LedChain *chain)
+{
+	if(!chain)
+		NFT_LOG_NULL(NULL);
+
+	if(!chain->relation.parent_hw && chain->relation.parent_tile)
+	{
+		NFT_LOG(L_ERROR, "Requested parent hardware but this chain is child of a tile.");
+		return NULL;
+	}
+
+	return chain->relation.parent_hw;
+}
+
+
+/**
+ * get parent of this chain
+ *
+ * @param chain LedChain descriptor
+ * @result parent LedTile of this chain or NULL
+ */
+LedTile *led_chain_get_parent_tile(LedChain *chain)
+{
+	if(!chain)
+		NFT_LOG_NULL(NULL);
+
+	if(!chain->relation.parent_tile && chain->relation.parent_hw)
+	{
+		NFT_LOG(L_ERROR, "Requested parent tile but this chain is child of a hardware.");
+		return NULL;
+	}
+
+	return chain->relation.parent_tile;
+}
+
+
+/**
  * get pointer to ledbuffer of this chain
  *
  * @param chain LedChain descriptor
