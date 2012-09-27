@@ -173,6 +173,18 @@ NftResult led_prefs_default_filename(char *dst, size_t size, const char *filenam
 
 
 /**
+ * get currently used filename or NULL
+ *
+ * @param p LedPrefs context
+ * @result filename of current preferences or NULL
+ */
+const char *led_prefs_current_filename(LedPrefs *p)
+{
+	return nft_prefs_get_filename(p);
+}
+
+
+/**
  * dump LedPrefsNode and all children to a printable buffer
  *
  * @param p LedPrefs descriptor
