@@ -159,9 +159,9 @@ static const char *_familyname_from_filename(const char *filename)
 {
 /** file extension for shared libraries */
 #ifdef WIN32
-#define LED_HARDWARE_FILE_EXTENSION ".dll"
+#define LED_HARDWARE_FILE_EXTENSION "dll"
 #else
-#define LED_HARDWARE_FILE_EXTENSION ".so"
+#define LED_HARDWARE_FILE_EXTENSION "so"
 #endif
 /** suffix one hardware plugin has to have (e.g. foobar-hardware.so) */
 #define LED_HARDWARE_FILE_SUFFIX "-hardware." LED_HARDWARE_FILE_EXTENSION
@@ -1265,8 +1265,8 @@ int led_hardware_plugin_total_count()
                 closedir(dir);
         }
 
-        /* return amount of found files + dummy plugin */
-        return amount+1;
+        /* return amount of found files */
+        return amount;
 }
 
 
@@ -1326,8 +1326,6 @@ const char *led_hardware_plugin_get_family_by_n(unsigned int num)
 {
         int index = num;
         
-        if(num-- == 0)
-                return "dummy";
 
         /* search all possible dirs */
         unsigned int i, amount = 0;
