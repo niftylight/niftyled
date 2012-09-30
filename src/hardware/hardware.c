@@ -714,6 +714,20 @@ NftResult led_hardware_set_stride(LedHardware *h, LedCount stride)
         if(!h)
                 NFT_LOG_NULL(NFT_FAILURE);
 
+	/* does hardware have a chain? */
+	if(h->relation.chain)
+	{
+		/* is stride <= length of chain? */
+		LedCount ledcount = led_chain_get_ledcount(h->relation.chain);
+		if(stride > ledcount)
+		{
+			NFT_LOG(L_ERROR, "Attempt to set stride to %d LEDs but chain of hardware only has %d LEDs.",
+			        stride, ledcount);
+
+			return NFT_FAILURE;
+		}
+	}
+
         h->params.stride = stride;
 
         return NFT_SUCCESS;
