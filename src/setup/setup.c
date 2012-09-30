@@ -1,7 +1,7 @@
 /*
  * libniftyled - Interface library for LED interfaces
  * Copyright (C) 2006-2011 Daniel Hiepler <daniel@niftylight.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -52,6 +52,9 @@
  */
 
 #include "niftyled-setup.h"
+#include "_hardware.h"
+
+
 
 
 /**
@@ -60,7 +63,7 @@
 struct _LedSetup
 {
             /** first hardware in setup or NULL */
-        LedHardware *firstHw;        
+        LedHardware *firstHw;
 };
 
 
@@ -70,7 +73,7 @@ struct _LedSetup
 
 
 
-/** 
+/**
  * allocate new LedSetup model descriptor
  *
  * @result new empty LedSetup model descriptor or NULL
@@ -115,7 +118,7 @@ void led_setup_destroy(LedSetup *s)
 /**
  * set head of hardware list in this setup
  *
- * @param s valid LedSetup 
+ * @param s valid LedSetup
  * @param h LedHardware to set as head in this setup
  */
 void led_setup_set_hardware(LedSetup *s, LedHardware *h)
@@ -124,6 +127,8 @@ void led_setup_set_hardware(LedSetup *s, LedHardware *h)
                 NFT_LOG_NULL();
 
 	s->firstHw = h;
+
+	hardware_set_parent_setup(h, s);
 }
 
 
@@ -143,7 +148,7 @@ LedHardware *led_setup_get_hardware(LedSetup *s)
 
 
 /**
- * get total width of the current setup in pixels 
+ * get total width of the current setup in pixels
  *
  * @param s LedSetup descriptor
  * @result total width of setup in pixels or -1 upon error
@@ -155,7 +160,7 @@ LedFrameCord led_setup_get_width(LedSetup *s)
 
             /* result */
             LedFrameCord r = 0;
-    
+
             /* no hardware registered? */
             if(!s->firstHw)
                 return r;
@@ -166,7 +171,7 @@ LedFrameCord led_setup_get_width(LedSetup *s)
             {
                 /* walk all tiles registered to this hardware */
                 LedTile *tile = led_hardware_get_tile(h);
-                
+
                 LedFrameCord w = led_tile_get_width(tile) + led_tile_get_x(tile);
                 if(w > r)
                         r = w;
@@ -177,7 +182,7 @@ LedFrameCord led_setup_get_width(LedSetup *s)
 
 
 /**
- * get total height of the current setup in pixels 
+ * get total height of the current setup in pixels
  *
  * @param s LedSetup descriptor
  * @result total width of setup in pixels or -1 upon error
@@ -189,7 +194,7 @@ LedFrameCord led_setup_get_height(LedSetup *s)
 
             /* result */
             LedFrameCord r = 0;
-    
+
             /* no hardware registered? */
             if(!s->firstHw)
                 return r;
@@ -200,7 +205,7 @@ LedFrameCord led_setup_get_height(LedSetup *s)
             {
                 /* walk all tiles registered to this hardware */
                 LedTile *tile = led_hardware_get_tile(h);
-                
+
                 LedFrameCord w = led_tile_get_height(tile) + led_tile_get_y(tile);
                 if(w > r)
                         r = w;

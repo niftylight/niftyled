@@ -1,7 +1,7 @@
 /*
  * libniftyled - Interface library for LED interfaces
  * Copyright (C) 2006-2011 Daniel Hiepler <daniel@niftylight.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -45,6 +45,7 @@
 #define _LED__HARDWARE_H
 
 
+void 	hardware_set_parent_setup(LedHardware *h, LedSetup *s);
 
 
 
