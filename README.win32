@@ -1,0 +1,21 @@
+
+to compile for win32:
+
+* get mingw
+* get windows dev & binary packages for:
+** glib, gtk+, pango, atk, cairo, win_iconv, gettext-runtime, libpng, fontconfig,
+   freetype, and proxy-libintl 
+   e.g. from http://www.gtk.org/download/win32.php
+* run ./autogen-win32.sh as root to correct pkg-config files
+* run ./autogen-win32.sh as user to configure for crosscompile in build-win32 subdir
+* make
+* get .exe from build-win32/src/.libs/
+
+* build deploydir "win32"
+** copy .exe to "./win32"
+** get windows binary packages for:
+*** expat, 
+*** uncompress
+*** move contents of ./bin to ./win32
+*** move contents of ./etc, ./lib [...] to ./win32/etc, ./win32/lib [...]
+*** zip win32
