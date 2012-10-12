@@ -782,8 +782,13 @@ NftResult led_hardware_set_tile(LedHardware *h, LedTile *t)
         /* register tile with hardware */
         h->relation.first_tile = t;
 
-        /* register hardware with tile */
-        return _tile_set_parent_hardware(t, h);
+	if(t)
+	{
+        	/* register hardware with tile */
+        	return _tile_set_parent_hardware(t, h);
+	}
+
+	return NFT_SUCCESS;
 }
 
 
