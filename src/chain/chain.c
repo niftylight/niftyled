@@ -204,6 +204,75 @@ void _chain_destroy(LedChain *c)
 }
 
 
+/**
+ * internal function to change amount of ledcount of a chain (API wrapper contains some checks)
+ *
+ * @param c to change ledcount
+ * @param ledcount new amount of LEDs in this chain
+ * @result NFT_SUCCESS or NFT_FAILURE
+ */
+NftResult _chain_set_ledcount(LedChain *c, LedCount ledcount)
+{
+	/* calc old and new bufsize */
+        int components = led_pixel_format_get_n_components(c->format);
+        size_t nbufsize = led_pixel_format_get_buffer_size(c->format, ledcount/components);
+        size_t obufsize = led_pixel_format_get_buffer_size(c->format, c->ledcount/components);
+
+
+        /* allocate new ledbuffer */
+        void *newbuf;
+        if(!(newbuf = malloc(nbufsize)))
+        {
+                NFT_LOG_PERROR("malloc");
+                return NFT_FAILURE;
+        }
+
+        /** copy old ledbuffer into new buffer */
+        memcpy(newbuf, c->ledbuffer, MIN(nbufsize, obufsize));
+
+
+        /* allocate new mapping buffer */
+        void **mapoffsets;
+        if(!(mapoffsets = calloc(ledcount,sizeof(int))))
+        {
+                NFT_LOG_PERROR("malloc");
+                return NFT_FAILURE;
+        }
+
+        /* copy old mapbuffer into new buffer */
+        memcpy(mapoffsets, c->mapoffsets, MIN((ledcount*sizeof(int)),(c->ledcount*sizeof(int))));
+
+
+        /** allocate buffer for LED-descriptors */
+        Led *newleds;
+        if(!(newleds = calloc(ledcount, sizeof(Led))))
+        {
+                NFT_LOG_PERROR("calloc");
+                free(newbuf);
+                return NFT_FAILURE;
+        }
+
+        /** copy old LEDs to new buffer */
+        LedCount i;
+        for(i = 0; i < MIN(ledcount, c->ledcount); i++)
+        {
+                led_copy(&newleds[i], &c->leds[i]);
+        }
+
+        /* free resources */
+        free(c->ledbuffer);
+        free(c->leds);
+
+        /* replace with resources that were just created */
+        c->buffersize = nbufsize;
+        c->ledbuffer = newbuf;
+        c->leds = newleds;
+        c->ledcount = ledcount;
+
+        return NFT_SUCCESS;
+}
+
+
 /******************************************************************************
  ****************************** API FUNCTIONS *********************************
  ******************************************************************************/
@@ -387,63 +456,14 @@ NftResult led_chain_set_ledcount(LedChain *c, LedCount ledcount)
         if(c->ledcount == ledcount)
                 return NFT_SUCCESS;
 
-        /* calc old and new bufsize */
-        int components = led_pixel_format_get_n_components(c->format);
-        size_t nbufsize = led_pixel_format_get_buffer_size(c->format, ledcount/components);
-        size_t obufsize = led_pixel_format_get_buffer_size(c->format, c->ledcount/components);
+	/* if this chain is a mapped hardware chain, led_hardware_set_ledcount() must be used */
+	if(c->relation.parent_hw)
+	{
+		NFT_LOG(L_ERROR, "This is a hardware chain. You must use led_hardware_set_ledcount()!");
+		return NFT_FAILURE;
+	}
 
-
-        /* allocate new ledbuffer */
-        void *newbuf;
-        if(!(newbuf = malloc(nbufsize)))
-        {
-                NFT_LOG_PERROR("malloc");
-                return NFT_FAILURE;
-        }
-
-        /** copy old ledbuffer into new buffer */
-        memcpy(newbuf, c->ledbuffer, MIN(nbufsize, obufsize));
-
-
-        /* allocate new mapping buffer */
-        void **mapoffsets;
-        if(!(mapoffsets = calloc(ledcount,sizeof(int))))
-        {
-                NFT_LOG_PERROR("malloc");
-                return NFT_FAILURE;
-        }
-
-        /* copy old mapbuffer into new buffer */
-        memcpy(mapoffsets, c->mapoffsets, MIN((ledcount*sizeof(int)),(c->ledcount*sizeof(int))));
-
-
-        /** allocate buffer for LED-descriptors */
-        Led *newleds;
-        if(!(newleds = calloc(ledcount, sizeof(Led))))
-        {
-                NFT_LOG_PERROR("calloc");
-                free(newbuf);
-                return NFT_FAILURE;
-        }
-
-        /** copy old LEDs to new buffer */
-        LedCount i;
-        for(i = 0; i < MIN(ledcount, c->ledcount); i++)
-        {
-                led_copy(&newleds[i], &c->leds[i]);
-        }
-
-        /* free resources */
-        free(c->ledbuffer);
-        free(c->leds);
-
-        /* replace with resources that were just created */
-        c->buffersize = nbufsize;
-        c->ledbuffer = newbuf;
-        c->leds = newleds;
-        c->ledcount = ledcount;
-
-        return NFT_SUCCESS;
+	return _chain_set_ledcount(c, ledcount);
 }
 
 

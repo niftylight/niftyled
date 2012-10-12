@@ -897,7 +897,7 @@ NftResult led_hardware_set_ledcount(LedHardware *h, LedCount leds)
 	}
 
         /* save in model */
-        if(!(led_chain_set_ledcount(h->relation.chain, leds)))
+        if(!(_chain_set_ledcount(h->relation.chain, leds)))
 	{
 		NFT_LOG(L_ERROR, "Failed to set chain of hardware to new ledcount (%d)", leds);
                 return NFT_FAILURE;

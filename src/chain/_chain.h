@@ -49,7 +49,7 @@
 void              _chain_destroy(LedChain *c);
 NftResult       _chain_set_parent_tile(LedChain *c, LedTile *t);
 NftResult       _chain_set_parent_hardware(LedChain *c, LedHardware *h);
-
+NftResult       _chain_set_ledcount(LedChain *c, LedCount ledcount);
 
 
 
