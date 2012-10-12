@@ -936,8 +936,18 @@ LedCount led_hardware_get_ledcount(LedHardware *h)
 
         if(get_ledcount.ledcount != ledcount)
         {
-                NFT_LOG(L_WARNING, "Plugin silently changed ledcount! I'm confused, this is a bug!");
-                return 0;
+		/* if hardware is initialized already, we might have a problem now */
+		if(h->params.initialized)
+		{
+                	NFT_LOG(L_WARNING, "Plugin silently changed ledcount! I'm confused... Continuing with 0 LEDs");
+			return 0;
+		}
+		else
+		{
+			NFT_LOG(L_WARNING, "Plugin is not initialized. Continuing with current hardware chain ledcount.");
+		}
+
+                return ledcount;
         }
 
 
