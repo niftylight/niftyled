@@ -45,7 +45,7 @@
 #define _LED__HARDWARE_H
 
 
-void 	hardware_set_parent_setup(LedHardware *h, LedSetup *s);
+void 	_hardware_set_parent_setup(LedHardware *h, LedSetup *s);
 
 
 

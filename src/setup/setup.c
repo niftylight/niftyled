@@ -128,7 +128,10 @@ void led_setup_set_hardware(LedSetup *s, LedHardware *h)
 
 	s->firstHw = h;
 
-	hardware_set_parent_setup(h, s);
+	if(h)
+	{
+		_hardware_set_parent_setup(h, s);
+	}
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * libniftyled - Interface library for LED interfaces
  * Copyright (C) 2006-2011 Daniel Hiepler <daniel@niftylight.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -46,9 +46,9 @@
 #define _LED__CHAIN_H
 
 
-void            chain_destroy(LedChain *c);
-NftResult       chain_set_parent_tile(LedChain *c, LedTile *t);
-NftResult       chain_set_parent_hardware(LedChain *c, LedHardware *h);
+void              _chain_destroy(LedChain *c);
+NftResult       _chain_set_parent_tile(LedChain *c, LedTile *t);
+NftResult       _chain_set_parent_hardware(LedChain *c, LedHardware *h);
 
 
 

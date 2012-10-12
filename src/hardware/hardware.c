@@ -338,7 +338,7 @@ static void _reinitialize(LedHardware *h)
 /**************************** INTERNAL FUNCTIONS ******************************/
 
 /** set parent setup of this hardware */
-void hardware_set_parent_setup(LedHardware *h, LedSetup *s)
+void _hardware_set_parent_setup(LedHardware *h, LedSetup *s)
 {
         if(!h)
                 NFT_LOG_NULL();
@@ -450,7 +450,7 @@ void led_hardware_destroy(LedHardware *h)
         led_tile_list_destroy(led_hardware_get_tile(h));
 
         /* destroy chain */
-        chain_destroy(h->relation.chain);
+        _chain_destroy(h->relation.chain);
 
         /* plugin deinitialize */
         if(LED_HARDWARE_PLUGIN_HAS_FUNC(h,plugin_deinit))
@@ -525,7 +525,7 @@ NftResult led_hardware_init(LedHardware *h, const char *id, LedCount ledcount, c
                 }
 
                 /* register hardware with chain */
-                chain_set_parent_hardware(h->relation.chain, h);
+                _chain_set_parent_hardware(h->relation.chain, h);
         }
 
         /* save ledcount */
@@ -783,7 +783,7 @@ NftResult led_hardware_set_tile(LedHardware *h, LedTile *t)
         h->relation.first_tile = t;
 
         /* register hardware with tile */
-        return tile_set_parent_hardware(t, h);
+        return _tile_set_parent_hardware(t, h);
 }
 
 
@@ -806,7 +806,7 @@ NftResult led_hardware_append_tile(LedHardware *h, LedTile *t)
                 return NFT_FAILURE;
         }
 
-            return tile_set_parent_hardware(t, h);
+            return _tile_set_parent_hardware(t, h);
 }
 
 /**
@@ -1556,6 +1556,12 @@ NftResult led_hardware_refresh_mapping(LedHardware *h)
 {
         if(!h)
                 NFT_LOG_NULL(NFT_FAILURE);
+
+	if(!h->relation.chain)
+	{
+		NFT_LOG(L_WARNING, "Hardware has no chain, yet. (initialize hardware first). Not refreshing mapping.");
+		return NFT_FAILURE;
+	}
 
         /* map tiles to chain */
         LedTile *t;

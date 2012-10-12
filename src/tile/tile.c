@@ -1,7 +1,7 @@
 /*
  * libniftyled - Interface library for LED interfaces
  * Copyright (C) 2006-2011 Daniel Hiepler <daniel@niftylight.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -72,10 +72,10 @@
 
 
 
-/** 
-  * model of one LedTile - every tile 
-  * can hold one chain and multiple child- 
-  * and sibling tiles 
+/**
+  * model of one LedTile - every tile
+  * can hold one chain and multiple child-
+  * and sibling tiles
   */
 struct _LedTile
 {
@@ -93,7 +93,7 @@ struct _LedTile
                 /** rotation angle of  this tile (in radians) */
                 double  rotation;
                 /** rotation center of this tile (in pixels) */
-                double pivot_x, pivot_y;    
+                double pivot_x, pivot_y;
         }geometry;
 
         /** relationships of this tile */
@@ -122,15 +122,15 @@ struct _LedTile
  **************************** STATIC FUNCTIONS ********************************
  ******************************************************************************/
 
-/** 
- * multiply two 3x3 matrices 
+/**
+ * multiply two 3x3 matrices
  * @todo this could be done better
  */
 static void _matrix_mul_3(double dst[3][3], double src[3][3])
 {
         double tmp[3][3];
         memset(&tmp, 0, sizeof(tmp));
-        
+
         int i, j, k;
         for(i=0; i<3; i++)
         {
@@ -142,7 +142,7 @@ static void _matrix_mul_3(double dst[3][3], double src[3][3])
                         }
                 }
         }
-        
+
         memcpy(dst, tmp, sizeof(tmp));
 }
 
@@ -151,16 +151,16 @@ static void _matrix_mul_3(double dst[3][3], double src[3][3])
 static void _matrix_mul_1(double dst[3], double src[3][3])
 {
         double tmp[3] = { 0, 0, 0};
-        
+
         int i, j;
         for(i=0; i<3; i++)
         {
                 for(j=0; j<3; j++)
                 {
-                        tmp[i] += src[j][i] * dst[j];      
+                        tmp[i] += src[j][i] * dst[j];
                 }
         }
-        
+
         memcpy(dst, tmp, sizeof(tmp));
 }
 
@@ -202,11 +202,11 @@ static void _transformed_pivot(double angle, double *x, double *y)
 {
         if(*x == *y)
                 return;
-        
+
         double matrix[3][3];
         _identity_matrix(matrix);
         _rotate(matrix, angle);
-        
+
         double vector[3] = { *x, *y, 1 };
         _matrix_mul_1(vector, matrix);
         *x = fabs(round(vector[0]));
@@ -216,14 +216,14 @@ static void _transformed_pivot(double angle, double *x, double *y)
 /** rotation around pivot */
 static void _rotate_pivot(double matrix[3][3], double angle, double x, double y)
 {
-        
+
         double x2 = x, y2 = y;
         _transformed_pivot(angle, &x2, &y2);
-        
-        
+
+
         /* translate to pivot */
         _translate(matrix, -x, -y);
-        
+
         /* rotate */
         _rotate(matrix, angle);
 
@@ -246,7 +246,7 @@ static void _transformed_dimensions(LedTile *m,
                 { (double) *width, (double) *height, 1 },
                 { 0.0,             (double) *height, 1 },
         };
-        
+
         double matrix[3][3];
         _identity_matrix(matrix);
         _rotate_pivot(matrix, m->geometry.rotation, m->geometry.pivot_x, m->geometry.pivot_y);
@@ -263,23 +263,23 @@ static void _transformed_dimensions(LedTile *m,
                 w_min = MIN(w_min, corners[i][0]);
                 h_min = MIN(h_min, corners[i][1]);
         }
-        
+
         *width = (LedFrameCord)  round(w_max-w_min);
         *height = (LedFrameCord) round(h_max-h_min);
 
-        
+
         //printf("%.0f/%.0f ---> %d/%d %.0f°\n", w, h, *width, *height, m->geometry.rotation*180/M_PI);
 }
 
 /** recalc total dimension of tile */
-static void _dimensions(LedTile *m, 
+static void _dimensions(LedTile *m,
                         LedFrameCord *width, LedFrameCord *height)
 {
-        
+
         *width = 0;
         *height = 0;
 
-        
+
         /* walk children */
         LedTile *child;
         for(child = m->relation.child; child; child = child->relation.next)
@@ -288,33 +288,33 @@ static void _dimensions(LedTile *m,
                 LedFrameCord w, h;
                 _dimensions(child, &w, &h);
                 _transformed_dimensions(child, &w, &h);
-                
+
                 *width  = MAX(*width,  w + child->geometry.x);
                 *height = MAX(*height, h + child->geometry.y);
 
-                /* walk siblings of child... */                        
+                /* walk siblings of child... */
                 LedTile *sibling;
                 for(sibling = child->relation.next; sibling; sibling = sibling->relation.next)
                 {
                         LedFrameCord w, h;
                         _dimensions(sibling, &w, &h);
                         _transformed_dimensions(sibling, &w, &h);
-                        
+
                         *width =  MAX(*width,  w + sibling->geometry.x);
                         *height = MAX(*height, h + sibling->geometry.y);
                 }
-        
+
         }
 
-        
-        
+
+
         /* if we have a chain, find dimensions of our own chain */
         if(m->relation.chain)
         {
                 *width = MAX(*width, led_chain_get_max_x(m->relation.chain)+1);
                 *height = MAX(*height, led_chain_get_max_y(m->relation.chain)+1);
         }
-	
+
 }
 
 
@@ -336,7 +336,7 @@ static void _map_matrix(LedTile *m)
  * @param h LedHardware descriptor of parent hardware
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult tile_set_parent_hardware(LedTile *t, LedHardware *h)
+NftResult _tile_set_parent_hardware(LedTile *t, LedHardware *h)
 {
         if(!t)
                 NFT_LOG_NULL(NFT_FAILURE);
@@ -346,9 +346,9 @@ NftResult tile_set_parent_hardware(LedTile *t, LedHardware *h)
                 NFT_LOG(L_ERROR, "Attempt to attach tile to a hardware but it's already attached to a tile");
                 return NFT_FAILURE;
         }
-        
+
         t->relation.parent_hw = h;
-        
+
         return NFT_SUCCESS;
 }
 
@@ -377,7 +377,7 @@ LedTile *led_tile_new()
                 //~ free(m);
                 //~ return NULL;
         //~ }
-        
+
         return m;
 }
 
@@ -399,15 +399,15 @@ void led_tile_destroy(LedTile *m)
         /* unlink from linked-list of siblings */
         if(m->relation.next)
                 m->relation.next->relation.prev = m->relation.prev;
-                
+
         if(m->relation.prev)
                 m->relation.prev->relation.next = m->relation.next;
 
-        
+
         /* unlink from parent tile */
         if(m->relation.parent)
         {
-                /* if we are the first child of our parent, 
+                /* if we are the first child of our parent,
                    make our next-sibling the new head */
                 if(m->relation.parent->relation.child == m)
                         m->relation.parent->relation.child = m->relation.next;
@@ -423,12 +423,12 @@ void led_tile_destroy(LedTile *m)
                         led_hardware_set_tile(m->relation.parent_hw, m->relation.next);
                 }
         }
-        
 
-        
+
+
         /* unregister from config context */
         //~ led_settings_tile_unregister(m);
-        
+
         /* free chain of this tile */
         if(m->relation.chain)
                 led_chain_destroy(m->relation.chain);
@@ -441,7 +441,7 @@ void led_tile_destroy(LedTile *m)
         m->relation.parent_hw = NULL;
         m->relation.chain = NULL;
         m->privdata = NULL;
-        
+
         /* free descriptor */
         free(m);
 }
@@ -460,7 +460,7 @@ void led_tile_list_destroy(LedTile *first)
         if(first->relation.next)
                 led_tile_list_destroy(first->relation.next);
 
-        
+
         led_tile_destroy(first);
 }
 
@@ -491,7 +491,7 @@ LedTile *led_tile_dup(LedTile *m)
         r->relation.prev = NULL;
         r->relation.parent = NULL;
         r->relation.parent_hw = NULL;
-        
+
         /* copy chain */
         LedChain *c;
         if((c = led_tile_get_chain(m)))
@@ -508,10 +508,10 @@ LedTile *led_tile_dup(LedTile *m)
                         goto _lmd_error;
         }
 
-        
+
         return r;
 
-        
+
 _lmd_error:
         led_tile_destroy(r);
         return NULL;
@@ -550,12 +550,12 @@ NftResult led_tile_set_x(LedTile *m, LedFrameCord x)
 {
         if(!m)
                 NFT_LOG_NULL(NFT_FAILURE);
-        
+
         /* save x-offset */
         m->geometry.x = x;
 
         _map_matrix(m);
-                
+
         return NFT_SUCCESS;
 }
 
@@ -587,12 +587,12 @@ NftResult led_tile_set_y(LedTile *m, LedFrameCord y)
         if(!m)
                 NFT_LOG_NULL(NFT_FAILURE);
 
-        
+
         /* save x-offset */
         m->geometry.y = y;
 
         _map_matrix(m);
-        
+
         return NFT_SUCCESS;
 }
 
@@ -627,7 +627,7 @@ NftResult led_tile_set_rotation(LedTile *m, double angle)
         m->geometry.rotation = angle - (double) ((int) (angle)/360)*360;
 
         _map_matrix(m);
-                
+
         return NFT_SUCCESS;
 }
 
@@ -662,7 +662,7 @@ NftResult led_tile_set_pivot_x(LedTile *m, double x)
         m->geometry.pivot_x = x;
 
         _map_matrix(m);
-        
+
         return NFT_SUCCESS;
 }
 
@@ -697,7 +697,7 @@ NftResult led_tile_set_pivot_y(LedTile *m, double y)
         m->geometry.pivot_y = y;
 
         _map_matrix(m);
-        
+
         return NFT_SUCCESS;
 }
 
@@ -712,7 +712,7 @@ double led_tile_get_pivot_y(LedTile *m)
 {
         if(!m)
                 NFT_LOG_NULL(-1);
-        
+
         return m->geometry.pivot_y ;
 }
 
@@ -730,7 +730,7 @@ double led_tile_get_transformed_pivot_x(LedTile *t)
 
         double x = t->geometry.pivot_x, y = t->geometry.pivot_y;
         _transformed_pivot(t->geometry.rotation, &x, &y);
-        
+
         return x;
 }
 
@@ -748,7 +748,7 @@ double led_tile_get_transformed_pivot_y(LedTile *t)
 
         double x = t->geometry.pivot_x, y = t->geometry.pivot_y;
         _transformed_pivot(t->geometry.rotation, &x, &y);
-        
+
         return y;
 }
 
@@ -780,7 +780,7 @@ LedFrameCord led_tile_get_transformed_width(LedTile *t)
 {
         if(!t)
                 NFT_LOG_NULL(-1);
-        
+
         LedFrameCord w, h;
         _dimensions(t, &w, &h);
         _transformed_dimensions(t, &w, &h);
@@ -801,7 +801,7 @@ LedFrameCord led_tile_get_height(LedTile *m)
 
         LedFrameCord w, h;
         _dimensions(m, &w, &h);
-        
+
         return h;
 }
 
@@ -814,7 +814,7 @@ LedFrameCord led_tile_get_transformed_height(LedTile *t)
 {
         if(!t)
                 NFT_LOG_NULL(-1);
-        
+
         LedFrameCord w, h;
         _dimensions(t, &w, &h);
         _transformed_dimensions(t, &w, &h);
@@ -854,8 +854,8 @@ NftResult led_tile_set_chain(LedTile *m, LedChain *c)
 
         /* register tile to chain */
         if(c)
-                chain_set_parent_tile(c, m);
-                
+                _chain_set_parent_tile(c, m);
+
         return NFT_SUCCESS;
 }
 
@@ -904,7 +904,7 @@ LedCount led_tile_get_ledcount(LedTile *m)
         if(!m)
                 NFT_LOG_NULL(0);
 
-        
+
         LedCount r = 0;
 
         LedTile *child;
@@ -920,7 +920,7 @@ LedCount led_tile_get_ledcount(LedTile *m)
         {
                 r += led_chain_get_ledcount(m->relation.chain);
         }
-        
+
         return r;
 }
 
@@ -940,9 +940,9 @@ NftResult led_tile_list_append_head(LedTile *head, LedTile *sibling)
         /* don't try to append a sibling twice */
         if(head->relation.next == sibling)
                 return TRUE;
-        
+
         LedTile *last;
-        for(last = head; 
+        for(last = head;
             last->relation.next;
             last = last->relation.next);
 
@@ -967,18 +967,18 @@ NftResult led_tile_list_append(LedTile *t, LedTile *sibling)
                 NFT_LOG(L_ERROR, "Tile already has sibling. Must be removed before setting new one.");
                 return NFT_FAILURE;
         }
-        
+
         if(t == sibling)
         {
                 NFT_LOG(L_ERROR, "Attempt to make us our own sibling");
                 return NFT_FAILURE;
         }
-        
+
         t->relation.next = sibling;
 
         if(sibling)
                 sibling->relation.prev = t;
-        
+
         return NFT_SUCCESS;
 }
 
@@ -1012,7 +1012,7 @@ LedTile *led_tile_list_get_next(LedTile *m)
 {
         if(!m)
                 NFT_LOG_NULL(NULL);
-        
+
         return m->relation.next;
 }
 
@@ -1027,7 +1027,7 @@ LedTile *led_tile_list_get_prev(LedTile *m)
 {
         if(!m)
                 NFT_LOG_NULL(NULL);
-        
+
         return m->relation.prev;
 }
 
@@ -1044,21 +1044,21 @@ NftResult led_tile_append_child(LedTile *m, LedTile *child)
         if(!m || !child)
                 NFT_LOG_NULL(NFT_FAILURE);
 
-        
-        
+
+
         /* set child-chain to parent */
         if(!(m->relation.child))
         {
-        
+
                 if(m == child)
                 {
                         NFT_LOG(L_ERROR, "Attempt to make us our own child");
                         return NFT_FAILURE;
                 }
-                
+
                 /* register child */
                 m->relation.child = child;
-                
+
         }
         else
         {
@@ -1069,11 +1069,11 @@ NftResult led_tile_append_child(LedTile *m, LedTile *child)
                 /* set child at last sibling-tile */
                 led_tile_list_append_head(m->relation.child, child);
         }
-        
+
         /* register parent with child */
         if(child)
                 child->relation.parent = m;
-        
+
 
         return NFT_SUCCESS;
 }
@@ -1100,20 +1100,20 @@ LedTile *led_tile_get_child(LedTile *t)
  * @todo improve accuracy (rotation)
  * @param m a LedTile
  * @param dst The destination LedChain
- * @param offset Start writing LEDs at this 
- *      position in dst-chain (to map multiple 
+ * @param offset Start writing LEDs at this
+ *      position in dst-chain (to map multiple
  *      tiles to the same destination-chain)
  * @result The amount of LEDs written to dst (or 0 upon error)
  */
 LedCount led_tile_to_chain(LedTile *m, LedChain *dst, LedCount offset)
-{       
+{
         if(!m || !dst)
                 NFT_LOG_NULL(0);
 
-        
+
         /* result will be the amount of total LEDs processed */
         LedCount leds_total = 0;
-        
+
         /* process children recursively (if there are any) */
         LedTile *c;
         for(c = m->relation.child; c; c = c->relation.next)
@@ -1121,7 +1121,7 @@ LedCount led_tile_to_chain(LedTile *m, LedChain *dst, LedCount offset)
 		LedCount res;
                 if((res = led_tile_to_chain(c, dst, offset+leds_total)) == 0)
                         return 0;
-		
+
 		leds_total += res;
         }
 
@@ -1136,7 +1136,7 @@ LedCount led_tile_to_chain(LedTile *m, LedChain *dst, LedCount offset)
                 {
                         _matrix_mul_3(matrix, p->matrix);
                 }
-                                
+
                 /* copy all LEDs of this tile to dst-chain one by one & shift according to offset */
                 LedCount i;
                 for(i = 0; i < led_chain_get_ledcount(m->relation.chain); i++)
@@ -1148,24 +1148,24 @@ LedCount led_tile_to_chain(LedTile *m, LedChain *dst, LedCount offset)
                         }
 
                         /* get destination LED */
-                        Led *led = led_chain_get_nth(dst, offset+i);               
+                        Led *led = led_chain_get_nth(dst, offset+i);
                         /* copy current LED of this chain to dest */
                         led_copy(led, led_chain_get_nth(m->relation.chain, i));
                         /* transform position according to complex transform matrix */
                         double vector[3] = { ((double) led_get_x(led))+0.5, ((double) led_get_y(led))+0.5, 1 };
                         _matrix_mul_1(vector, matrix);
-                        
+
                         led_set_x(led, (LedFrameCord) (round(vector[0]-0.5)));
                         led_set_y(led, (LedFrameCord) (round(vector[1]-0.5)));
-                        
+
                         leds_total++;
                 }
 
-                NFT_LOG(L_VERBOSE, "Copied %d LEDs from tile to to dest chain (%d LEDs) with offset %d", 
+                NFT_LOG(L_VERBOSE, "Copied %d LEDs from tile to to dest chain (%d LEDs) with offset %d",
                 leds_total, led_chain_get_ledcount(dst), offset);
         }
-        
-        
+
+
         return leds_total;
 }
 
