@@ -472,6 +472,7 @@ void led_tile_list_destroy(LedTile *first)
  *
  * @param m the tile to create a copy of
  * @result newly allocated tile that replicates m or NULL on error
+ * @note if you set a private pointer using led_tile_set_privdata(), it will NOT be copied to the duplicate
  */
 LedTile *led_tile_dup(LedTile *m)
 {

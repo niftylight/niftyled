@@ -398,6 +398,7 @@ void led_chain_destroy(LedChain *c)
  *
  * @param c chain to create a copy of
  * @result newly allocated chain that replicates c or NULL on error
+ * @note if you set a private pointer using led_chain_set_privdata(), it will NOT be copied to the duplicate
  */
 LedChain *led_chain_dup(LedChain *c)
 {
@@ -905,15 +906,21 @@ NftResult led_set_privdata(Led *l, void *privdata)
  * @param dst - destination chain
  * @param src - source chain
  * @result NFT_SUCCESS or NFT_FAILURE
+ * @note if you set a private pointer using led_set_privdata(), it will NOT be copied
  */
 NftResult led_copy(Led *dst, Led *src)
 {
         if(!dst || !src)
                 NFT_LOG_NULL(NFT_FAILURE);
 
+	/* save private pointer */
+	void *ptr = dst->privdata;
 
         /* copy structure */
         memcpy(dst, src, sizeof(Led));
+
+	/* copy private pointer back so it will be kept */
+	dst->privdata = ptr;
 
         return NFT_SUCCESS;
 }
