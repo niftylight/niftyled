@@ -2,7 +2,7 @@ Source: niftyled
 Section: libs
 Priority: optional
 Maintainer: Daniel Hiepler <daniel-ubuntu@niftylight.de>
-Build-Depends: debhelper (>= 8.0.0), autotools-dev, niftyprefs, libbabl-dev (>= 0.1.4)
+Build-Depends: debhelper (>= 8.0.0), autotools-dev, niftylog, niftyprefs, libbabl-dev (>= 0.1.4)
 Standards-Version: 3.9.2
 Homepage: http://wiki.niftylight.de/niftyled
 #Vcs-Git: git://github.com/niftylight/niftyled.git
@@ -10,6 +10,6 @@ Homepage: http://wiki.niftylight.de/niftyled
 
 Package: niftyled
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, niftyprefs, libbabl-0.1-0 (>= 0.1.4)
+Depends: ${shlibs:Depends}, ${misc:Depends}, niftylog, niftyprefs, libbabl-0.1-0 (>= 0.1.4)
 Description: API to control LED hardware using pixel data
  library designed to provide an abstract interface for LED/lighting hardware to easily control it using pixel data
