@@ -21,11 +21,13 @@ ledset_CFLAGS = \
 	-I$(top_srcdir)/include \
 	$(OPT_CFLAGS) \
 	$(niftyprefs_CFLAGS) \
+	$(niftylog_CFLAGS) \
 	$(babl_CFLAGS) 
 	
 # ldflags
 ledset_LDFLAGS = \
 	$(niftyprefs_LIBS) \
+	$(niftylog_LIBS) \
 	$(babl_LIBS) \
 	$(top_srcdir)/src/libniftyled.la \
 	-Wall -no-undefined
