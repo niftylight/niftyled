@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
         
         
         /* mapping chain */
-        LedChain *cm;
+        LedChain *cm = NULL;
         if(!(cm = led_chain_new(led_tile_get_ledcount(m), "RGB u8")))
                 goto m_deinit;
         

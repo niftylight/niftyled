@@ -1,9 +1,9 @@
 # libniftyled Makefile.am - v0.3 - Daniel Hiepler <daniel@niftylight.de> 
 
 INCLUDE_DIRS = -I../include -I$(top_srcdir)/include
-tests_CFLAGS_PRIV = -Wall $(INCLUDE_DIRS) $(niftyprefs_CFLAGS) $(babl_CFLAGS)
+tests_CFLAGS_PRIV = -Wall $(INCLUDE_DIRS) $(niftyprefs_CFLAGS) $(niftylog_CFLAGS) $(babl_CFLAGS)
 tests_LDFLAGS_PRIV =
-tests_LDADD_PRIV = ../src/libniftyled.la $(niftyprefs_LIBS) $(babl_LIBS)
+tests_LDADD_PRIV = ../src/libniftyled.la $(niftyprefs_LIBS) $(niftylog_LIBS) $(babl_LIBS)
 
 
 
