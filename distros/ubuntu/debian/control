@@ -11,5 +11,6 @@ Homepage: http://wiki.niftylight.de/niftyled
 Package: niftyled
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, niftylog, niftyprefs, libbabl-0.1-0 (>= 0.1.4)
+Recommends: niftyled-plugins, niftyconf
 Description: API to control LED hardware using pixel data
  library designed to provide an abstract interface for LED/lighting hardware to easily control it using pixel data

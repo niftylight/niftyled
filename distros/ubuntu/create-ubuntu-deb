@@ -48,8 +48,9 @@ autoreconf -i || die "autoreconf"
 
 # create debian files
 rm -Rf ${DIR}/debian 2>/dev/null
-dh_make  --copyright "${LICENSE}" --email "${DEBEMAIL}" --createorig --single || die "dh_make"
+dh_make  --copyright "${LICENSE}" --email "${DEBEMAIL}" --createorig --library || die "dh_make"
 cp -r "${DEBIAN}"/* "${DIR}/debian/" || echo "No debian files found in \"${DEBIAN}\". Using those from dh_make"
+rm "${DIR}/debian"/*.ex "${DIR}/debian"/*.EX
 
 # build source
 dpkg-buildpackage -S -v"${PKG_VERSION}" || die "source pkg build"
