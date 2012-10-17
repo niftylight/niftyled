@@ -1,0 +1,23 @@
+Source: @PACKAGE_NAME@
+Priority: optional
+Maintainer: Daniel Hiepler <daniel-ubuntu@niftylight.de>
+Build-Depends: debhelper (>= 8.0.0), autotools-dev
+Standards-Version: 3.9.2
+Homepage: @PACKAGE_URL@
+#Vcs-Git: git://github.com/niftylight/niftyled.git
+#Vcs-Browser: https://github.com/niftylight/niftyled.git
+
+Package: @PACKAGE_NAME@-dev
+Section: libdevel
+Architecture: any
+Depends: @PACKAGE_NAME@ (= @PACKAGE_VERSION@), libxml2-dev (>= 2.7.4), libbabl-dev (>= 0.1.4), libniftyprefs-dev, libniftylog-dev, libc6-dev
+Description: @PACKAGE_NAME@ library headers
+ This package contains development headers for @PACKAGE_NAME@ -
+ @PACKAGE_DESCRIPTION@
+
+Package: @PACKAGE_NAME@@PACKAGE_API_REVISION@
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libxml2 (>= 2.7.4), libbabl-0.1-0 (>= 0.1.4), libniftyprefs0 (>= 0.1.1), libniftylog1 (>= 0.1.2), libc6
+Description: @PACKAGE_DESCRIPTION@
+ @PACKAGE_DESCRIPTION@

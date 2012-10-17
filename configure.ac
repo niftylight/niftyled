@@ -159,7 +159,8 @@ AC_CONFIG_FILES([
 	tests/Makefile \
 	utils/Makefile \
 	utils/ledset/Makefile \
-	${PACKAGE}.pc
+	${PACKAGE}.pc \
+	distros/ubuntu/debian/control
 ])
 AC_OUTPUT
 
