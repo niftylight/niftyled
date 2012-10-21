@@ -1,0 +1,7 @@
+
+debian/ directory contents created with
+
+autoreconf -i
+dh_make --copyright gpl3 --email foo@bar.com --library
+# edit/rename files in debian/
+make pkg-deb

@@ -160,7 +160,7 @@ AC_CONFIG_FILES([
 	utils/Makefile \
 	utils/ledset/Makefile \
 	${PACKAGE}.pc \
-	distros/ubuntu/debian/control
+	debian/control.tmpl
 ])
 AC_OUTPUT
 

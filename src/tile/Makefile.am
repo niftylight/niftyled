@@ -2,6 +2,8 @@
 
 include $(top_srcdir)/src/Makefile.global.am
 
+EXTRA_DIST = _tile.h
+
 
 # targets
 noinst_LTLIBRARIES = libtile.la

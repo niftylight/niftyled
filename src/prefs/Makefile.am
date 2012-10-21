@@ -2,6 +2,8 @@
 
 include $(top_srcdir)/src/Makefile.global.am
 
+EXTRA_DIST = _prefs_chain.h _prefs_hardware.h _prefs_setup.h _prefs_tile.h
+
 
 # targets
 noinst_LTLIBRARIES = libprefs.la
