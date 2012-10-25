@@ -1,7 +1,7 @@
 /*
  * ledset - CLI tool to send a greyscale value to a single LED using libniftyled
  * Copyright (C) 2006-2010 Daniel Hiepler <daniel@niftylight.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -170,7 +170,7 @@ static NftResult _parse_args(int argc, char *argv[])
 	{
 
 		switch(argument)
-		{                        
+		{
 			/* --help */
 			case 'h':
 			{
@@ -306,7 +306,7 @@ static int _readstr(char *buf, size_t bufsize)
 {
 	int result = - 1;
 
-	/* display the previous "printf" - 
+	/* display the previous "printf" -
 	 this is the wrong place for doing that ;) */
 	fflush(stdout);
 
@@ -320,8 +320,8 @@ static int _readstr(char *buf, size_t bufsize)
 
 /** read integer value from stdin */
 static NftResult _readint(int *i)
-{        
-	/* display the previous "printf" - 
+{
+	/* display the previous "printf" -
 	 this is the wrong place for doing that ;) */
 	fflush(stdout);
 
@@ -340,7 +340,7 @@ static NftResult _readint(int *i)
 /******************************************************************************/
 
 int main(int argc, char *argv[])
-{    
+{
 
 	/* set default loglevel */
 	nft_log_level_set(L_NOTICE);
@@ -425,9 +425,9 @@ int main(int argc, char *argv[])
 				n -= led_chain_get_ledcount(led_hardware_get_chain(h));
 			}
 
-			NFT_LOG(L_INFO, 
+			NFT_LOG(L_INFO,
 			        "Setting LED %d on hardware \"%s\" to brightness %lld [%d-%d]",
-			        n, led_hardware_get_name(h), _c.ledval, 
+			        n, led_hardware_get_name(h), _c.ledval,
 			        LED_GAIN_MIN, LED_GAIN_MAX);
 
 			_light_led_n(h, n, _c.ledval);
@@ -554,7 +554,7 @@ int main(int argc, char *argv[])
 
 
 				/* update X/Y-values in config */
-				Led *led = led_chain_get_nth(chain, l); 
+				Led *led = led_chain_get_nth(chain, l);
 				led_set_x(led, (LedFrameCord) x);
 				led_set_y(led, (LedFrameCord) y);
 				led_set_component(led, (LedFrameComponent) component);
@@ -592,7 +592,7 @@ int main(int argc, char *argv[])
 				}
 				NFT_LOG(L_NOTICE, "corrected... Please doublecheck the result.");
 			}
-			
+
 			/* create config */
 			if(!(pnode = led_prefs_setup_to_node(p, s)))
 			{
@@ -601,7 +601,7 @@ int main(int argc, char *argv[])
 			}
 
 			/* write config file */
-			nft_prefs_node_to_file(p, pnode, _c.outputfile);
+			nft_prefs_node_to_file(p, pnode, _c.outputfile, false);
 
 			NFT_LOG(L_NOTICE, "Written config file for %dx%d tile.",
 			        led_tile_get_width(tile), led_tile_get_height(tile));

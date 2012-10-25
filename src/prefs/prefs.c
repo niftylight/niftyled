@@ -1,7 +1,7 @@
 /*
  * libniftyled - Interface library for LED interfaces
  * Copyright (C) 2006-2011 Daniel Hiepler <daniel@niftylight.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -51,6 +51,7 @@
  * @{
  */
 
+#include <ctype.h>
 #include <errno.h>
 #include "niftyled-hardware.h"
 #include "niftyled-chain.h"
@@ -63,7 +64,28 @@
 #include "config.h"
 
 
+/** printable type names (must match order of _type_name_types!) */
+const char *_type_name_strings[] =
+{
+		LED_SETUP_NAME,
+		LED_HARDWARE_NAME,
+		LED_TILE_NAME,
+		LED_CHAIN_NAME,
+		LED_LED_NAME,
+		"invalid",
+		NULL
+};
 
+/** corresponding numeric types (must match order of _type_name_strings!) */
+const NIFTYLED_TYPE _type_name_types[] =
+{
+		LED_SETUP_T,
+		LED_HARDWARE_T ,
+        LED_TILE_T,
+        LED_CHAIN_T,
+        LED_T,
+		LED_INVALID_T
+};
 
 /******************************************************************************/
 /**************************** STATIC FUNCTIONS ********************************/
@@ -91,15 +113,15 @@ LedPrefs *led_prefs_init()
 	/* register overall setup class */
 	if(!(_prefs_setup_class_register(p)))
 	    	goto _lpi_error;
-                 
+
         /* register hardware class */
 	if(!(_prefs_hardware_class_register(p)))
 	    	goto _lpi_error;
-	
+
         /* register tile class */
         if(!(_prefs_tile_class_register(p)))
                 goto _lpi_error;
-    
+
         /* register chain class */
 	if(!(_prefs_chain_class_register(p)))
 	    	goto _lpi_error;
@@ -107,9 +129,9 @@ LedPrefs *led_prefs_init()
         /* register LED class */
         if(!(_prefs_led_class_register(p)))
                 goto _lpi_error;
-        
+
         return p;
-    
+
 _lpi_error:
             nft_prefs_deinit(p);
             return NULL;
@@ -122,7 +144,7 @@ _lpi_error:
  * @param p LedPrefs descriptor
  */
 void led_prefs_deinit(LedPrefs *p)
-{        
+{
         nft_prefs_deinit(p);
 }
 
@@ -147,7 +169,7 @@ NftResult led_prefs_default_filename(char *dst, size_t size, const char *filenam
                 strncpy(dst, env, size);
                 return NFT_SUCCESS;
         }
-        
+
         /* build our own default path */
         if(filename)
         {
@@ -166,8 +188,8 @@ NftResult led_prefs_default_filename(char *dst, size_t size, const char *filenam
                         return NFT_FAILURE;
                 }
         }
-        
-        
+
+
         return NFT_SUCCESS;
 }
 
@@ -198,16 +220,44 @@ char *led_prefs_node_to_buffer(LedPrefs *p, LedPrefsNode *n)
 
 
 /**
+ * dump fully encapsulated LedPrefsNode and all children to a printable buffer
+ *
+ * @param p LedPrefs descriptor
+ * @param n LedPrefsNode to dump
+ * @result newly allocated buffer. (use free() to deallocate)
+ */
+char *led_prefs_node_to_buffer_full(LedPrefs *p, LedPrefsNode *n)
+{
+	return nft_prefs_node_to_buffer_with_headers(p, n);
+}
+
+
+/**
  * dump LedPrefsNode and all children to a file
  *
  * @param p LedPrefs descriptor
  * @param n LedPrefsNode to dump
- * @param filename full path of file to be written 
+ * @param filename full path of file to be written
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult led_prefs_node_to_file(LedPrefs *p, LedPrefsNode *n, const char *filename)
+NftResult led_prefs_node_to_file(LedPrefs *p, LedPrefsNode *n, const char *filename, bool overwrite)
 {
-	return nft_prefs_node_to_file(p, n, filename);
+	return nft_prefs_node_to_file(p, n, filename, overwrite);
+}
+
+
+/**
+ * dump LedPrefsNode and all children to a file
+ * fully encapsulated by the underlying prefs mechanism
+ *
+ * @param p LedPrefs descriptor
+ * @param n LedPrefsNode to dump
+ * @param filename full path of file to be written
+ * @result NFT_SUCCESS or NFT_FAILURE
+ */
+NftResult led_prefs_node_to_file_full(LedPrefs *p, LedPrefsNode *n, const char *filename, bool overwrite)
+{
+	return nft_prefs_node_to_file_with_headers(p, n, filename, overwrite);
 }
 
 
@@ -217,7 +267,7 @@ NftResult led_prefs_node_to_file(LedPrefs *p, LedPrefsNode *n, const char *filen
  * @param p LedPrefs descriptor
  * @param buffer src buffer to parse
  * @param bufsize size of buffer in bytes
- * @result newly created LedPrefsNode (use led_prefs_node_free() to deallocate) 
+ * @result newly created LedPrefsNode (use led_prefs_node_free() to deallocate)
  */
 LedPrefsNode *led_prefs_node_from_buffer(LedPrefs *p, char *buffer, size_t bufsize)
 {
@@ -230,9 +280,9 @@ LedPrefsNode *led_prefs_node_from_buffer(LedPrefs *p, char *buffer, size_t bufsi
  *
  * @param p LedPrefs descriptor
  * @param filename full path of file to parse
- 
+ * @result newly created LedPrefsNode (use led_prefs_node_free() to deallocate)
  */
-LedPrefsNode *	led_prefs_node_from_file(LedPrefs *p, const char *filename)
+LedPrefsNode *led_prefs_node_from_file(LedPrefs *p, const char *filename)
 {
 	return nft_prefs_node_from_file(p, filename);
 }
@@ -246,6 +296,68 @@ LedPrefsNode *	led_prefs_node_from_file(LedPrefs *p, const char *filename)
 void led_prefs_node_free(LedPrefsNode *n)
 {
 	nft_prefs_node_free(n);
+}
+
+
+/**
+ * get NIFTYLED_TYPE of a prefs node
+ *
+ * @param n LedPrefsNode to get type of
+ * @result NIFTYLED_TYPE of this node or LED_INVALID_T on unhandled node
+ */
+NIFTYLED_TYPE led_prefs_node_get_type(LedPrefsNode *n)
+{
+		if(!n)
+				NFT_LOG_NULL(LED_INVALID_T);
+
+		const char *name = nft_prefs_node_get_name(n);
+
+		return led_prefs_type_from_string(name);
+}
+
+
+/**
+ * convert type name to NIFTYLED_TYPE
+ *
+ * @param name printable string of type
+ * @result NIFTYLED_TYPE or LED_INVALID_T on unhandled type
+ */
+NIFTYLED_TYPE led_prefs_type_from_string(const char *name)
+{
+		/* we don't need much space */
+		char *tmp = alloca(256);
+		size_t i;
+		for(i = 0; name[i] && i < 255; i++)
+		{
+				tmp[i] = tolower(name[i]);
+		}
+
+		for(i = 0; _type_name_strings[i]; i++)
+		{
+				if(strcmp(tmp, _type_name_strings[i]) == 0)
+						return _type_name_types[i];
+		}
+
+		return LED_INVALID_T;
+}
+
+
+/**
+ * convert NIFTYLED_TYPE to printable string
+ *
+ * @param type numeric NIFTYLED_TYPE
+ * @result printable string
+ */
+const char *led_prefs_type_to_string(NIFTYLED_TYPE type)
+{
+		size_t i;
+		for(i = 0; _type_name_strings[i]; i++)
+		{
+				if(_type_name_types[i] == type)
+						return _type_name_strings[i];
+		}
+
+		return "invalid";
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * libniftyled - Interface library for LED interfaces
  * Copyright (C) 2006-2011 Daniel Hiepler <daniel@niftylight.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -44,6 +44,7 @@
 #ifndef _LED__PREFS_TILE_H
 #define _LED__PREFS_TILE_H
 
+#include "niftyled-prefs_tile.h"
 
 
 NftResult         _prefs_tile_class_register(NftPrefs *p);
