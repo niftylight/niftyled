@@ -213,9 +213,9 @@ const char *led_prefs_current_filename(LedPrefs *p)
  * @param n LedPrefsNode to dump
  * @result newly allocated buffer. (use free() to deallocate)
  */
-char *led_prefs_node_to_buffer(LedPrefs *p, LedPrefsNode *n)
+char *led_prefs_node_to_buffer_light(LedPrefs *p, LedPrefsNode *n)
 {
-	return nft_prefs_node_to_buffer(p, n);
+	return nft_prefs_node_to_buffer_light(p, n);
 }
 
 
@@ -226,9 +226,9 @@ char *led_prefs_node_to_buffer(LedPrefs *p, LedPrefsNode *n)
  * @param n LedPrefsNode to dump
  * @result newly allocated buffer. (use free() to deallocate)
  */
-char *led_prefs_node_to_buffer_full(LedPrefs *p, LedPrefsNode *n)
+char *led_prefs_node_to_buffer(LedPrefs *p, LedPrefsNode *n)
 {
-	return nft_prefs_node_to_buffer_with_headers(p, n);
+	return nft_prefs_node_to_buffer(p, n);
 }
 
 
@@ -240,9 +240,9 @@ char *led_prefs_node_to_buffer_full(LedPrefs *p, LedPrefsNode *n)
  * @param filename full path of file to be written
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult led_prefs_node_to_file(LedPrefs *p, LedPrefsNode *n, const char *filename, bool overwrite)
+NftResult led_prefs_node_to_file_light(LedPrefs *p, LedPrefsNode *n, const char *filename, bool overwrite)
 {
-	return nft_prefs_node_to_file(p, n, filename, overwrite);
+	return nft_prefs_node_to_file_light(p, n, filename, overwrite);
 }
 
 
@@ -255,9 +255,9 @@ NftResult led_prefs_node_to_file(LedPrefs *p, LedPrefsNode *n, const char *filen
  * @param filename full path of file to be written
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult led_prefs_node_to_file_full(LedPrefs *p, LedPrefsNode *n, const char *filename, bool overwrite)
+NftResult led_prefs_node_to_file(LedPrefs *p, LedPrefsNode *n, const char *filename, bool overwrite)
 {
-	return nft_prefs_node_to_file_with_headers(p, n, filename, overwrite);
+	return nft_prefs_node_to_file(p, n, filename, overwrite);
 }
 
 
