@@ -332,6 +332,9 @@ NIFTYLED_TYPE led_prefs_type_from_string(const char *name)
 				tmp[i] = tolower(name[i]);
 		}
 
+		/* terminate string */
+		tmp[i] = '\0';
+	
 		for(i = 0; _type_name_strings[i]; i++)
 		{
 				if(strcmp(tmp, _type_name_strings[i]) == 0)
