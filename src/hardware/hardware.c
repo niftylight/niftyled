@@ -1139,11 +1139,13 @@ NftResult led_hardware_list_append(LedHardware *h, LedHardware *sibling)
 
         /* register previous */
         if(sibling)
+		{
                 sibling->relation.prev = h;
 
-	/* register setup */
-	sibling->relation.setup = h->relation.setup;
-
+				/* register setup */
+				sibling->relation.setup = h->relation.setup;
+		}
+		
         return NFT_SUCCESS;
 }
 
