@@ -249,7 +249,7 @@ static NftResult _prefs_to_tile(LedPrefs *p, void **newObj, NftPrefsNode *n, voi
                     /* do we have a child-tile node? */
                     else if(led_prefs_is_tile_node(child))
                     {
-                        if(!led_tile_append_child(t, led_prefs_tile_from_node(p, child)))
+                        if(!led_tile_list_append_child(t, led_prefs_tile_from_node(p, child)))
                         {
                                 NFT_LOG(L_ERROR, "Failed to add \"tile\" to \"tile\". Aborting.");
                                     goto _ptt_error;

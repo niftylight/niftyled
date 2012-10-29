@@ -505,7 +505,7 @@ LedTile *led_tile_dup(LedTile *m)
         LedTile *child;
         for(child = m->relation.child; child; child = child->relation.next)
         {
-                if(!led_tile_append_child(r, led_tile_dup(child)))
+                if(!led_tile_list_append_child(r, led_tile_dup(child)))
                         goto _lmd_error;
         }
 
@@ -1043,13 +1043,13 @@ LedTile *led_tile_list_get_prev(LedTile *m)
 
 
 /**
- * append tile to last of the parent's children
+ * append tile to last child of tile
  *
  * @param m parent LedTile descriptor
- * @param child child LedTile descriptor
+ * @param child child LedTile descriptor (will be appended to last child of m)
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult led_tile_append_child(LedTile *m, LedTile *child)
+NftResult led_tile_list_append_child(LedTile *m, LedTile *child)
 {
         if(!m || !child)
                 NFT_LOG_NULL(NFT_FAILURE);

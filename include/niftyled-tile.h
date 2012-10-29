@@ -81,7 +81,6 @@ void            led_tile_destroy(LedTile *t);
 LedTile *       led_tile_dup(LedTile *t);
 void            led_tile_print(LedTile *t, NftLoglevel l);
 LedCount        led_tile_to_chain(LedTile *t, LedChain *dst, LedCount offset);
-NftResult       led_tile_append_child(LedTile *t, LedTile *child);
 
 LedFrameCord    led_tile_get_x(LedTile *t);
 LedFrameCord    led_tile_get_y(LedTile *t);
@@ -110,6 +109,7 @@ NftResult       led_tile_set_privdata(LedTile *t, void *privdata);
 /* LedTile linked list functions */
 void            led_tile_list_destroy(LedTile *first);
 NftResult       led_tile_list_append_head(LedTile *head, LedTile *sibling);
+NftResult       led_tile_list_append_child(LedTile *t, LedTile *child);
 NftResult       led_tile_list_append(LedTile *t, LedTile *sibling);
 LedTile *       led_tile_list_get_nth(LedTile *c, int n);
 LedTile *       led_tile_list_get_prev(LedTile *t);
