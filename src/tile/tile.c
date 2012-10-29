@@ -976,10 +976,19 @@ NftResult led_tile_list_append(LedTile *t, LedTile *sibling)
         }
 
         t->relation.next = sibling;
-
+		
         if(sibling)
+		{
                 sibling->relation.prev = t;
+		}
 
+		LedTile *tmp;
+		for(tmp = sibling; tmp; tmp = tmp->relation.next)
+		{
+				tmp->relation.parent_hw = t->relation.parent_hw;
+				tmp->relation.parent = t->relation.parent;
+		}
+		
         return NFT_SUCCESS;
 }
 
