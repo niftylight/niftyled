@@ -127,13 +127,13 @@ int main(int argc, char *argv[])
 				goto m_deinit;
 
 		/* append children to submodule */
-		if(!led_tile_append_child(msub1, _create_subsubmodule(conf, 0, 0, 0)))
+		if(!led_tile_list_append_child(msub1, _create_subsubmodule(conf, 0, 0, 0)))
 				goto m_deinit;
-		if(!led_tile_append_child(msub1, _create_subsubmodule(conf, 2, 0, (90*M_PI)/180)))
+		if(!led_tile_list_append_child(msub1, _create_subsubmodule(conf, 2, 0, (90*M_PI)/180)))
 				goto m_deinit;
-		if(!led_tile_append_child(msub1, _create_subsubmodule(conf, 2,2, (180*M_PI)/180)))
+		if(!led_tile_list_append_child(msub1, _create_subsubmodule(conf, 2,2, (180*M_PI)/180)))
 				goto m_deinit;
-		if(!led_tile_append_child(msub1, _create_subsubmodule(conf, 0, 2, (270*M_PI)/180)))
+		if(!led_tile_list_append_child(msub1, _create_subsubmodule(conf, 0, 2, (270*M_PI)/180)))
 				goto m_deinit;
 
 		/* duplicate sub-module */
@@ -153,9 +153,9 @@ int main(int argc, char *argv[])
 				goto m_deinit;
 
 		/* append submodules to parent */
-		if(!led_tile_append_child(m, msub1))
+		if(!led_tile_list_append_child(m, msub1))
 				goto m_deinit;
-		if(!led_tile_append_child(m, msub2))
+		if(!led_tile_list_append_child(m, msub2))
 				goto m_deinit;
 
 
