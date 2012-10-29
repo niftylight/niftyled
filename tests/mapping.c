@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
 				goto m_deinit;
 
 		/* dump node to file */
-		if(!(nft_prefs_node_to_file(conf, n, "-", false)))
+		if(!(led_prefs_node_to_file(n, "-", false)))
 				goto m_deinit;
 
 		/* free node */
@@ -192,7 +192,7 @@ int main(int argc, char *argv[])
 				goto m_deinit;
 
 		/* dump node to file */
-		if(!(nft_prefs_node_to_file(conf, n, "-", false)))
+		if(!(led_prefs_node_to_file(n, "-", false)))
 				goto m_deinit;
 
 		/* free node */

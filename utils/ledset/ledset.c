@@ -383,7 +383,7 @@ int main(int argc, char *argv[])
 
 	/* parse prefs-file */
 	LedPrefsNode *pnode;
-	if(!(pnode = nft_prefs_node_from_file(p, _c.configfile)))
+	if(!(pnode = led_prefs_node_from_file(_c.configfile)))
 	{
 		NFT_LOG(L_ERROR, "Failed to open configfile \"%s\"", _c.configfile);
 		goto m_exit;
@@ -601,7 +601,7 @@ int main(int argc, char *argv[])
 			}
 
 			/* write config file */
-			nft_prefs_node_to_file(p, pnode, _c.outputfile, false);
+			led_prefs_node_to_file(pnode, _c.outputfile, false);
 
 			NFT_LOG(L_NOTICE, "Written config file for %dx%d tile.",
 			        led_tile_get_width(tile), led_tile_get_height(tile));
