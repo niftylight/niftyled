@@ -83,7 +83,7 @@ void led_pixel_format_new()
 	for(t=0; types[t]; t++)
 	{
 		/* generate name */
-		snprintf(name, sizeof(name), "BGR (%s)", types[t]);
+		snprintf(name, sizeof(name), "BGR %s", types[t]);
 
 		/* register format */
 		babl_format_new("name", name, babl_model("RGB"),
@@ -97,7 +97,7 @@ void led_pixel_format_new()
 	for(t=0; types[t]; t++)
 	{
 		/* generate name */
-		snprintf(name, sizeof(name), "ARGB (%s)", types[t]);
+		snprintf(name, sizeof(name), "ARGB %s", types[t]);
 
 		/* register format */
 		babl_format_new("name", name, babl_model("RGBA"), 
@@ -112,7 +112,7 @@ void led_pixel_format_new()
 	for(t=0; types[t]; t++)
 	{
 		/* generate name */
-		snprintf(name, sizeof(name), "ABGR (%s)", types[t]);
+		snprintf(name, sizeof(name), "ABGR %s", types[t]);
 
 		/* register format */
 		babl_format_new("name", name, babl_model("RGBA"), 
