@@ -56,7 +56,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <alloca.h>
+#include <malloc.h>
 
 #if HAVE_BYTESWAP_H
 #include <byteswap.h>
@@ -364,7 +364,11 @@ void led_frame_print_buffer(LedFrame *f)
                                 {
                                         unsigned char *val;
                                         val = (unsigned char *) f->buffer + offset;
+#ifdef WIN32
+                                        snprintf(num, P_NUMSIZE-1, "%.2X", *val);
+#else
                                         snprintf(num, P_NUMSIZE-1, "%.2hhX", *val);
+#endif
                                 }
                                 else if(babl_format_get_type(f->format, c) == babl_type("u16"))
                                 {

@@ -207,7 +207,11 @@ static NftResult _parse_args(int argc, char *argv[])
 				/* --value */
 			case 'V':
 			{
+#ifdef WIN32
+				if(sscanf(optarg, "%d", &_c.ledval) != 1)
+#else
 				if(sscanf(optarg, "%Ld", &_c.ledval) != 1)
+#endif
 				{
 					NFT_LOG(L_ERROR, "Invalid greyscale-value \"%s\" (Use a numerical value)", optarg);
 					return NFT_FAILURE;

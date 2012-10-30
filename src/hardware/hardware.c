@@ -63,7 +63,7 @@
 #include <string.h>
 #include <errno.h>
 #include <dirent.h>
-#include <alloca.h>
+#include <malloc.h>
 
 #if HAVE_DLFCN_H
 #include <dlfcn.h>

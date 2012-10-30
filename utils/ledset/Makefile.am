@@ -19,6 +19,7 @@ endif
 ledset_CFLAGS = \
 	-Wall \
 	-I$(top_srcdir)/include \
+	-I../../include \
 	$(OPT_CFLAGS) \
 	$(niftyprefs_CFLAGS) \
 	$(niftylog_CFLAGS) \
@@ -29,5 +30,5 @@ ledset_LDFLAGS = \
 	$(niftyprefs_LIBS) \
 	$(niftylog_LIBS) \
 	$(babl_LIBS) \
-	$(top_srcdir)/src/libniftyled.la \
+	../../src/libniftyled.la \
 	-Wall -no-undefined

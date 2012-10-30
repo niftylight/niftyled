@@ -18,7 +18,9 @@ INCLUDE_DIRS = \
         -I$(top_srcdir)/src/hardware \
         -I$(top_srcdir)/src/prefs \
         -I$(top_srcdir)/src/setup \
-        -I$(top_srcdir)/src/tile
+        -I$(top_srcdir)/src/tile \
+        -I../../include \
+        -I../include
 
 # global cflags
 COMMON_CFLAGS_N = \

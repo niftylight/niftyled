@@ -53,6 +53,7 @@
 
 #include <ctype.h>
 #include <errno.h>
+#include <malloc.h>
 #include "niftyled-hardware.h"
 #include "niftyled-chain.h"
 #include "niftyled-tile.h"
