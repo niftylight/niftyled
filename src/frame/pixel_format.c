@@ -51,6 +51,7 @@
  * @{
  */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <babl/babl.h>
@@ -74,13 +75,18 @@ void led_pixel_format_new()
 
 	/* register our "custom" formats */
 	const char *types[] = { "u8", "u16", "u32", "float", "double", NULL };
-	
+	char name[32];
+		
 	int t;
 
 	/* create BGR formats */
 	for(t=0; types[t]; t++)
 	{
-		babl_format_new(babl_model("RGB"), 
+		/* generate name */
+		snprintf(name, sizeof(name), "BGR (%s)", types[t]);
+
+		/* register format */
+		babl_format_new("name", name, babl_model("RGB"),
 				babl_type (types[t]), 
 				babl_component ("B"), 
 				babl_component ("G"), 
@@ -90,9 +96,13 @@ void led_pixel_format_new()
 	/* create ARGB formats */
 	for(t=0; types[t]; t++)
 	{
-		babl_format_new(babl_model("RGBA"), 
+		/* generate name */
+		snprintf(name, sizeof(name), "ARGB (%s)", types[t]);
+
+		/* register format */
+		babl_format_new("name", name, babl_model("RGBA"), 
 				babl_type (types[t]), 
-		                babl_component ("A"),
+		        babl_component ("A"),
 				babl_component ("R"), 
 				babl_component ("G"), 
 				babl_component ("B"), NULL);
@@ -101,9 +111,13 @@ void led_pixel_format_new()
 	/* create ABGR formats */
 	for(t=0; types[t]; t++)
 	{
-		babl_format_new(babl_model("RGBA"), 
+		/* generate name */
+		snprintf(name, sizeof(name), "ABGR (%s)", types[t]);
+
+		/* register format */
+		babl_format_new("name", name, babl_model("RGBA"), 
 				babl_type (types[t]), 
-		                babl_component ("A"),
+		        babl_component ("A"),
 				babl_component ("B"), 
 				babl_component ("G"), 
 				babl_component ("R"), NULL);
