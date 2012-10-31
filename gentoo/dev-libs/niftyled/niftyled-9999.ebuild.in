@@ -3,11 +3,11 @@
 
 EAPI=2
 
-inherit git autotools
+inherit git-2 autotools
 
 DESCRIPTION="@PACKAGE_DESCRIPTION@"
 HOMEPAGE="@PACKAGE_URL@"
-EGIT_REPO_URI="https://github.com/niftylight/niftyled.git"
+EGIT_REPO_URI="git://github.com/niftylight/niftyled.git https://github.com/niftylight/niftyled.git"
 #EGIT_COMMIT="master"
 #EGIT_BRANCH="${EGIT_COMMIT}"
 
@@ -34,9 +34,7 @@ src_prepare()
 
 src_unpack()
 {
-	git_src_unpack
-	git_submodules init
-	git_submodules update
+	git-2_src_unpack
 }
 
 src_configure() 
