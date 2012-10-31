@@ -13,7 +13,7 @@ EGIT_REPO_URI="git://github.com/niftylight/niftyled.git https://github.com/nifty
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~amd64 ~x86"
 
 IUSE="debug"
 
