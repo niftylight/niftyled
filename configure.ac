@@ -152,7 +152,7 @@ AC_CONFIG_FILES([
 	utils/ledset/Makefile \
 	${PACKAGE}.pc \
 	debian/control.tmpl \
-	gentoo/dev-libs/niftyled/niftyled-9999.ebuild
+	gentoo/media-gfx/niftyled/niftyled-9999.ebuild
 ])
 AC_OUTPUT
 
