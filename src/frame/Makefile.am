@@ -1,4 +1,7 @@
-# libniftyled Makefile.am - v0.3 - Daniel Hiepler <daniel@niftylight.de> 
+#############
+# libniftyled Makefile.am
+# v0.4 - Daniel Hiepler <daniel@niftylight.de>
+
 
 include $(top_srcdir)/src/Makefile.global.am
 
@@ -12,7 +15,7 @@ libframe_la_SOURCES = \
 	pixel_format.c \
 	frame.c
 
-# cflags 
+# cflags
 libframe_la_CFLAGS = \
 	$(COMMON_CFLAGS_N)
 

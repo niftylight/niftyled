@@ -19,6 +19,6 @@ Description: @PACKAGE_NAME@ library headers
 Package: @PACKAGE_NAME@@PACKAGE_API_REVISION@
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libbabl-0.1-0 (>= 0.1.4), libniftyprefs0 (>= 0.1.0), libniftylog1 (>= 0.1.2)
+Depends: ${shlibs:Depends}, ${misc:Depends}, libbabl-0.1-0 (>= 0.1.4), libniftyprefs1 (>= 0.1.0), libniftylog1 (>= 0.1.2)
 Description: pixel based LED control framework
  @PACKAGE_DESCRIPTION@

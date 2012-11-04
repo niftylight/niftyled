@@ -1,4 +1,7 @@
-# libniftyled Makefile.am - v0.3 - Daniel Hiepler <daniel@niftylight.de> 
+#############
+# libniftyled Makefile.am
+# v0.4 - Daniel Hiepler <daniel@niftylight.de>
+
 
 include $(top_srcdir)/src/Makefile.global.am
 
@@ -16,7 +19,7 @@ libprefs_la_SOURCES = \
 	prefs_setup.c \
 	prefs_tile.c
 
-# cflags 
+# cflags
 libprefs_la_CFLAGS = \
 	$(COMMON_CFLAGS_N)
 

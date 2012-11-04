@@ -1,4 +1,7 @@
-# libniftyled Makefile.am - v0.3 - Daniel Hiepler <daniel@niftylight.de> 
+#############
+# libniftyled Makefile.am
+# v0.4 - Daniel Hiepler <daniel@niftylight.de>
+
 
 include $(top_srcdir)/src/Makefile.global.am
 
@@ -12,7 +15,7 @@ noinst_LTLIBRARIES = libtile.la
 libtile_la_SOURCES = \
 	tile.c
 
-# cflags 
+# cflags
 libtile_la_CFLAGS = \
 	$(COMMON_CFLAGS_N)
 

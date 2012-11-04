@@ -39,18 +39,12 @@ src_unpack()
 
 src_configure() 
 {
-	# debugging symbols?
-	if use debug ; then
-		myconf+=" --enable-debug"
-	else
-		myconf+=" --disable-debug"
-	fi
-
-    econf ${myconf}
+    econf \
+        $(use_enable debug)
 }
 
 src_install() {
-    emake DESTDIR="${D}" install
+    emake DESTDIR="${D}" install || die
 
     dodoc NEWS README COPYING AUTHORS ChangeLog
 }
