@@ -1,4 +1,6 @@
-# libniftyled Makefile.am - v0.3 - Daniel Hiepler <daniel@niftylight.de> 
+#############
+# libniftyled Makefile.am
+# v0.4 - Daniel Hiepler <daniel@niftylight.de>
 
 
 include Makefile.global.am
@@ -23,26 +25,28 @@ lib_LTLIBRARIES = lib@PACKAGE@.la
 lib@PACKAGE@_la_SOURCES = \
 	version.c
 
-# cflags 
+# cflags
 lib@PACKAGE@_la_CFLAGS = \
-	-DPACKAGE_GIT_VERSION="\"`$(top_srcdir)/version.sh --git`\"" \
-	$(COMMON_CFLAGS_N)
+	$(COMMON_CFLAGS_N) \
+	-DPACKAGE_GIT_VERSION="\"`$(top_srcdir)/version --git`\""
 
 # linker flags
 lib@PACKAGE@_la_LDFLAGS = \
 	-version-info @PACKAGE_API_CURRENT@:@PACKAGE_API_REVISION@:@PACKAGE_API_AGE@ \
-	-release @PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MICRO_VERSION@ \
-	-ldl \
-	$(COMMON_LDFLAGS_N)
+	-release @PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ \
+	$(COMMON_LDFLAGS_N) \
+	$(niftyprefs_LIBS) \
+	$(babl_LIBS)
 
-# link in modules from subdirectories
+# link in modules from subdirectories @todo@ dynamic?
 lib@PACKAGE@_la_LIBADD = \
+	-lm -ldl \
+	$(SUBDIRS) \
 	$(niftyprefs_LIBS) \
 	$(babl_LIBS) \
-	-lm \
-	tile/libtile.la \
 	chain/libchain.la \
-	hardware/libhardware.la \
-	setup/libsetup.la \
 	frame/libframe.la \
-	prefs/libprefs.la
+	hardware/libhardware.la \
+	prefs/libprefs.la \
+	setup/libsetup.la \
+	tile/libtile.la
