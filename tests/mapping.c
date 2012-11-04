@@ -98,6 +98,7 @@ int main(int argc, char *argv[])
 		LedTile *m = NULL;
 		LedTile *msub1 = NULL;
 		LedTile *msub2 = NULL;
+		LedChain *cm = NULL;
 
 
 		/* check library version */
@@ -163,7 +164,6 @@ int main(int argc, char *argv[])
 
 
 		/* mapping chain */
-		LedChain *cm = NULL;
 		if(!(cm = led_chain_new(led_tile_get_ledcount(m), "RGB u8")))
 				goto m_deinit;
 
