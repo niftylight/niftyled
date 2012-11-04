@@ -14,11 +14,11 @@ Architecture: any
 Depends: ${misc:Depends}, @PACKAGE_NAME@@PACKAGE_API_REVISION@ (= ${binary:Version}), libbabl-dev (>= 0.1.4), libniftyprefs-dev, libniftylog-dev
 Description: @PACKAGE_NAME@ library headers
  This package contains development headers for @PACKAGE_NAME@ -
- @PACKAGE_DESCRIPTION@
+ @PACKAGE_DESCRIPTION_LONG@
 
 Package: @PACKAGE_NAME@@PACKAGE_API_REVISION@
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libbabl-0.1-0 (>= 0.1.4), libniftyprefs1 (>= 0.1.0), libniftylog1 (>= 0.1.2)
-Description: pixel based LED control framework
- @PACKAGE_DESCRIPTION@
+Description: @PACKAGE_DESCRIPTION@
+ @PACKAGE_DESCRIPTION_LONG@
