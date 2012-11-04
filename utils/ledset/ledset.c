@@ -462,7 +462,7 @@ int main(int argc, char *argv[])
 
 			/* first run through all LEDs once */
 			NFT_LOG(L_INFO, "Turning off all LEDs...");
-			int l;
+			unsigned int l;
 			for(l=0; l < _c.ledcount; l++)
 			{
 				_light_led_n(firstHw, l, 0);
