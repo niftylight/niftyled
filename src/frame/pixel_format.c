@@ -396,7 +396,7 @@ static int _get_format(LedPixelFormat *f, void *udata)
  * return amount of supported pixel formats
  *
  * @result amount of formats supported. This is the maximum value to be passed
- * to @ref led_pixel_format_n()
+ * to @ref led_pixel_format_get_nth()
  */
 size_t led_pixel_format_get_n_formats()
 {
