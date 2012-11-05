@@ -41,4 +41,5 @@ COMMON_CFLAGS_N = \
 
 # global ldflags
 COMMON_LDFLAGS_N = \
-       -Wall -no-undefined -no-allow-shlib-undefined
+       -Wall -no-undefined -no-allow-shlib-undefined \
+       -export-symbols-regex [_]*\(led_\|Led\|LED_\).*
