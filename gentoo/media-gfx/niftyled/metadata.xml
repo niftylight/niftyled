@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<herd>niftylight</herd>
+<maintainer>
+  <email>daniel-gentoo@niftylight.de</email>
+</maintainer>
+<use>
+  <flag name='debug'>Compile for debugging (also modify CFLAGS and FEATURES)</flag>
+</use>
+<bugs-to>http://github.com/niftylight/niftyled/issues</bugs-to>
+</pkgmetadata>
