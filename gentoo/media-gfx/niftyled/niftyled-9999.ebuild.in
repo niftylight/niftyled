@@ -15,7 +15,9 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-IUSE="debug"
+IUSE="debug gstreamer"
+
+PDEPEND="gstreamer? ( media-plugins/gst-plugins-niftyled )"
 
 RDEPEND="dev-libs/niftylog
 	dev-libs/niftyprefs
