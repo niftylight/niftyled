@@ -36,6 +36,7 @@ COMMON_CFLAGS_N = \
        -DPLUGINDIR=\"@PACKAGE@-plugins\" \
        $(OPT_CFLAGS) \
        $(niftyprefs_CFLAGS) \
+       $(niftylog_CFLAGS) \
        $(babl_CFLAGS) \
        $(WARN_CFLAGS)
 
