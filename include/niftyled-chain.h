@@ -77,7 +77,7 @@ typedef struct _Led Led;
 /** model of one chain of @ref Led's */
 typedef struct _LedChain LedChain;
 /** type to count LEDs */
-typedef size_t LedCount;
+typedef unsigned long LedCount;
 /** type to define the gain-setting of an LED-driver (0 = turned off, 65535 = full brightness) */
 typedef LED_T_GAIN LedGain;
 

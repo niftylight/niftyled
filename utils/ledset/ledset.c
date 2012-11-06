@@ -455,7 +455,7 @@ int main(int argc, char *argv[])
 			}
 
 			printf("\n=====================================================\n"
-			       "Going through all %d LEDs on adapter \"%s\" as defined in \"%s\",\n"
+			       "Going through all %lu LEDs on adapter \"%s\" as defined in \"%s\",\n"
 			       "lighting one LED at a time. Please enter attributes of the LED that is currently lit.\n"
 			       "=====================================================\n\n",
 			       _c.ledcount, led_hardware_get_name(firstHw), _c.configfile);
