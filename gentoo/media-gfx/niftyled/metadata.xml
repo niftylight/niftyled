@@ -8,6 +8,7 @@
 <use>
   <flag name='debug'>Compile for debugging (also modify CFLAGS and FEATURES)</flag>
   <flag name='gstreamer'>Add support for using gStreamer to send pixeldata to LED hardware using niftyled</flag>
+  <flag name='vlc'>Add support for using VLC to send pixeldata to LED hardware using niftyled</flag>
 </use>
 <bugs-to>http://github.com/niftylight/niftyled/issues</bugs-to>
 </pkgmetadata>

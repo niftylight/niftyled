@@ -15,9 +15,10 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-IUSE="debug gstreamer"
+IUSE="debug gstreamer vlc"
 
-PDEPEND="gstreamer? ( media-plugins/gst-plugins-niftyled )"
+PDEPEND="gstreamer? ( media-plugins/gst-plugins-niftyled )
+	vlc? ( media-plugins/niftyled-vlc )"
 
 RDEPEND="dev-libs/niftylog
 	dev-libs/niftyprefs
