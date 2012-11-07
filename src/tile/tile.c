@@ -1105,6 +1105,21 @@ LedTile *led_tile_get_child(LedTile *t)
 
 
 /**
+ * get parent-tile of a tile
+ *
+ * @param t LedTile descriptor
+ * @result LedTile descriptor of parent or NULL
+ */
+LedTile *led_tile_get_parent(LedTile *t)
+{
+	if(!t)
+				NFT_LOG_NULL(NULL);
+		
+	return t->relation.parent;
+}
+
+
+/**
  * convert a tile to a flat LedChain
  *
  * @todo improve accuracy (rotation)

@@ -97,6 +97,7 @@ LedCount        led_tile_get_ledcount(LedTile *t);
 LedFrameCord    led_tile_get_width(LedTile *t);
 LedFrameCord    led_tile_get_height(LedTile *t);
 LedTile *       led_tile_get_child(LedTile *t);
+LedTile *		led_tile_get_parent(LedTile *t);
 
 NftResult       led_tile_set_x(LedTile *t, LedFrameCord x);
 NftResult       led_tile_set_y(LedTile *t, LedFrameCord y);
