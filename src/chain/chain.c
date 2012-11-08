@@ -657,7 +657,7 @@ LedHardware *led_chain_get_parent_hardware(LedChain *chain)
 
 	if(!chain->relation.parent_hw && chain->relation.parent_tile)
 	{
-		NFT_LOG(L_ERROR, "Requested parent hardware but this chain is child of a tile.");
+		NFT_LOG(L_DEBUG, "Requested parent hardware but this chain is child of a tile.");
 		return NULL;
 	}
 
@@ -678,7 +678,7 @@ LedTile *led_chain_get_parent_tile(LedChain *chain)
 
 	if(!chain->relation.parent_tile && chain->relation.parent_hw)
 	{
-		NFT_LOG(L_ERROR, "Requested parent tile but this chain is child of a hardware.");
+		NFT_LOG(L_DEBUG, "Requested parent tile but this chain is child of a hardware.");
 		return NULL;
 	}
 
