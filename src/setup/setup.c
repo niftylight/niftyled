@@ -173,11 +173,13 @@ LedFrameCord led_setup_get_width(LedSetup *s)
             for(h = s->firstHw; h; h = led_hardware_list_get_next(h))
             {
                 /* walk all tiles registered to this hardware */
-                LedTile *tile = led_hardware_get_tile(h);
-
-                LedFrameCord w = led_tile_get_width(tile) + led_tile_get_x(tile);
-                if(w > r)
-                        r = w;
+                LedTile *tile;
+				for(tile = led_hardware_get_tile(h); tile; tile = led_tile_list_get_next(tile))
+				{
+						LedFrameCord w = led_tile_get_width(tile) + led_tile_get_x(tile);
+						if(w > r)
+								r = w;
+				}
         }
 
             return r;
@@ -207,11 +209,13 @@ LedFrameCord led_setup_get_height(LedSetup *s)
             for(h = s->firstHw; h; h = led_hardware_list_get_next(h))
             {
                 /* walk all tiles registered to this hardware */
-                LedTile *tile = led_hardware_get_tile(h);
-
-                LedFrameCord w = led_tile_get_height(tile) + led_tile_get_y(tile);
-                if(w > r)
-                        r = w;
+                LedTile *tile;
+				for(tile = led_hardware_get_tile(h); tile; tile = led_tile_list_get_next(tile))
+				{
+						LedFrameCord w = led_tile_get_height(tile) + led_tile_get_y(tile);
+						if(w > r)
+								r = w;
+				}
         }
 
             return r;
