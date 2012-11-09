@@ -236,8 +236,8 @@ static void _rotate_pivot(double matrix[3][3], double angle, double x, double y)
 static void _transformed_dimensions(LedTile *m,
                                     LedFrameCord *width, LedFrameCord *height)
 {
-        if(*width == *height)
-                return;
+        //if(*width == *height)
+        //        return;
 
         double corners[4][3] =
         {
@@ -253,7 +253,7 @@ static void _transformed_dimensions(LedTile *m,
 
         double w_min = 0, h_min = 0, w_max = 0, h_max = 0;
 
-	/* four corners */
+		/* four corners */
         int i;
         for(i = 0; i<4; i++)
         {
