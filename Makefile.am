@@ -42,7 +42,7 @@ INDENT_H_ARGS=-bl -bls -cli8 -cbi0 -bli0 -cs -fca -i8 -sc -npsl -nut -npcs \
 		-di32 -hnl -nbc -nbfda -nbfde
 
 .PHONY: indent
-indent: $(top_srcdir)/.indent.pro
+indent:
 	@echo Indenting source-files...
 	find $(top_srcdir)/include ./src -type f -and -name "*.[h]" -not -empty -print0 | xargs -0 $(top_srcdir)/missing --run indent $(INDENT_H_ARGS)
 	find $(top_srcdir)/src -type f -and -name "*.[c]" -not -empty -print0 | xargs -0 $(top_srcdir)/missing --run indent $(INDENT_C_ARGS)
