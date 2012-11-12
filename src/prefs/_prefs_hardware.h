@@ -47,8 +47,8 @@
 #include "niftyled-prefs_hardware.h"
 
 
-NftResult	_prefs_hardware_class_register(NftPrefs *p);
+NftResult                       _prefs_hardware_class_register(NftPrefs * p);
 
 
 
-#endif  /* _LED__PREFS_HARDWARE_H */
+#endif /* _LED__PREFS_HARDWARE_H */

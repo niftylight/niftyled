@@ -47,9 +47,9 @@
 #include "niftyled-prefs_chain.h"
 
 
-NftResult         _prefs_chain_class_register(NftPrefs *p);
-NftResult         _prefs_led_class_register(NftPrefs *p);
+NftResult                       _prefs_chain_class_register(NftPrefs * p);
+NftResult                       _prefs_led_class_register(NftPrefs * p);
 
 
 
-#endif  /* _LED__PREFS_CHAIN_H */
+#endif /* _LED__PREFS_CHAIN_H */

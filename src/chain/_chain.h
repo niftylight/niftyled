@@ -46,13 +46,13 @@
 #define _LED__CHAIN_H
 
 
-void              _chain_destroy(LedChain *c);
-NftResult       _chain_set_parent_tile(LedChain *c, LedTile *t);
-NftResult       _chain_set_parent_hardware(LedChain *c, LedHardware *h);
-NftResult       _chain_set_ledcount(LedChain *c, LedCount ledcount);
+void                            _chain_destroy(LedChain * c);
+NftResult                       _chain_set_parent_tile(LedChain * c, LedTile * t);
+NftResult                       _chain_set_parent_hardware(LedChain * c, LedHardware * h);
+NftResult                       _chain_set_ledcount(LedChain * c, LedCount ledcount);
 
 
 
 
 
-#endif  /* _LED__CHAIN_H */
+#endif /* _LED__CHAIN_H */

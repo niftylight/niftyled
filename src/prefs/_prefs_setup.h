@@ -47,13 +47,8 @@
 #include "niftyled-prefs_setup.h"
 
 
-NftResult         _prefs_setup_class_register(NftPrefs *p);
+NftResult                       _prefs_setup_class_register(NftPrefs * p);
 
 
 
-#endif  /* _LED__PREFS_SETUP_H */
-
-
-
-
-
+#endif /* _LED__PREFS_SETUP_H */
