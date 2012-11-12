@@ -1105,17 +1105,32 @@ LedTile *led_tile_get_child(LedTile *t)
 
 
 /**
- * get parent-tile of a tile
+ * get parent tile of a tile
  *
  * @param t LedTile descriptor
  * @result LedTile descriptor of parent or NULL
  */
-LedTile *led_tile_get_parent(LedTile *t)
+LedTile *led_tile_get_parent_tile(LedTile *t)
 {
 	if(!t)
 				NFT_LOG_NULL(NULL);
 		
 	return t->relation.parent;
+}
+
+
+/**
+ * get parent hardware of a tile
+ *
+ * @param t LedTile descriptor
+ * @result LedHardware descriptor of parent or NULL
+ */
+LedHardware *led_tile_get_parent_hardware(LedTile *t)
+{
+	if(!t)
+				NFT_LOG_NULL(NULL);
+
+	return t->relation.parent_hw;
 }
 
 
