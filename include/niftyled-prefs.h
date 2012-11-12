@@ -63,47 +63,48 @@
 
 
 /** model to hold LedPrefs */
-typedef NftPrefs LedPrefs;
+typedef NftPrefs                LedPrefs;
+
 /** wrapper model for niftyprefs */
-typedef NftPrefsNode LedPrefsNode;
+typedef NftPrefsNode            LedPrefsNode;
 
 
 /* integer representation of niftyled elements */
 typedef enum
 {
-		LED_SETUP_T = 1,
+        LED_SETUP_T = 1,
         LED_HARDWARE_T,
         LED_TILE_T,
         LED_CHAIN_T,
         LED_T,
         LED_INVALID_T,
-}NIFTYLED_TYPE;
+} NIFTYLED_TYPE;
 
 
 
 
-NftResult       			led_prefs_default_filename(char *dst, size_t size, const char *filename);
-const char *			led_prefs_node_get_filename(LedPrefsNode *n);
+NftResult                       led_prefs_default_filename(char *dst, size_t size, const char *filename);
+const char                     *led_prefs_node_get_filename(LedPrefsNode * n);
 
-LedPrefs *      		led_prefs_init();
-void            				led_prefs_deinit(LedPrefs *p);
+LedPrefs                       *led_prefs_init();
+void                            led_prefs_deinit(LedPrefs * p);
 
-char *						led_prefs_node_to_buffer_light(LedPrefsNode *n);
-char *						led_prefs_node_to_buffer(LedPrefsNode *n);
-NftResult 					led_prefs_node_to_file_light(LedPrefsNode *n, const char *filename, bool overwrite);
-NftResult 					led_prefs_node_to_file(LedPrefsNode *n, const char *filename, bool overwrite);
-LedPrefsNode *	led_prefs_node_from_buffer(char *buffer, size_t bufsize);
-LedPrefsNode *	led_prefs_node_from_file(const char *filename);
-NIFTYLED_TYPE 	led_prefs_node_get_type(LedPrefsNode *n);
+char                           *led_prefs_node_to_buffer_light(LedPrefsNode * n);
+char                           *led_prefs_node_to_buffer(LedPrefsNode * n);
+NftResult                       led_prefs_node_to_file_light(LedPrefsNode * n, const char *filename, bool overwrite);
+NftResult                       led_prefs_node_to_file(LedPrefsNode * n, const char *filename, bool overwrite);
+LedPrefsNode                   *led_prefs_node_from_buffer(char *buffer, size_t bufsize);
+LedPrefsNode                   *led_prefs_node_from_file(const char *filename);
+NIFTYLED_TYPE                   led_prefs_node_get_type(LedPrefsNode * n);
 
-NIFTYLED_TYPE	led_prefs_type_from_string(const char *name);
-const char *			led_prefs_type_to_string(NIFTYLED_TYPE type);
+NIFTYLED_TYPE                   led_prefs_type_from_string(const char *name);
+const char                     *led_prefs_type_to_string(NIFTYLED_TYPE type);
 
-void 						led_prefs_node_free(LedPrefsNode *n);
+void                            led_prefs_node_free(LedPrefsNode * n);
 
 
 
-#endif  /* _LED_PREFS_H */
+#endif /* _LED_PREFS_H */
 
 /**
  * @}

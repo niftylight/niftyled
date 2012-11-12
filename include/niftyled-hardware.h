@@ -94,7 +94,7 @@
 
 
 /** hardware-model to interface with LEDs */
-typedef struct _LedHardware LedHardware;
+typedef struct _LedHardware     LedHardware;
 
 
 #include <niftylog.h>
@@ -113,19 +113,19 @@ typedef struct _LedPluginCustomProp LedPluginCustomProp;
  */
 typedef enum
 {
-	/** always first entry */
+        /** always first entry */
         LED_HW_CUSTOM_PROP_MIN,
-	
-	/** string property */
-	LED_HW_CUSTOM_PROP_STRING,
-	/** integer property */
-	LED_HW_CUSTOM_PROP_INT,
-	/** float property */
-	LED_HW_CUSTOM_PROP_FLOAT,
-	
-	/** always last entry */
+
+        /** string property */
+        LED_HW_CUSTOM_PROP_STRING,
+        /** integer property */
+        LED_HW_CUSTOM_PROP_INT,
+        /** float property */
+        LED_HW_CUSTOM_PROP_FLOAT,
+
+        /** always last entry */
         LED_HW_CUSTOM_PROP_MAX
-}LedPluginCustomPropType;
+} LedPluginCustomPropType;
 
 
 /** 
@@ -139,24 +139,20 @@ typedef enum
 {
         /** always first entry */
         LED_HW_MIN,
-    
+
         /** led-gain */
         LED_HW_GAIN,
         /** amount of LEDs controlled by plugin */
         LED_HW_LEDCOUNT,
         /** hardware-id */
         LED_HW_ID,
-    	/** custom property */
-	LED_HW_CUSTOM_PROP,
-        /* add new parameter-types above this line
-           (don't forget to define name in 
-                hardware.c:
-                    led_hardware_get_plugin_param_name()
-                        LedPluginParamNames */
-    
+        /** custom property */
+        LED_HW_CUSTOM_PROP,
+        /* add new parameter-types above this line (don't forget to define name in hardware.c: led_hardware_get_plugin_param_name() LedPluginParamNames */
+
         /** always last entry */
         LED_HW_MAX
-}LedPluginParam;
+} LedPluginParam;
 
 
 
@@ -176,35 +172,35 @@ typedef union
         struct
         {
                 /** position of LED in chain */
-                LedCount pos;
+                LedCount                        pos;
                 /** gain-value of LED */
-                LedGain value;
+                LedGain                         value;
         } gain;
         /** LED_HW_LEDCOUNT: to set/get amount of LEDs the plugin controls */
-        LedCount ledcount;
+        LedCount                        ledcount;
         /** LED_HW_ID: hardware id of plugin instance */
-        const char *id;
-	/** LED_HW_CUSTOM_PROP: */
-	struct
-	{
-		/** name of this property */
-		const char *name;
-		/** type of this property */
-		LedPluginCustomPropType type;
-		/** size of value in bytes (mainly for strings) */
-		size_t valuesize;
-		/** value of this property */
-		union
-		{
-			/** LED_HW_CUSTOM_PROP_STRING */
-			char *s;
-			/** LED_HW_CUSTOM_PROP_INT */
-			int i;
-			/** LED_HW_CUSTOM_PROP_FLOAT */
-			float f;
-		}value;
-	} custom;
-}LedPluginParamData;
+        const char                     *id;
+        /** LED_HW_CUSTOM_PROP: */
+        struct
+        {
+                /** name of this property */
+                const char                     *name;
+                /** type of this property */
+                LedPluginCustomPropType         type;
+                /** size of value in bytes (mainly for strings) */
+                size_t                          valuesize;
+                /** value of this property */
+                union
+                {
+                        /** LED_HW_CUSTOM_PROP_STRING */
+                        char                           *s;
+                        /** LED_HW_CUSTOM_PROP_INT */
+                        int                             i;
+                        /** LED_HW_CUSTOM_PROP_FLOAT */
+                        float                           f;
+                } value;
+        } custom;
+} LedPluginParamData;
 
 
 
@@ -224,29 +220,29 @@ typedef union
 typedef struct LedHardwarePlugin
 {
         /** family name of the plugin (lib{family}-hardware.so) */
-        const char *family;
+        const char                     *family;
         /** api major version */
-        int api_major;
+        int                             api_major;
         /** api minor version */
-        int api_minor;
+        int                             api_minor;
         /** api micro version */
-        int api_micro;
+        int                             api_micro;
         /** plugin major version */
-        int major_version;
+        int                             major_version;
         /** plugin minor version */
-        int minor_version;
+        int                             minor_version;
         /** plugin micro version */
-        int micro_version;
+        int                             micro_version;
         /** license string or NULL */
-        char *license;
+        char                           *license;
         /** author(s) string or NULL */
-        char *author;
+        char                           *author;
         /** short plugin description string or NULL */
-        char *description;
+        char                           *description;
         /** plugin URL string or NULL */
-        char *url;
+        char                           *url;
         /** example ID string or NULL */
-        char *id_example;
+        char                           *id_example;
         /** 
          * gets called first after loading a hardware_plugin. You may fill 
          * *privdata with a pointer to some own descriptor to differ multiple
@@ -257,26 +253,26 @@ typedef struct LedHardwarePlugin
          * @param h - the LedHardware this plugin belongs to
          * @result NFT_SUCCESS or NFT_FAILURE
          */
-        NftResult (*plugin_init)(void **privdata, LedHardware *h);
+                                        NftResult(*plugin_init) (void **privdata, LedHardware * h);
         /** 
          * deinitialize the plugin when it's unloaded - free all resources 
          * @note function is optional - may be NULL
          * @param privdata The plugins private data-descriptor from LedHardware->privdata 
          */
-        void (*plugin_deinit)(void *privdata);
+        void                            (*plugin_deinit) (void *privdata);
         /** 
          * initialize hardware (if you want to do something before this, use the plugin_init() handler)
          * @note function is optional - may be NULL
          * @param privdata The plugins private data-descriptor from LedHardware->privdata 
          * @result NFT_SUCCESS or NFT_FAILURE
          */
-        NftResult (*hw_init)(void *privdata, const char *id);
+                                        NftResult(*hw_init) (void *privdata, const char *id);
         /** 
          * deinitialize hardware 
          * @note function is optional - may be NULL
          * @param privdata The plugins private data-descriptor from LedHardware->privdata 
          */
-        void (*hw_deinit)(void *privdata);
+        void                            (*hw_deinit) (void *privdata);
         /**
          * get properties or data from plugin
          *
@@ -286,7 +282,7 @@ typedef struct LedHardwarePlugin
          * @p data union where plugin should store the data
          * @result NFT_SUCCESS or NFT_FAILURE
          */
-        NftResult (*get)(void *privdata, LedPluginParam param, LedPluginParamData *data);
+                                        NftResult(*get) (void *privdata, LedPluginParam param, LedPluginParamData * data);
         /**
          * set properties or data to plugin
          *
@@ -296,7 +292,7 @@ typedef struct LedHardwarePlugin
          * @p data union where plugin reads parameter-specific data from
          * @result NFT_SUCCESS or NFT_FAILURE if value isn't accepted
          */
-        NftResult (*set)(void *privdata, LedPluginParam param, LedPluginParamData *data);
+                                        NftResult(*set) (void *privdata, LedPluginParam param, LedPluginParamData * data);
         /**
          * send data from chain to hardware
          *
@@ -306,15 +302,15 @@ typedef struct LedHardwarePlugin
          * @p count amount of LEDs to send
          * @p offset start with data at this LED in chain
          */
-        NftResult (*send)(void *privdata, LedChain *chain, LedCount count, LedCount offset);
+                                        NftResult(*send) (void *privdata, LedChain * chain, LedCount count, LedCount offset);
         /**
          * show data sent to chain
          *
          * @note function is optional - may be NULL (but everything will stay pretty dark without it)
          * @p privdata The plugins private data-descriptor from LedHardware->privdata 
          */
-        NftResult (*show)(void *privdata);
-}LedHardwarePlugin;
+                                        NftResult(*show) (void *privdata);
+} LedHardwarePlugin;
 
 
 
@@ -324,88 +320,89 @@ typedef struct LedHardwarePlugin
 
 
 /* LedHardware functions */
-LedHardware *           led_hardware_new(const char *name, const char *plugin_name);
-void                    led_hardware_destroy(LedHardware *h);
-NftResult               led_hardware_init(LedHardware *h, const char *id, LedCount ledcount, const char *pixelformat);
-void                    led_hardware_deinit(LedHardware *h);
-NftResult               led_hardware_is_initialized(LedHardware *h);
+LedHardware                    *led_hardware_new(const char *name, const char *plugin_name);
+void                            led_hardware_destroy(LedHardware * h);
+NftResult                       led_hardware_init(LedHardware * h, const char *id, LedCount ledcount, const char *pixelformat);
+void                            led_hardware_deinit(LedHardware * h);
+NftResult                       led_hardware_is_initialized(LedHardware * h);
 
-LedHardwarePlugin *     led_hardware_get_plugin(LedHardware *h);
-const char *            led_hardware_get_id(LedHardware *h);
-LedCount                led_hardware_get_stride(LedHardware *h);
-LedChain *              led_hardware_get_chain(LedHardware *h);
-LedTile *               led_hardware_get_tile(LedHardware *h);
-const char *            led_hardware_get_name(LedHardware *h);
-LedCount                led_hardware_get_ledcount(LedHardware *h);
-LedGain                 led_hardware_get_gain(LedHardware *h, LedCount pos);
-void *                  led_hardware_get_privdata(LedHardware *h);
+LedHardwarePlugin              *led_hardware_get_plugin(LedHardware * h);
+const char                     *led_hardware_get_id(LedHardware * h);
+LedCount                        led_hardware_get_stride(LedHardware * h);
+LedChain                       *led_hardware_get_chain(LedHardware * h);
+LedTile                        *led_hardware_get_tile(LedHardware * h);
+const char                     *led_hardware_get_name(LedHardware * h);
+LedCount                        led_hardware_get_ledcount(LedHardware * h);
+LedGain                         led_hardware_get_gain(LedHardware * h, LedCount pos);
+void                           *led_hardware_get_privdata(LedHardware * h);
+
 //const char *            led_hardware_get_propname(LedHardware *h, const char *propname);
 
-NftResult               led_hardware_set_tile(LedHardware *h, LedTile *t);
-NftResult               led_hardware_set_id(LedHardware *h, const char *id);
-NftResult               led_hardware_set_stride(LedHardware *h, LedCount stride);
-NftResult               led_hardware_set_name(LedHardware *h, const char *name);
-NftResult               led_hardware_set_ledcount(LedHardware *h, LedCount leds);
-NftResult               led_hardware_set_gain(LedHardware *h, LedCount pos, LedGain gain);
-NftResult               led_hardware_set_privdata(LedHardware *h, void *privdata);
+NftResult                       led_hardware_set_tile(LedHardware * h, LedTile * t);
+NftResult                       led_hardware_set_id(LedHardware * h, const char *id);
+NftResult                       led_hardware_set_stride(LedHardware * h, LedCount stride);
+NftResult                       led_hardware_set_name(LedHardware * h, const char *name);
+NftResult                       led_hardware_set_ledcount(LedHardware * h, LedCount leds);
+NftResult                       led_hardware_set_gain(LedHardware * h, LedCount pos, LedGain gain);
+NftResult                       led_hardware_set_privdata(LedHardware * h, void *privdata);
 
-NftResult               led_hardware_append_tile(LedHardware *h, LedTile *t);
-void                    led_hardware_print(LedHardware *h, NftLoglevel l);
-NftResult               led_hardware_send(LedHardware *h);
-NftResult               led_hardware_show(LedHardware *h);
-NftResult               led_hardware_refresh_gain(LedHardware *h);
-NftResult               led_hardware_refresh_mapping(LedHardware *h);
+NftResult                       led_hardware_append_tile(LedHardware * h, LedTile * t);
+void                            led_hardware_print(LedHardware * h, NftLoglevel l);
+NftResult                       led_hardware_send(LedHardware * h);
+NftResult                       led_hardware_show(LedHardware * h);
+NftResult                       led_hardware_refresh_gain(LedHardware * h);
+NftResult                       led_hardware_refresh_mapping(LedHardware * h);
 
 /* LedHardware linked list functions */
-void                    led_hardware_list_destroy(LedHardware *first);
-NftResult               led_hardware_list_append(LedHardware *h, LedHardware *sibling);
-NftResult               led_hardware_list_append_head(LedHardware *head, LedHardware *sibling);
-NftResult               led_hardware_list_refresh_gain(LedHardware *first);
-NftResult               led_hardware_list_refresh_mapping(LedHardware *first);
-NftResult               led_hardware_list_send(LedHardware *first);
-NftResult               led_hardware_list_show(LedHardware *first);
+void                            led_hardware_list_destroy(LedHardware * first);
+NftResult                       led_hardware_list_append(LedHardware * h, LedHardware * sibling);
+NftResult                       led_hardware_list_append_head(LedHardware * head, LedHardware * sibling);
+NftResult                       led_hardware_list_refresh_gain(LedHardware * first);
+NftResult                       led_hardware_list_refresh_mapping(LedHardware * first);
+NftResult                       led_hardware_list_send(LedHardware * first);
+NftResult                       led_hardware_list_show(LedHardware * first);
 
-int                     led_hardware_list_get_length(LedHardware *h);
-LedHardware *           led_hardware_list_get_nth(LedHardware *h, int n);
-LedHardware *           led_hardware_list_get_next(LedHardware *h);
-LedHardware *           led_hardware_list_get_prev(LedHardware *h);
-LedCount                led_hardware_list_get_ledcount(LedHardware *first);
+int                             led_hardware_list_get_length(LedHardware * h);
+LedHardware                    *led_hardware_list_get_nth(LedHardware * h, int n);
+LedHardware                    *led_hardware_list_get_next(LedHardware * h);
+LedHardware                    *led_hardware_list_get_prev(LedHardware * h);
+LedCount                        led_hardware_list_get_ledcount(LedHardware * first);
 
 /* LedHardwarePlugin functions */
-int                     led_hardware_plugin_total_count();
-void                    led_hardware_plugin_print(LedHardwarePlugin *p, NftLoglevel l);
-void *                  led_hardware_plugin_get_privdata(LedHardware *h);
-const char *            led_hardware_plugin_get_family(LedHardware *h);
-const char *            led_hardware_plugin_get_family_by_n(unsigned int num);
-const char *            led_hardware_plugin_get_license(LedHardware *h);
-const char *            led_hardware_plugin_get_author(LedHardware *h);
-const char *            led_hardware_plugin_get_description(LedHardware *h);
-const char *            led_hardware_plugin_get_url(LedHardware *h);
-const char *            led_hardware_plugin_get_id_example(LedHardware *h);
-int                     led_hardware_plugin_get_version_major(LedHardware *h);
-int                     led_hardware_plugin_get_version_minor(LedHardware *h);
-int                     led_hardware_plugin_get_version_micro(LedHardware *h);
-const char *            led_hardware_plugin_get_param_name(LedPluginParam p);
+int                             led_hardware_plugin_total_count();
+void                            led_hardware_plugin_print(LedHardwarePlugin * p, NftLoglevel l);
+void                           *led_hardware_plugin_get_privdata(LedHardware * h);
+const char                     *led_hardware_plugin_get_family(LedHardware * h);
+const char                     *led_hardware_plugin_get_family_by_n(unsigned int num);
+const char                     *led_hardware_plugin_get_license(LedHardware * h);
+const char                     *led_hardware_plugin_get_author(LedHardware * h);
+const char                     *led_hardware_plugin_get_description(LedHardware * h);
+const char                     *led_hardware_plugin_get_url(LedHardware * h);
+const char                     *led_hardware_plugin_get_id_example(LedHardware * h);
+int                             led_hardware_plugin_get_version_major(LedHardware * h);
+int                             led_hardware_plugin_get_version_minor(LedHardware * h);
+int                             led_hardware_plugin_get_version_micro(LedHardware * h);
+const char                     *led_hardware_plugin_get_param_name(LedPluginParam p);
 
 /* LedPluginParam functions */
-NftResult               led_hardware_plugin_prop_register(LedHardware *h, const char *propname, LedPluginCustomPropType type);
-void                    led_hardware_plugin_prop_unregister(LedHardware *h, const char *propname);
-int                     led_hardware_plugin_prop_count(LedHardware *h);
-LedPluginCustomProp *	led_hardware_plugin_prop_nth(LedHardware *h, int n);
-LedPluginCustomProp *	led_hardware_plugin_prop_next(LedPluginCustomProp *p);
-LedPluginCustomPropType led_hardware_plugin_prop_type_from_string(const char *type);
+NftResult                       led_hardware_plugin_prop_register(LedHardware * h, const char *propname, LedPluginCustomPropType type);
+void                            led_hardware_plugin_prop_unregister(LedHardware * h, const char *propname);
+int                             led_hardware_plugin_prop_count(LedHardware * h);
+LedPluginCustomProp            *led_hardware_plugin_prop_nth(LedHardware * h, int n);
+LedPluginCustomProp            *led_hardware_plugin_prop_next(LedPluginCustomProp * p);
+LedPluginCustomPropType         led_hardware_plugin_prop_type_from_string(const char *type);
 
-NftResult               led_hardware_plugin_prop_set_string(LedHardware *h, const char *propname, const char *s);
-NftResult               led_hardware_plugin_prop_set_int(LedHardware *h, const char *propname, int i);
-NftResult               led_hardware_plugin_prop_set_float(LedHardware *h, const char *propname, float f);
+NftResult                       led_hardware_plugin_prop_set_string(LedHardware * h, const char *propname, const char *s);
+NftResult                       led_hardware_plugin_prop_set_int(LedHardware * h, const char *propname, int i);
+NftResult                       led_hardware_plugin_prop_set_float(LedHardware * h, const char *propname, float f);
 
-const char *            led_hardware_plugin_prop_get_name(LedPluginCustomProp *p);
-LedPluginCustomPropType led_hardware_plugin_prop_get_type(LedPluginCustomProp *p);
-NftResult               led_hardware_plugin_prop_get_string(LedHardware *h, const char *propname, char **v);
-NftResult               led_hardware_plugin_prop_get_int(LedHardware *h, const char *propname, int *v);
-NftResult               led_hardware_plugin_prop_get_float(LedHardware *h, const char *propname, float *v);
+const char                     *led_hardware_plugin_prop_get_name(LedPluginCustomProp * p);
+LedPluginCustomPropType         led_hardware_plugin_prop_get_type(LedPluginCustomProp * p);
+NftResult                       led_hardware_plugin_prop_get_string(LedHardware * h, const char *propname, char **v);
+NftResult                       led_hardware_plugin_prop_get_int(LedHardware * h, const char *propname, int *v);
+NftResult                       led_hardware_plugin_prop_get_float(LedHardware * h, const char *propname, float *v);
 
-#endif  /* _LED_HARDWARE_H */
+#endif /* _LED_HARDWARE_H */
 
 
 /**

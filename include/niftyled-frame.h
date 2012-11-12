@@ -69,31 +69,33 @@
 
 
 /** model of one pixelframe */
-typedef struct _LedFrame LedFrame;
+typedef struct _LedFrame        LedFrame;
+
 /** type to define coordinates (x,y positions, width & height) */
-typedef LED_T_COORDINATE LedFrameCord;
+typedef LED_T_COORDINATE        LedFrameCord;
+
 /** type to define the channelnumber for one portion of a pixel */
-typedef LED_T_COMPONENT LedFrameComponent;
+typedef LED_T_COMPONENT         LedFrameComponent;
 
 
 
 
 
-LedFrame *              led_frame_new(LedFrameCord width, LedFrameCord height, LedPixelFormat *format);
-void                    led_frame_destroy(LedFrame *f);
-void                    led_frame_print(LedFrame *f, NftLoglevel l);
-void                    led_frame_print_buffer(LedFrame *f);
-void                    led_frame_convert_endianess(LedFrame *f);
+LedFrame                       *led_frame_new(LedFrameCord width, LedFrameCord height, LedPixelFormat * format);
+void                            led_frame_destroy(LedFrame * f);
+void                            led_frame_print(LedFrame * f, NftLoglevel l);
+void                            led_frame_print_buffer(LedFrame * f);
+void                            led_frame_convert_endianess(LedFrame * f);
 
-void                    led_frame_set_big_endian(LedFrame *f, bool is_big_endian);
-NftResult               led_frame_set_buffer(LedFrame *f, void *buffer, size_t buffersize, void (*freebuf)(void *));
+void                            led_frame_set_big_endian(LedFrame * f, bool is_big_endian);
+NftResult                       led_frame_set_buffer(LedFrame * f, void *buffer, size_t buffersize, void (*freebuf) (void *));
 
-bool                    led_frame_get_big_endian(LedFrame *f);
-LedFrameCord            led_frame_get_width(LedFrame *f);
-LedFrameCord            led_frame_get_height(LedFrame *f);
-LedPixelFormat *        led_frame_get_format(LedFrame *f);
-void *                  led_frame_get_buffer(LedFrame *f);
-size_t                  led_frame_get_buffersize(LedFrame *f);
+bool                            led_frame_get_big_endian(LedFrame * f);
+LedFrameCord                    led_frame_get_width(LedFrame * f);
+LedFrameCord                    led_frame_get_height(LedFrame * f);
+LedPixelFormat                 *led_frame_get_format(LedFrame * f);
+void                           *led_frame_get_buffer(LedFrame * f);
+size_t                          led_frame_get_buffersize(LedFrame * f);
 
 
 

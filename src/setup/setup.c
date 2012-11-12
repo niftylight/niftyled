@@ -81,13 +81,13 @@ struct _LedSetup
 LedSetup *led_setup_new()
 {
         LedSetup *r;
-            if(!(r = calloc(1, sizeof(LedSetup))))
-            {
+        if(!(r = calloc(1, sizeof(LedSetup))))
+        {
                 NFT_LOG_PERROR("calloc");
                 return NULL;
         }
 
-            return r;
+        return r;
 }
 
 
@@ -96,22 +96,22 @@ LedSetup *led_setup_new()
  *
  * @param s valid LedSetup
  */
-void led_setup_destroy(LedSetup *s)
+void led_setup_destroy(LedSetup * s)
 {
         if(!s)
                 return;
 
-            /* destroy all LedHardware objects */
-            if(s->firstHw)
-            {
+        /* destroy all LedHardware objects */
+        if(s->firstHw)
+        {
                 led_hardware_list_destroy(s->firstHw);
-            }
+        }
 
-            /* be really tidy :) */
-            s->firstHw = NULL;
+        /* be really tidy :) */
+        s->firstHw = NULL;
 
-            /* free descriptor */
-            free(s);
+        /* free descriptor */
+        free(s);
 }
 
 
@@ -121,17 +121,17 @@ void led_setup_destroy(LedSetup *s)
  * @param s valid LedSetup
  * @param h LedHardware to set as head in this setup
  */
-void led_setup_set_hardware(LedSetup *s, LedHardware *h)
+void led_setup_set_hardware(LedSetup * s, LedHardware * h)
 {
         if(!s)
                 NFT_LOG_NULL();
 
-	s->firstHw = h;
+        s->firstHw = h;
 
-	if(h)
-	{
-		_hardware_set_parent_setup(h, s);
-	}
+        if(h)
+        {
+                _hardware_set_parent_setup(h, s);
+        }
 }
 
 
@@ -141,12 +141,12 @@ void led_setup_set_hardware(LedSetup *s, LedHardware *h)
  * @param s valid LedSetup
  * @result head of LedHardware list of this setup
  */
-LedHardware *led_setup_get_hardware(LedSetup *s)
+LedHardware *led_setup_get_hardware(LedSetup * s)
 {
         if(!s)
                 NFT_LOG_NULL(NULL);
 
-            return s->firstHw;
+        return s->firstHw;
 }
 
 
@@ -156,33 +156,36 @@ LedHardware *led_setup_get_hardware(LedSetup *s)
  * @param s LedSetup descriptor
  * @result total width of setup in pixels or -1 upon error
  */
-LedFrameCord led_setup_get_width(LedSetup *s)
+LedFrameCord led_setup_get_width(LedSetup * s)
 {
         if(!s)
                 NFT_LOG_NULL(-1);
 
-            /* result */
-            LedFrameCord r = 0;
+        /* result */
+        LedFrameCord r = 0;
 
-            /* no hardware registered? */
-            if(!s->firstHw)
+        /* no hardware registered? */
+        if(!s->firstHw)
                 return r;
 
-            /* walk all registered Hardware descriptors */
-            LedHardware *h;
-            for(h = s->firstHw; h; h = led_hardware_list_get_next(h))
-            {
+        /* walk all registered Hardware descriptors */
+        LedHardware *h;
+        for(h = s->firstHw; h; h = led_hardware_list_get_next(h))
+        {
                 /* walk all tiles registered to this hardware */
                 LedTile *tile;
-				for(tile = led_hardware_get_tile(h); tile; tile = led_tile_list_get_next(tile))
-				{
-						LedFrameCord w = led_tile_get_transformed_width(tile) + led_tile_get_x(tile);
-						if(w > r)
-								r = w;
-				}
+                for(tile = led_hardware_get_tile(h); tile;
+                    tile = led_tile_list_get_next(tile))
+                {
+                        LedFrameCord w =
+                                led_tile_get_transformed_width(tile) +
+                                led_tile_get_x(tile);
+                        if(w > r)
+                                r = w;
+                }
         }
 
-            return r;
+        return r;
 }
 
 
@@ -192,33 +195,36 @@ LedFrameCord led_setup_get_width(LedSetup *s)
  * @param s LedSetup descriptor
  * @result total width of setup in pixels or -1 upon error
  */
-LedFrameCord led_setup_get_height(LedSetup *s)
+LedFrameCord led_setup_get_height(LedSetup * s)
 {
         if(!s)
                 NFT_LOG_NULL(-1);
 
-            /* result */
-            LedFrameCord r = 0;
+        /* result */
+        LedFrameCord r = 0;
 
-            /* no hardware registered? */
-            if(!s->firstHw)
+        /* no hardware registered? */
+        if(!s->firstHw)
                 return r;
 
-            /* walk all registered Hardware descriptors */
-            LedHardware *h;
-            for(h = s->firstHw; h; h = led_hardware_list_get_next(h))
-            {
+        /* walk all registered Hardware descriptors */
+        LedHardware *h;
+        for(h = s->firstHw; h; h = led_hardware_list_get_next(h))
+        {
                 /* walk all tiles registered to this hardware */
                 LedTile *tile;
-				for(tile = led_hardware_get_tile(h); tile; tile = led_tile_list_get_next(tile))
-				{
-						LedFrameCord w = led_tile_get_transformed_height(tile) + led_tile_get_y(tile);
-						if(w > r)
-								r = w;
-				}
+                for(tile = led_hardware_get_tile(h); tile;
+                    tile = led_tile_list_get_next(tile))
+                {
+                        LedFrameCord w =
+                                led_tile_get_transformed_height(tile) +
+                                led_tile_get_y(tile);
+                        if(w > r)
+                                r = w;
+                }
         }
 
-            return r;
+        return r;
 }
 
 

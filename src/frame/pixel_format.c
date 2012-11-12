@@ -73,55 +73,55 @@ void led_pixel_format_new()
 {
         babl_init();
 
-	/* register our "custom" formats */
-	const char *types[] = { "u8", "u16", "u32", "float", "double", NULL };
-	char name[32];
-		
-	int t;
+        /* register our "custom" formats */
+        const char *types[] = { "u8", "u16", "u32", "float", "double", NULL };
+        char name[32];
 
-	/* create BGR formats */
-	for(t=0; types[t]; t++)
-	{
-		/* generate name */
-		snprintf(name, sizeof(name), "BGR %s", types[t]);
+        int t;
 
-		/* register format */
-		babl_format_new("name", name, babl_model("RGB"),
-				babl_type (types[t]), 
-				babl_component ("B"), 
-				babl_component ("G"), 
-				babl_component ("R"), NULL);
-	}
+        /* create BGR formats */
+        for(t = 0; types[t]; t++)
+        {
+                /* generate name */
+                snprintf(name, sizeof(name), "BGR %s", types[t]);
 
-	/* create ARGB formats */
-	for(t=0; types[t]; t++)
-	{
-		/* generate name */
-		snprintf(name, sizeof(name), "ARGB %s", types[t]);
+                /* register format */
+                babl_format_new("name", name, babl_model("RGB"),
+                                babl_type(types[t]),
+                                babl_component("B"),
+                                babl_component("G"),
+                                babl_component("R"), NULL);
+        }
 
-		/* register format */
-		babl_format_new("name", name, babl_model("RGBA"), 
-				babl_type (types[t]), 
-		        babl_component ("A"),
-				babl_component ("R"), 
-				babl_component ("G"), 
-				babl_component ("B"), NULL);
-	}
-	
-	/* create ABGR formats */
-	for(t=0; types[t]; t++)
-	{
-		/* generate name */
-		snprintf(name, sizeof(name), "ABGR %s", types[t]);
+        /* create ARGB formats */
+        for(t = 0; types[t]; t++)
+        {
+                /* generate name */
+                snprintf(name, sizeof(name), "ARGB %s", types[t]);
 
-		/* register format */
-		babl_format_new("name", name, babl_model("RGBA"), 
-				babl_type (types[t]), 
-		        babl_component ("A"),
-				babl_component ("B"), 
-				babl_component ("G"), 
-				babl_component ("R"), NULL);
-	}
+                /* register format */
+                babl_format_new("name", name, babl_model("RGBA"),
+                                babl_type(types[t]),
+                                babl_component("A"),
+                                babl_component("R"),
+                                babl_component("G"),
+                                babl_component("B"), NULL);
+        }
+
+        /* create ABGR formats */
+        for(t = 0; types[t]; t++)
+        {
+                /* generate name */
+                snprintf(name, sizeof(name), "ABGR %s", types[t]);
+
+                /* register format */
+                babl_format_new("name", name, babl_model("RGBA"),
+                                babl_type(types[t]),
+                                babl_component("A"),
+                                babl_component("B"),
+                                babl_component("G"),
+                                babl_component("R"), NULL);
+        }
 }
 
 
@@ -142,15 +142,18 @@ void led_pixel_format_destroy()
  * @param component the component-number starting from 0 (e.g. 1 to get "G" type in "RGB")
  * @result printable name of format (e.g. "u8") or NULL upon error
  */
-const char *led_pixel_format_get_component_type(LedPixelFormat *f, unsigned int component)
+const char *led_pixel_format_get_component_type(LedPixelFormat * f,
+                                                unsigned int component)
 {
         if(component >= led_pixel_format_get_n_components(f))
         {
-                NFT_LOG(L_ERROR, "Format-type of component %d requested. But only have %d components in format %s",
-                        component, led_pixel_format_get_n_components(f), babl_get_name(f));
+                NFT_LOG(L_ERROR,
+                        "Format-type of component %d requested. But only have %d components in format %s",
+                        component, led_pixel_format_get_n_components(f),
+                        babl_get_name(f));
                 return NULL;
         }
-        
+
         return babl_get_name(babl_format_get_type(f, component));
 }
 
@@ -161,7 +164,7 @@ const char *led_pixel_format_get_component_type(LedPixelFormat *f, unsigned int 
  * @param f LedPixelFormat
  * @result string or NULL
  */
-const char *led_pixel_format_to_string(LedPixelFormat *f)
+const char *led_pixel_format_to_string(LedPixelFormat * f)
 {
         if(!f)
                 NFT_LOG_NULL(NULL);
@@ -176,14 +179,15 @@ const char *led_pixel_format_to_string(LedPixelFormat *f)
  * @param f LedPixelFormat
  * @result string or NULL
  */
-const char *led_pixel_format_colorspace_to_string(LedPixelFormat *f)
+const char *led_pixel_format_colorspace_to_string(LedPixelFormat * f)
 {
         if(!f)
                 NFT_LOG_NULL(NULL);
 
         /* copy format string */
         static char colorspace[64];
-        strncpy(colorspace, led_pixel_format_to_string(f), sizeof(colorspace));
+        strncpy(colorspace, led_pixel_format_to_string(f),
+                sizeof(colorspace));
 
         /* find space */
         size_t i;
@@ -207,10 +211,10 @@ const char *led_pixel_format_colorspace_to_string(LedPixelFormat *f)
  * @result LedPixelFormat object or NULL upon error
  */
 LedPixelFormat *led_pixel_format_from_string(const char *s)
-{       
+{
         if(!s)
-                NFT_LOG_NULL(NULL);	
-	
+                NFT_LOG_NULL(NULL);
+
         return (LedPixelFormat *) babl_format(s);
 }
 
@@ -222,7 +226,7 @@ LedPixelFormat *led_pixel_format_from_string(const char *s)
  * @param b another LedPixelFormat
  * @result TRUE if formats match, FALSE otherwise
  */
-bool led_pixel_format_is_equal(LedPixelFormat *a, LedPixelFormat *b)
+bool led_pixel_format_is_equal(LedPixelFormat * a, LedPixelFormat * b)
 {
         if(a == b)
                 return TRUE;
@@ -237,7 +241,7 @@ bool led_pixel_format_is_equal(LedPixelFormat *a, LedPixelFormat *b)
  * @param f LedPixelFormat descriptor
  * @result amount of bytes per pixel
  */
-size_t led_pixel_format_get_bytes_per_pixel(LedPixelFormat *f)
+size_t led_pixel_format_get_bytes_per_pixel(LedPixelFormat * f)
 {
         return (size_t) babl_format_get_bytes_per_pixel(f);
 }
@@ -249,7 +253,7 @@ size_t led_pixel_format_get_bytes_per_pixel(LedPixelFormat *f)
  * @param f LedPixelFormat descriptor
  * @result amount of components per pixel
  */
-size_t led_pixel_format_get_n_components(LedPixelFormat *f)
+size_t led_pixel_format_get_n_components(LedPixelFormat * f)
 {
         return (size_t) babl_format_get_n_components(f);
 }
@@ -261,9 +265,9 @@ size_t led_pixel_format_get_n_components(LedPixelFormat *f)
  * @param n amount of pixels
  * @result amount of bytes needed to store n pixels
  */
-size_t led_pixel_format_get_buffer_size(LedPixelFormat *f, LedFrameCord n)
+size_t led_pixel_format_get_buffer_size(LedPixelFormat * f, LedFrameCord n)
 {
-        return (size_t) (int) n * babl_format_get_bytes_per_pixel(f);
+        return (size_t) (int) n *babl_format_get_bytes_per_pixel(f);
 }
 
 
@@ -274,8 +278,9 @@ size_t led_pixel_format_get_buffer_size(LedPixelFormat *f, LedFrameCord n)
  * @param dst destination LedPixelFormat
  * @result a LedPixelFormatConverter or NULL upon error
  */
-LedPixelFormatConverter *led_pixel_format_get_converter(LedPixelFormat *src, LedPixelFormat *dst)
-{                          
+LedPixelFormatConverter *led_pixel_format_get_converter(LedPixelFormat * src,
+                                                        LedPixelFormat * dst)
+{
         return (LedPixelFormatConverter *) babl_fish(src, dst);
 }
 
@@ -289,11 +294,11 @@ LedPixelFormatConverter *led_pixel_format_get_converter(LedPixelFormat *src, Led
  * @param n amount of pixels to convert
  *
  */
-void led_pixel_format_convert(LedPixelFormatConverter *converter,
+void led_pixel_format_convert(LedPixelFormatConverter * converter,
                               void *src, void *dst, size_t n)
-{        
+{
         NFT_LOG(L_NOISY, "Converting %d pixels", n);
-        babl_process(converter, src, dst, (long) n);                             
+        babl_process(converter, src, dst, (long) n);
 }
 
 
@@ -323,10 +328,10 @@ bool led_pixel_format_is_big_endian()
  */
 //~ size_t led_pixel_format_get_pixel_offset(LedPixelFormat *f, size_t n)
 //~ {
-        //~ if(!f)
-                //~ NFT_LOG_NULL(0);
+        // ~ if(!f)
+                // ~ NFT_LOG_NULL(0);
 
-        //~ return n*led_pixel_format_get_bytes_per_pixel(f);
+        // ~ return n*led_pixel_format_get_bytes_per_pixel(f);
 //~ }
 
 
@@ -337,15 +342,17 @@ bool led_pixel_format_is_big_endian()
  * @param n amount of components to seek
  * @result byte-offset
  */
-size_t led_pixel_format_get_component_offset(LedPixelFormat *f, size_t n)
+size_t led_pixel_format_get_component_offset(LedPixelFormat * f, size_t n)
 {
         if(!f)
                 NFT_LOG_NULL(0);
 
         /* calculate bytes-per-component */
-        int bpc = led_pixel_format_get_bytes_per_pixel(f)/led_pixel_format_get_n_components(f);
-        
-        return bpc*n;
+        int bpc =
+                led_pixel_format_get_bytes_per_pixel(f) /
+                led_pixel_format_get_n_components(f);
+
+        return bpc * n;
 }
 
 
@@ -355,40 +362,40 @@ size_t led_pixel_format_get_component_offset(LedPixelFormat *f, size_t n)
 
 
 /** libbabl internal API */
-typedef int  (*BablEachFunction) (Babl *entry, void *data);
+typedef int (*BablEachFunction) (Babl * entry, void *data);
 void babl_format_class_for_each(BablEachFunction each_fun, void *user_data);
 
 /* structure to pass argument to BablEachFunction */
 struct _foreach_arg
 {
-	LedPixelFormat *format;
-	size_t n;
+        LedPixelFormat *format;
+        size_t n;
 };
 
 
 /** foreach function to count all formats supported by babl */
-static int _count_format(LedPixelFormat *f, void *udata)
+static int _count_format(LedPixelFormat * f, void *udata)
 {
-	struct _foreach_arg *arg = udata;
-	
-	arg->n++;
-	return 0;
+        struct _foreach_arg *arg = udata;
+
+        arg->n++;
+        return 0;
 }
 
 
 /** foreach function to get nth format supported by babl */
-static int _get_format(LedPixelFormat *f, void *udata)
+static int _get_format(LedPixelFormat * f, void *udata)
 {
-	struct _foreach_arg *arg = udata;
-	
-	if(arg->n > 0)
-	{
-		arg->n--;
-		return FALSE;
-	}
+        struct _foreach_arg *arg = udata;
 
-	arg->format = f;
-	return TRUE;
+        if(arg->n > 0)
+        {
+                arg->n--;
+                return FALSE;
+        }
+
+        arg->format = f;
+        return TRUE;
 }
 
 
@@ -400,10 +407,10 @@ static int _get_format(LedPixelFormat *f, void *udata)
  */
 size_t led_pixel_format_get_n_formats()
 {
-	struct _foreach_arg arg = { NULL, 0 };
-	babl_format_class_for_each(_count_format, &arg);
+        struct _foreach_arg arg = { NULL, 0 };
+        babl_format_class_for_each(_count_format, &arg);
 
-	return arg.n;
+        return arg.n;
 }
 
 
@@ -412,13 +419,13 @@ size_t led_pixel_format_get_n_formats()
  *
  * @param n value from 0 to led_pixel_format_get_n_formats()-1
  * @result nth LedPixelFormat or NULL
- */ 
+ */
 LedPixelFormat *led_pixel_format_get_nth(size_t n)
 {
-	struct _foreach_arg arg = { NULL, n };
-	babl_format_class_for_each(_get_format, &arg);
+        struct _foreach_arg arg = { NULL, n };
+        babl_format_class_for_each(_get_format, &arg);
 
-	return arg.format;
+        return arg.format;
 }
 
 

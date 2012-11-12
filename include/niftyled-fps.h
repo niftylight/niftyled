@@ -61,17 +61,17 @@
  * - ...
  * @{
  */
- 
- 
+
+
 #ifndef _FPS_H
 #define _FPS_H
 
 
 
 
-NftResult       led_fps_sample();
-NftResult       led_fps_delay(int fps);
-int             led_fps_get();
+NftResult                       led_fps_sample();
+NftResult                       led_fps_delay(int fps);
+int                             led_fps_get();
 
 
 #endif /* _FPS_H */

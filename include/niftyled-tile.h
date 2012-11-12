@@ -67,7 +67,7 @@
 
 
 /** model of one LedTile */
-typedef struct _LedTile LedTile;
+typedef struct _LedTile         LedTile;
 
 
 #include "niftyled-chain.h"
@@ -76,54 +76,54 @@ typedef struct _LedTile LedTile;
 
 
 /* LedTile functions */
-LedTile *       led_tile_new();
-void            led_tile_destroy(LedTile *t);
-LedTile *       led_tile_dup(LedTile *t);
-void            led_tile_print(LedTile *t, NftLoglevel l);
-LedCount        led_tile_to_chain(LedTile *t, LedChain *dst, LedCount offset);
+LedTile                        *led_tile_new();
+void                            led_tile_destroy(LedTile * t);
+LedTile                        *led_tile_dup(LedTile * t);
+void                            led_tile_print(LedTile * t, NftLoglevel l);
+LedCount                        led_tile_to_chain(LedTile * t, LedChain * dst, LedCount offset);
 
-LedFrameCord    led_tile_get_x(LedTile *t);
-LedFrameCord    led_tile_get_y(LedTile *t);
-double          led_tile_get_rotation(LedTile *t);
-double          led_tile_get_pivot_x(LedTile *t);
-double          led_tile_get_pivot_y(LedTile *t);
-double          led_tile_get_transformed_pivot_x(LedTile *t);
-double          led_tile_get_transformed_pivot_y(LedTile *t);
-LedFrameCord    led_tile_get_transformed_width(LedTile *t);
-LedFrameCord    led_tile_get_transformed_height(LedTile *t);
-LedChain *      led_tile_get_chain(LedTile *t);
-void *          led_tile_get_privdata(LedTile *t);
-LedCount        led_tile_get_ledcount(LedTile *t);
-LedFrameCord    led_tile_get_width(LedTile *t);
-LedFrameCord    led_tile_get_height(LedTile *t);
-LedTile *       led_tile_get_child(LedTile *t);
-LedTile *		led_tile_get_parent_tile(LedTile *t);
-LedHardware *	led_tile_get_parent_hardware(LedTile *t);
+LedFrameCord                    led_tile_get_x(LedTile * t);
+LedFrameCord                    led_tile_get_y(LedTile * t);
+double                          led_tile_get_rotation(LedTile * t);
+double                          led_tile_get_pivot_x(LedTile * t);
+double                          led_tile_get_pivot_y(LedTile * t);
+double                          led_tile_get_transformed_pivot_x(LedTile * t);
+double                          led_tile_get_transformed_pivot_y(LedTile * t);
+LedFrameCord                    led_tile_get_transformed_width(LedTile * t);
+LedFrameCord                    led_tile_get_transformed_height(LedTile * t);
+LedChain                       *led_tile_get_chain(LedTile * t);
+void                           *led_tile_get_privdata(LedTile * t);
+LedCount                        led_tile_get_ledcount(LedTile * t);
+LedFrameCord                    led_tile_get_width(LedTile * t);
+LedFrameCord                    led_tile_get_height(LedTile * t);
+LedTile                        *led_tile_get_child(LedTile * t);
+LedTile                        *led_tile_get_parent_tile(LedTile * t);
+LedHardware                    *led_tile_get_parent_hardware(LedTile * t);
 
-NftResult       led_tile_set_x(LedTile *t, LedFrameCord x);
-NftResult       led_tile_set_y(LedTile *t, LedFrameCord y);
-NftResult       led_tile_set_rotation(LedTile *t, double angle);
-NftResult       led_tile_set_pivot_x(LedTile *t, double x);
-NftResult       led_tile_set_pivot_y(LedTile *t, double y);
-NftResult       led_tile_set_chain(LedTile *t, LedChain *c);
-NftResult       led_tile_set_privdata(LedTile *t, void *privdata);
+NftResult                       led_tile_set_x(LedTile * t, LedFrameCord x);
+NftResult                       led_tile_set_y(LedTile * t, LedFrameCord y);
+NftResult                       led_tile_set_rotation(LedTile * t, double angle);
+NftResult                       led_tile_set_pivot_x(LedTile * t, double x);
+NftResult                       led_tile_set_pivot_y(LedTile * t, double y);
+NftResult                       led_tile_set_chain(LedTile * t, LedChain * c);
+NftResult                       led_tile_set_privdata(LedTile * t, void *privdata);
 
 /* LedTile linked list functions */
-void            led_tile_list_destroy(LedTile *first);
-NftResult       led_tile_list_append_head(LedTile *head, LedTile *sibling);
-NftResult       led_tile_list_append_child(LedTile *t, LedTile *child);
-NftResult       led_tile_list_append(LedTile *t, LedTile *sibling);
-LedTile *       led_tile_list_get_nth(LedTile *c, int n);
-LedTile *       led_tile_list_get_prev(LedTile *t);
-LedTile *       led_tile_list_get_next(LedTile *t);
-int             led_tile_list_get_length(LedTile *c);
+void                            led_tile_list_destroy(LedTile * first);
+NftResult                       led_tile_list_append_head(LedTile * head, LedTile * sibling);
+NftResult                       led_tile_list_append_child(LedTile * t, LedTile * child);
+NftResult                       led_tile_list_append(LedTile * t, LedTile * sibling);
+LedTile                        *led_tile_list_get_nth(LedTile * c, int n);
+LedTile                        *led_tile_list_get_prev(LedTile * t);
+LedTile                        *led_tile_list_get_next(LedTile * t);
+int                             led_tile_list_get_length(LedTile * c);
 
 
 
 
 
 
-#endif  /* _LED_TILE_H */
+#endif /* _LED_TILE_H */
 
 /**
  * @}

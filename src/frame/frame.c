@@ -92,7 +92,7 @@ struct _LedFrame
          */
         bool is_big_endian;
         /** buffer free-func */
-        void (*freebuf)(void *buf);
+        void (*freebuf) (void *buf);
 };
 
 
@@ -111,23 +111,26 @@ struct _LedFrame
  *    - check @ref pixel_format for supported formats
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-LedFrame *led_frame_new(LedFrameCord width, LedFrameCord height, LedPixelFormat *format)
+LedFrame *led_frame_new(LedFrameCord width, LedFrameCord height,
+                        LedPixelFormat * format)
 {
         if(!format)
                 NFT_LOG_NULL(NULL);
 
         /* initialize conversion instance */
         led_pixel_format_new();
-        
-                
+
+
         /* size of pixelbuffer */
-        size_t bufsize = led_pixel_format_get_buffer_size(format, width*height);
+        size_t bufsize =
+                led_pixel_format_get_buffer_size(format, width * height);
         if(bufsize <= 0)
         {
-                NFT_LOG(L_ERROR, "Invalid calculated frame buffersize: %d", bufsize);
+                NFT_LOG(L_ERROR, "Invalid calculated frame buffersize: %d",
+                        bufsize);
                 return NULL;
         }
-        
+
         /* allocate buffer */
         void *framebuffer;
         if(!(framebuffer = malloc(bufsize)))
@@ -138,7 +141,7 @@ LedFrame *led_frame_new(LedFrameCord width, LedFrameCord height, LedPixelFormat 
 
         /* clear buffer */
         memset(framebuffer, 0, bufsize);
-        
+
         /* allocate descriptor */
         LedFrame *n;
         if(!(n = calloc(1, sizeof(LedFrame))))
@@ -148,7 +151,7 @@ LedFrame *led_frame_new(LedFrameCord width, LedFrameCord height, LedPixelFormat 
                 return NULL;
         }
 
-        
+
         /* fill descriptor with data */
         n->format = format;
         n->freebuf = free;
@@ -156,8 +159,8 @@ LedFrame *led_frame_new(LedFrameCord width, LedFrameCord height, LedPixelFormat 
         n->height = height;
         n->buffer = framebuffer;
         n->bufsize = bufsize;
-              
-        
+
+
         /* voilà */
         return n;
 }
@@ -168,7 +171,7 @@ LedFrame *led_frame_new(LedFrameCord width, LedFrameCord height, LedPixelFormat 
  *
  * @param f an LedFrame
  */
-void led_frame_destroy(LedFrame *f)
+void led_frame_destroy(LedFrame * f)
 {
         if(!f)
                 return;
@@ -177,7 +180,7 @@ void led_frame_destroy(LedFrame *f)
         {
                 f->freebuf(f->buffer);
         }
-        
+
         free(f);
 
         /* deinitialize conversion instance */
@@ -191,7 +194,7 @@ void led_frame_destroy(LedFrame *f)
  * @param f an LedFrame
  * @result width of frame or 0 upon error
  */
-LedFrameCord led_frame_get_width(LedFrame *f)
+LedFrameCord led_frame_get_width(LedFrame * f)
 {
         if(!f)
                 NFT_LOG_NULL(0);
@@ -206,7 +209,7 @@ LedFrameCord led_frame_get_width(LedFrame *f)
  * @param f an LedFrame
  * @result height of frame or 0 upon error
  */
-LedFrameCord led_frame_get_height(LedFrame *f)
+LedFrameCord led_frame_get_height(LedFrame * f)
 {
         if(!f)
                 NFT_LOG_NULL(0);
@@ -221,7 +224,7 @@ LedFrameCord led_frame_get_height(LedFrame *f)
  * @param f LedFrame descriptor
  * @result pointer to raw buffer or NULL upon error
  */
-void *led_frame_get_buffer(LedFrame *f)
+void *led_frame_get_buffer(LedFrame * f)
 {
         if(!f)
                 NFT_LOG_NULL(NULL);
@@ -239,26 +242,28 @@ void *led_frame_get_buffer(LedFrame *f)
  * @param buffersize size of buffer in bytes
  * @param freebuf function to free buffer or NULL
  */
-NftResult led_frame_set_buffer(LedFrame *f, void *buffer, size_t buffersize, void (*freebuf)(void *))
+NftResult led_frame_set_buffer(LedFrame * f, void *buffer, size_t buffersize,
+                               void (*freebuf) (void *))
 {
         if(!f)
                 NFT_LOG_NULL(NFT_FAILURE);
 
         /** buffer large enough? */
-        if(f->bufsize >  buffersize)
+        if(f->bufsize > buffersize)
         {
-                NFT_LOG(L_ERROR, "Frame buffersize (%d) differs from new buffersize (%d)",
+                NFT_LOG(L_ERROR,
+                        "Frame buffersize (%d) differs from new buffersize (%d)",
                         f->bufsize, buffersize);
                 return NFT_FAILURE;
         }
-        
+
         /** free previous buffer? */
         if(f->buffer && f->freebuf)
                 f->freebuf(f->buffer);
 
         f->buffer = buffer;
         f->freebuf = freebuf;
-        
+
         return NFT_SUCCESS;
 }
 
@@ -269,10 +274,10 @@ NftResult led_frame_set_buffer(LedFrame *f, void *buffer, size_t buffersize, voi
  * @param f LedFrame descriptor
  * @result size of led_frame_get_buffer() in bytes
  */
-size_t led_frame_get_buffersize(LedFrame *f)
+size_t led_frame_get_buffersize(LedFrame * f)
 {
-        return led_pixel_format_get_buffer_size(
-                        f->format, f->width*f->height);
+        return led_pixel_format_get_buffer_size(f->format,
+                                                f->width * f->height);
 }
 
 
@@ -282,7 +287,7 @@ size_t led_frame_get_buffersize(LedFrame *f)
  * @param f LedFrame
  * @result pixelformat of frame or NULL upon error
  */
-LedPixelFormat *led_frame_get_format(LedFrame *f)
+LedPixelFormat *led_frame_get_format(LedFrame * f)
 {
         if(!f)
                 NFT_LOG_NULL(NULL);
@@ -297,7 +302,7 @@ LedPixelFormat *led_frame_get_format(LedFrame *f)
  *
  * @param f a LedFrame
  */
-void led_frame_print_buffer(LedFrame *f)
+void led_frame_print_buffer(LedFrame * f)
 {
 /* loglevel to use for printout */
 #define P_LOGLEVEL L_NOISY
@@ -335,74 +340,97 @@ void led_frame_print_buffer(LedFrame *f)
         tmp[0] = '\0';
 
 
-        int h, hm = MIN(P_PRINT_ROW,f->height);
-        for(h=0; h < hm; h++)
+        int h, hm = MIN(P_PRINT_ROW, f->height);
+        for(h = 0; h < hm; h++)
         {
-                strncat(tmp, "\n ", P_BUFSIZE-strlen(tmp));
+                strncat(tmp, "\n ", P_BUFSIZE - strlen(tmp));
 
-                if(hm < f->height && h==P_PRINT_ROW-1)
-                        strncat(tmp, "...\n ", P_BUFSIZE-strlen(tmp));
+                if(hm < f->height && h == P_PRINT_ROW - 1)
+                        strncat(tmp, "...\n ", P_BUFSIZE - strlen(tmp));
 
-                int w, wm = MIN(P_PRINT_COL,f->width);
-                for(w=0; w < wm; w++)
+                int w, wm = MIN(P_PRINT_COL, f->width);
+                for(w = 0; w < wm; w++)
                 {
                         /* print ... if wm = 64 */
-                        if(wm < f->width && w==P_PRINT_COL-1)
-                                strncat(tmp, "... ", P_BUFSIZE-strlen(tmp));
+                        if(wm < f->width && w == P_PRINT_COL - 1)
+                                strncat(tmp, "... ", P_BUFSIZE - strlen(tmp));
 
-                        //strncat(tmp, "0x", P_BUFSIZE-strlen(tmp));
+                        // strncat(tmp, "0x", P_BUFSIZE-strlen(tmp));
                         unsigned int c;
-                        for(c=0; c<led_pixel_format_get_n_components(f->format); c++)
+                        for(c = 0;
+                            c < led_pixel_format_get_n_components(f->format);
+                            c++)
                         {
 
-                                /* calculate amount of components to this pixel */
-                                size_t n = (f->width*h+w)*led_pixel_format_get_n_components(f->format);
+                                /* calculate amount of components to this pixel 
+                                 */
+                                size_t n =
+                                        (f->width * h +
+                                         w) *
+                                        led_pixel_format_get_n_components
+                                        (f->format);
                                 /* byte-offset of this component */
-                                size_t offset = led_pixel_format_get_component_offset(f->format, n+c);
-                                        
-                                if(babl_format_get_type(f->format, c) == babl_type("u8"))
+                                size_t offset =
+                                        led_pixel_format_get_component_offset
+                                        (f->format, n + c);
+
+                                if(babl_format_get_type(f->format, c) ==
+                                   babl_type("u8"))
                                 {
                                         unsigned char *val;
-                                        val = (unsigned char *) f->buffer + offset;
+                                        val = (unsigned char *) f->buffer +
+                                                offset;
 #ifdef WIN32
-                                        snprintf(num, P_NUMSIZE-1, "%.2X", *val);
+                                        snprintf(num, P_NUMSIZE - 1, "%.2X",
+                                                 *val);
 #else
-                                        snprintf(num, P_NUMSIZE-1, "%.2hhX", *val);
+                                        snprintf(num, P_NUMSIZE - 1, "%.2hhX",
+                                                 *val);
 #endif
                                 }
-                                else if(babl_format_get_type(f->format, c) == babl_type("u16"))
+                                else if(babl_format_get_type(f->format, c) ==
+                                        babl_type("u16"))
                                 {
                                         unsigned short *val;
-                                        val = (unsigned short *) f->buffer + offset;
-                                        snprintf(num, P_NUMSIZE-1, "%.4hX", *val);
+                                        val = (unsigned short *) f->buffer +
+                                                offset;
+                                        snprintf(num, P_NUMSIZE - 1, "%.4hX",
+                                                 *val);
                                 }
-                                else if(babl_format_get_type(f->format, c) == babl_type("u32"))
+                                else if(babl_format_get_type(f->format, c) ==
+                                        babl_type("u32"))
                                 {
                                         unsigned int *val;
-                                        val = (unsigned int *) f->buffer + offset;
-                                        snprintf(num, P_NUMSIZE-1, "%.8X", *val);
+                                        val = (unsigned int *) f->buffer +
+                                                offset;
+                                        snprintf(num, P_NUMSIZE - 1, "%.8X",
+                                                 *val);
                                 }
-                                else if(babl_format_get_type(f->format, c) == babl_type("double"))
+                                else if(babl_format_get_type(f->format, c) ==
+                                        babl_type("double"))
                                 {
                                         double *val;
                                         val = (double *) f->buffer + offset;
-                                        snprintf(num, P_NUMSIZE-1, "%f", *val);
+                                        snprintf(num, P_NUMSIZE - 1, "%f",
+                                                 *val);
                                 }
-                                else if(babl_format_get_type(f->format, c) == babl_type("float"))
+                                else if(babl_format_get_type(f->format, c) ==
+                                        babl_type("float"))
                                 {
                                         float *val;
                                         val = (float *) f->buffer + offset;
-                                        snprintf(num, P_NUMSIZE-1, "%f", *val);
+                                        snprintf(num, P_NUMSIZE - 1, "%f",
+                                                 *val);
                                 }
                                 else
                                 {
                                         NFT_LOG(L_ERROR, "Unhandled type");
                                         return;
                                 }
-                                                                
-                                strncat(tmp, num, P_BUFSIZE-strlen(tmp));
+
+                                strncat(tmp, num, P_BUFSIZE - strlen(tmp));
                         }
-                        strncat(tmp, " ", P_BUFSIZE-strlen(tmp));
+                        strncat(tmp, " ", P_BUFSIZE - strlen(tmp));
                 }
 
         }
@@ -420,22 +448,22 @@ void led_frame_print_buffer(LedFrame *f)
  * @param f a LedFrame
  * @param l minimum current loglevel so tile gets printed
  */
-void led_frame_print(LedFrame *f, NftLoglevel l)
+void led_frame_print(LedFrame * f, NftLoglevel l)
 {
         if(!f)
                 NFT_LOG_NULL();
-        
+
         NFT_LOG(l,
                 "Frame 0x%p\n"
                 "\tDimensions: %dx%d\n"
                 "\tFormat: %s (%s)\n"
                 "\tBufsize: %d bytes",
-                f, 
+                f,
                 f->width, f->height,
-                f->format ? led_pixel_format_to_string(f->format) : "none", 
+                f->format ? led_pixel_format_to_string(f->format) : "none",
                 f->is_big_endian ? "big endian" : "little endian",
                 f->bufsize);
-}      
+}
 
 
 /**
@@ -444,7 +472,7 @@ void led_frame_print(LedFrame *f, NftLoglevel l)
  * @param f a LedFrame
  * @param is_big_endian TRUE if buffer of frame is big-endian ordered, FALSE otherwise
  */
-void led_frame_set_big_endian(LedFrame *f, bool is_big_endian)
+void led_frame_set_big_endian(LedFrame * f, bool is_big_endian)
 {
         if(!f)
                 NFT_LOG_NULL();
@@ -461,7 +489,7 @@ void led_frame_set_big_endian(LedFrame *f, bool is_big_endian)
  * @param f an LedFrame
  * @result is_big_endian TRUE if buffer of frame is big-endian ordered, FALSE otherwise
  */
-bool led_frame_get_big_endian(LedFrame *f)
+bool led_frame_get_big_endian(LedFrame * f)
 {
         if(!f)
                 /** prefer wrong result over crash (we'll fail later) */
@@ -478,31 +506,39 @@ bool led_frame_get_big_endian(LedFrame *f)
  *
  * @param f an LedFrame
  */
-void led_frame_convert_endianess(LedFrame *f)
+void led_frame_convert_endianess(LedFrame * f)
 {
-        switch(led_pixel_format_get_bytes_per_pixel(f->format))
+        switch (led_pixel_format_get_bytes_per_pixel(f->format))
         {
 #if HAVE_BYTESWAP_H
                 case 2:
                 {
                         short *t = f->buffer;
                         size_t n;
-                        for(n=0; n<led_pixel_format_get_buffer_size(f->format, f->width*f->height)/2; n++)
+                        for(n = 0;
+                            n < led_pixel_format_get_buffer_size(f->format,
+                                                                 f->width *
+                                                                 f->height) /
+                            2; n++)
                         {
                                 short a = t[n];
                                 t[n] = bswap_16(a);
                         }
                         break;
                 }
-                        
+
                 case 4:
                 {
                         int *t = f->buffer;
                         size_t n;
-                        for(n=0; n<led_pixel_format_get_buffer_size(f->format, f->width*f->height)/4; n++)
+                        for(n = 0;
+                            n < led_pixel_format_get_buffer_size(f->format,
+                                                                 f->width *
+                                                                 f->height) /
+                            4; n++)
                         {
                                 int a = t[n];
-                                
+
                                 t[n] = bswap_32(a);
                         }
                         break;
@@ -513,23 +549,29 @@ void led_frame_convert_endianess(LedFrame *f)
                 {
                         int *t = f->buffer;
                         size_t n;
-                        for(n=0; n<led_pixel_format_get_buffer_size(f->format, f->width*f->height)/4; n++)
+                        for(n = 0;
+                            n < led_pixel_format_get_buffer_size(f->format,
+                                                                 f->width *
+                                                                 f->height) /
+                            4; n++)
                         {
                                 int a = t[n];
-                                
-                                t[n] =  ((a & 0xff) << 24) + 
-                                        ((a & 0xff00) << 8) + 
+
+                                t[n] = ((a & 0xff) << 24) +
+                                        ((a & 0xff00) << 8) +
                                         ((a & 0xff0000) >> 8) +
                                         ((a & 0xff000000) >> 24);
                         }
                         break;
                 }
 #endif
-                                        
+
                 default:
                 {
-                        NFT_LOG(L_WARNING, "Change endianess of %d bytes-per-pixel not supported.", 
-                                led_pixel_format_get_bytes_per_pixel(f->format));
+                        NFT_LOG(L_WARNING,
+                                "Change endianess of %d bytes-per-pixel not supported.",
+                                led_pixel_format_get_bytes_per_pixel
+                                (f->format));
                         NFT_TODO();
                         return;
                 }

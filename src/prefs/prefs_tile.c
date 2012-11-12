@@ -82,72 +82,82 @@
  * @note you shouldn't call this function directly
  * It's used by nft_prefs_obj_to_node() etc. 
  */
-static NftResult _prefs_from_tile(NftPrefs *p, NftPrefsNode *n, void *obj, void *userptr)
+static NftResult _prefs_from_tile(NftPrefs * p, NftPrefsNode * n, void *obj,
+                                  void *userptr)
 {
         if(!p || !n || !obj)
                 NFT_LOG_NULL(NFT_FAILURE);
 
-            /* tile to generate preferences from */
-            LedTile *t = obj;
+        /* tile to generate preferences from */
+        LedTile *t = obj;
 
 
-            /* x offset */
-            if(!nft_prefs_node_prop_int_set(n, LED_TILE_PROP_X, led_tile_get_x(t)))
+        /* x offset */
+        if(!nft_prefs_node_prop_int_set
+           (n, LED_TILE_PROP_X, led_tile_get_x(t)))
                 return NFT_FAILURE;
-           
+
         /* y offset */
-            if(!nft_prefs_node_prop_int_set(n, LED_TILE_PROP_Y, led_tile_get_y(t)))
+        if(!nft_prefs_node_prop_int_set
+           (n, LED_TILE_PROP_Y, led_tile_get_y(t)))
                 return NFT_FAILURE;
-    
+
         /* mapping width */
-            if(!nft_prefs_node_prop_int_set(n, LED_TILE_PROP_WIDTH, led_tile_get_width(t)))
+        if(!nft_prefs_node_prop_int_set
+           (n, LED_TILE_PROP_WIDTH, led_tile_get_width(t)))
                 return NFT_FAILURE;
 
         /* mapping height */
-            if(!nft_prefs_node_prop_int_set(n, LED_TILE_PROP_HEIGHT, led_tile_get_height(t)))
-                return NFT_FAILURE;            
+        if(!nft_prefs_node_prop_int_set
+           (n, LED_TILE_PROP_HEIGHT, led_tile_get_height(t)))
+                return NFT_FAILURE;
 
         /* rotation center x */
-            if(!nft_prefs_node_prop_double_set(n, LED_TILE_PROP_ROT_X, led_tile_get_pivot_x(t)))
-                return NFT_FAILURE;  
+        if(!nft_prefs_node_prop_double_set
+           (n, LED_TILE_PROP_ROT_X, led_tile_get_pivot_x(t)))
+                return NFT_FAILURE;
 
         /* rotation center y */
-            if(!nft_prefs_node_prop_double_set(n, LED_TILE_PROP_ROT_Y, led_tile_get_pivot_y(t)))
-                return NFT_FAILURE;  
-       
-        /* rotation angle (radians -> degrees) */
-            if(!nft_prefs_node_prop_double_set(n, LED_TILE_PROP_ROTATION, (led_tile_get_rotation(t)*180)/M_PI))
-                return NFT_FAILURE; 
+        if(!nft_prefs_node_prop_double_set
+           (n, LED_TILE_PROP_ROT_Y, led_tile_get_pivot_y(t)))
+                return NFT_FAILURE;
 
-    
+        /* rotation angle (radians -> degrees) */
+        if(!nft_prefs_node_prop_double_set
+           (n, LED_TILE_PROP_ROTATION,
+            (led_tile_get_rotation(t) * 180) / M_PI))
+                return NFT_FAILURE;
+
+
         /* chain of this tile */
-            LedChain *c;
-            if((c = led_tile_get_chain(t)))
+        LedChain *c;
+        if((c = led_tile_get_chain(t)))
         {
-                    /* generate prefs node from chain */
+                /* generate prefs node from chain */
                 NftPrefsNode *node;
                 if(!(node = led_prefs_chain_to_node(p, c)))
                         return NFT_FAILURE;
 
                 /* add node as child of this node */
                 nft_prefs_node_add_child(n, node);
-            }
-    
-        
+        }
+
+
         /* child tiles of this tile */
         LedTile *child;
-        for(child = led_tile_get_child(t); child; child = led_tile_list_get_next(child))
+        for(child = led_tile_get_child(t); child;
+            child = led_tile_list_get_next(child))
         {
-                    /* generate prefs node from tile */
-                    NftPrefsNode *node;
-                    if(!(node = led_prefs_tile_to_node(p, child)))
+                /* generate prefs node from tile */
+                NftPrefsNode *node;
+                if(!(node = led_prefs_tile_to_node(p, child)))
                         return NFT_FAILURE;
-            
+
                 /* add node as child of this node */
                 if(!nft_prefs_node_add_child(n, node))
                         return NFT_FAILURE;
         }
-        
+
         /* all went fine */
         return NFT_SUCCESS;
 }
@@ -159,55 +169,67 @@ static NftResult _prefs_from_tile(NftPrefs *p, NftPrefsNode *n, void *obj, void 
  * @note you shouldn't call this function directly
  * It's used by nft_prefs_obj_from_node() etc. 
  */
-static NftResult _prefs_to_tile(LedPrefs *p, void **newObj, NftPrefsNode *n, void *userptr)
+static NftResult _prefs_to_tile(LedPrefs * p, void **newObj, NftPrefsNode * n,
+                                void *userptr)
 {
         if(!p || !n)
                 NFT_LOG_NULL(NFT_FAILURE);
 
-        
+
         /* get x offset */
         LedFrameCord x;
-            if(!nft_prefs_node_prop_int_get(n, LED_TILE_PROP_X, &x))
+        if(!nft_prefs_node_prop_int_get(n, LED_TILE_PROP_X, &x))
         {
-                NFT_LOG(L_WARNING, "<tile> config-node has no \"%s\" offset. Using 0 as default.", LED_TILE_PROP_X);
+                NFT_LOG(L_WARNING,
+                        "<tile> config-node has no \"%s\" offset. Using 0 as default.",
+                        LED_TILE_PROP_X);
                 x = 0;
         }
 
         /* get y offset */
         LedFrameCord y;
-            if(!nft_prefs_node_prop_int_get(n, LED_TILE_PROP_Y, &y))
+        if(!nft_prefs_node_prop_int_get(n, LED_TILE_PROP_Y, &y))
         {
-                NFT_LOG(L_WARNING, "<tile> config-node has no \"%s\" offset. Using 0 as default.", LED_TILE_PROP_Y);
+                NFT_LOG(L_WARNING,
+                        "<tile> config-node has no \"%s\" offset. Using 0 as default.",
+                        LED_TILE_PROP_Y);
                 y = 0;
         }
-               
-        
+
+
         /* get rotation center x */
         double rot_x;
         if(!nft_prefs_node_prop_double_get(n, LED_TILE_PROP_ROT_X, &rot_x))
         {
-                NFT_LOG(L_WARNING, "<tile> config-node has no \"%s\" offset. Using 0 as default.", LED_TILE_PROP_ROT_X);
+                NFT_LOG(L_WARNING,
+                        "<tile> config-node has no \"%s\" offset. Using 0 as default.",
+                        LED_TILE_PROP_ROT_X);
                 rot_x = 0;
         }
-                       
+
         /* get rotation center y */
         double rot_y;
         if(!nft_prefs_node_prop_double_get(n, LED_TILE_PROP_ROT_Y, &rot_y))
         {
-                NFT_LOG(L_WARNING, "<tile> config-node has no \"%s\" offset. Using 0 as default.", LED_TILE_PROP_ROT_Y);
+                NFT_LOG(L_WARNING,
+                        "<tile> config-node has no \"%s\" offset. Using 0 as default.",
+                        LED_TILE_PROP_ROT_Y);
                 rot_y = 0;
         }
-                           
+
         /* get rotation angle */
         double rotation;
-        if(!nft_prefs_node_prop_double_get(n, LED_TILE_PROP_ROTATION, &rotation))
+        if(!nft_prefs_node_prop_double_get
+           (n, LED_TILE_PROP_ROTATION, &rotation))
         {
-                NFT_LOG(L_WARNING, "<tile> config-node has no \"%s\" offset. Using 0 as default.", LED_TILE_PROP_ROTATION);
+                NFT_LOG(L_WARNING,
+                        "<tile> config-node has no \"%s\" offset. Using 0 as default.",
+                        LED_TILE_PROP_ROTATION);
                 rotation = 0;
         }
-                           
+
         /* convert degrees to radians */
-        rotation = (rotation*M_PI)/180;
+        rotation = (rotation * M_PI) / 180;
 
 
         /* create new tile */
@@ -222,54 +244,60 @@ static NftResult _prefs_to_tile(LedPrefs *p, void **newObj, NftPrefsNode *n, voi
         led_tile_set_pivot_y(t, rot_y);
         led_tile_set_rotation(t, rotation);
 
-           
+
         /* process child nodes */
         LedPrefsNode *child;
         for(child = nft_prefs_node_get_first_child(n);
-            child;
-            child = nft_prefs_node_get_next(child))
+            child; child = nft_prefs_node_get_next(child))
         {
                 /* is child a chain node? */
-                    if(led_prefs_is_chain_node(child))
-                    {
+                if(led_prefs_is_chain_node(child))
+                {
                         /* only one chain for every tile */
                         if(led_tile_get_chain(t))
                         {
-                                NFT_LOG(L_WARNING, "preferences contain more than one \"chain\" for \"tile\" node (only one allowed -> ignoring node)");
-                                    continue;
+                                NFT_LOG(L_WARNING,
+                                        "preferences contain more than one \"chain\" for \"tile\" node (only one allowed -> ignoring node)");
+                                continue;
                         }
-                        
+
                         /* generate chain & add to tile */
-                        if(!(led_tile_set_chain(t, led_prefs_chain_from_node(p, child))))
+                        if(!
+                           (led_tile_set_chain
+                            (t, led_prefs_chain_from_node(p, child))))
                         {
-                                NFT_LOG(L_ERROR, "Failed to add \"chain\" to \"tile\". Aborting.");
+                                NFT_LOG(L_ERROR,
+                                        "Failed to add \"chain\" to \"tile\". Aborting.");
                                 goto _ptt_error;
                         }
                 }
-                    /* do we have a child-tile node? */
-                    else if(led_prefs_is_tile_node(child))
-                    {
-                        if(!led_tile_list_append_child(t, led_prefs_tile_from_node(p, child)))
+                /* do we have a child-tile node? */
+                else if(led_prefs_is_tile_node(child))
+                {
+                        if(!led_tile_list_append_child
+                           (t, led_prefs_tile_from_node(p, child)))
                         {
-                                NFT_LOG(L_ERROR, "Failed to add \"tile\" to \"tile\". Aborting.");
-                                    goto _ptt_error;
+                                NFT_LOG(L_ERROR,
+                                        "Failed to add \"tile\" to \"tile\". Aborting.");
+                                goto _ptt_error;
                         }
                 }
-                    else
-                /* invalid node? */
-                    {
-                        NFT_LOG(L_WARNING, "Attempt to add \"%s\" node to tile. Only \"chain\" and \"tile\" allowed. (Ignoring node)",
+                else
+                        /* invalid node? */
+                {
+                        NFT_LOG(L_WARNING,
+                                "Attempt to add \"%s\" node to tile. Only \"chain\" and \"tile\" allowed. (Ignoring node)",
                                 nft_prefs_node_get_name(child));
                         continue;
                 }
         }
-        
-            /* save new chain-object to "newObj" pointer */
-            *newObj = t;
-        
+
+        /* save new chain-object to "newObj" pointer */
+        *newObj = t;
+
         return NFT_SUCCESS;
 
-        
+
 _ptt_error:
         led_tile_destroy(t);
         return NFT_FAILURE;
@@ -283,12 +311,13 @@ _ptt_error:
 /**
  * register "hardware" prefs class (called once for initialization)
  */
-NftResult _prefs_tile_class_register(NftPrefs *p)
+NftResult _prefs_tile_class_register(NftPrefs * p)
 {
-            if(!p)
+        if(!p)
                 NFT_LOG_NULL(NFT_FAILURE);
-    
-        return nft_prefs_class_register(p, LED_TILE_NAME, &_prefs_to_tile, &_prefs_from_tile);
+
+        return nft_prefs_class_register(p, LED_TILE_NAME, &_prefs_to_tile,
+                                        &_prefs_from_tile);
 }
 
 
@@ -302,8 +331,8 @@ NftResult _prefs_tile_class_register(NftPrefs *p)
  *
  * @param n LedPrefsNode
  * @result TRUE if node represents a tile object, FALSE otherwise
- */ 
-bool led_prefs_is_tile_node(LedPrefsNode *n)
+ */
+bool led_prefs_is_tile_node(LedPrefsNode * n)
 {
         return (strcmp(nft_prefs_node_get_name(n), LED_TILE_NAME) == 0);
 }
@@ -316,20 +345,21 @@ bool led_prefs_is_tile_node(LedPrefsNode *n)
  * @param n LedPrefsNode 
  * @result newly created LedTile
  */
-LedTile *led_prefs_tile_from_node(LedPrefs *p, LedPrefsNode *n)
+LedTile *led_prefs_tile_from_node(LedPrefs * p, LedPrefsNode * n)
 {
-            if(!p || !n)
+        if(!p || !n)
                 NFT_LOG_NULL(NULL);
-    
-            /* check if node is of expected class */
-            if(!led_prefs_is_tile_node(n))
-            {
-                NFT_LOG(L_ERROR, "got wrong LedPrefsNode class. Expected \"%s\" but got \"%s\"",
-                                LED_TILE_NAME, nft_prefs_node_get_name(n));
+
+        /* check if node is of expected class */
+        if(!led_prefs_is_tile_node(n))
+        {
+                NFT_LOG(L_ERROR,
+                        "got wrong LedPrefsNode class. Expected \"%s\" but got \"%s\"",
+                        LED_TILE_NAME, nft_prefs_node_get_name(n));
                 return NULL;
         }
-    
-        return  nft_prefs_obj_from_node(p, n, NULL);
+
+        return nft_prefs_obj_from_node(p, n, NULL);
 }
 
 
@@ -340,7 +370,7 @@ LedTile *led_prefs_tile_from_node(LedPrefs *p, LedPrefsNode *n)
  * @param t LedTile object 
  * @result newly created LedPrefsNode 
  */
-LedPrefsNode *led_prefs_tile_to_node(LedPrefs *p, LedTile *t)
+LedPrefsNode *led_prefs_tile_to_node(LedPrefs * p, LedTile * t)
 {
         return nft_prefs_obj_to_node(p, LED_TILE_NAME, t, NULL);
 }

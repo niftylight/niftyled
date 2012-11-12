@@ -63,33 +63,34 @@
 
 
 /** wrapper type to define the pixel-format of a frame */
-typedef Babl LedPixelFormat;
+typedef Babl                    LedPixelFormat;
+
 /** wrapper type to define a babl-fish that converts one bufferful from one colorspace to another */
-typedef Babl LedPixelFormatConverter;
+typedef Babl                    LedPixelFormatConverter;
 
 
 
 void                            led_pixel_format_new();
 void                            led_pixel_format_destroy();
 bool                            led_pixel_format_is_big_endian();
-const char *                    led_pixel_format_to_string(LedPixelFormat *f);
-LedPixelFormat *                led_pixel_format_from_string(const char *s);
-bool                            led_pixel_format_is_equal(LedPixelFormat *a, LedPixelFormat *b);
-const char *                    led_pixel_format_colorspace_to_string(LedPixelFormat *f);
-void                            led_pixel_format_convert(LedPixelFormatConverter *converter, void *src, void *dst, size_t n);
+const char                     *led_pixel_format_to_string(LedPixelFormat * f);
+LedPixelFormat                 *led_pixel_format_from_string(const char *s);
+bool                            led_pixel_format_is_equal(LedPixelFormat * a, LedPixelFormat * b);
+const char                     *led_pixel_format_colorspace_to_string(LedPixelFormat * f);
+void                            led_pixel_format_convert(LedPixelFormatConverter * converter, void *src, void *dst, size_t n);
 
-size_t                          led_pixel_format_get_bytes_per_pixel(LedPixelFormat *f);
-size_t                          led_pixel_format_get_buffer_size(LedPixelFormat *f, int n);
-LedPixelFormatConverter *       led_pixel_format_get_converter(LedPixelFormat *src, LedPixelFormat *dst);
-size_t                          led_pixel_format_get_n_components(LedPixelFormat *f);
-const char *                    led_pixel_format_get_component_type(LedPixelFormat *f, unsigned int component);
-size_t                          led_pixel_format_get_component_offset(LedPixelFormat *f, size_t n);
-size_t				led_pixel_format_get_n_formats();
-LedPixelFormat *		led_pixel_format_get_nth(size_t n);
+size_t                          led_pixel_format_get_bytes_per_pixel(LedPixelFormat * f);
+size_t                          led_pixel_format_get_buffer_size(LedPixelFormat * f, int n);
+LedPixelFormatConverter        *led_pixel_format_get_converter(LedPixelFormat * src, LedPixelFormat * dst);
+size_t                          led_pixel_format_get_n_components(LedPixelFormat * f);
+const char                     *led_pixel_format_get_component_type(LedPixelFormat * f, unsigned int component);
+size_t                          led_pixel_format_get_component_offset(LedPixelFormat * f, size_t n);
+size_t                          led_pixel_format_get_n_formats();
+LedPixelFormat                 *led_pixel_format_get_nth(size_t n);
 
 /*size_t                          led_pixel_format_get_pixel_offset(LedPixelFormat *f, size_t n);*/
 
-#endif          /* _LED_PIXEL_FORMAT_H */
+#endif /* _LED_PIXEL_FORMAT_H */
 
 /**
  * @}

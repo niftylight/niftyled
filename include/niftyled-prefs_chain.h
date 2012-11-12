@@ -67,18 +67,18 @@
 
 
 
-bool            led_prefs_is_chain_node(LedPrefsNode *n);
-bool            led_prefs_is_led_node(LedPrefsNode *n);
+bool                            led_prefs_is_chain_node(LedPrefsNode * n);
+bool                            led_prefs_is_led_node(LedPrefsNode * n);
 
-LedChain *      led_prefs_chain_from_node(LedPrefs *p, LedPrefsNode *n);
-LedPrefsNode *  led_prefs_chain_to_node(LedPrefs *p, LedChain *c);
+LedChain                       *led_prefs_chain_from_node(LedPrefs * p, LedPrefsNode * n);
+LedPrefsNode                   *led_prefs_chain_to_node(LedPrefs * p, LedChain * c);
 
-NftResult       led_prefs_led_from_node(LedPrefs *p, LedPrefsNode *n, Led *led);
-LedPrefsNode *  led_prefs_led_to_node(LedPrefs *p, Led *l);
+NftResult                       led_prefs_led_from_node(LedPrefs * p, LedPrefsNode * n, Led * led);
+LedPrefsNode                   *led_prefs_led_to_node(LedPrefs * p, Led * l);
 
 
 
-#endif  /* _LED_PREFS_CHAIN_H */
+#endif /* _LED_PREFS_CHAIN_H */
 
 /**
  * @}

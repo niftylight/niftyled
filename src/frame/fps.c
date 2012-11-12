@@ -68,7 +68,7 @@ static int _current_fps;
  */
 NftResult led_fps_sample()
 {
-        
+
         if(gettimeofday(&_last, NULL) != 0)
         {
                 NFT_LOG_PERROR("gettimeofday");
@@ -93,31 +93,34 @@ NftResult led_fps_delay(int fps)
         }
 
         /* calc delay from fps */
-        long fps_sec =  (1/fps);
-        long fps_usec = (1000000/fps);
-                
+        long fps_sec = (1 / fps);
+        long fps_usec = (1000000 / fps);
+
         /* delay if frame isn't due yet */
-        if(((_last.tv_sec+fps_sec) >= current.tv_sec) &&
-           ((_last.tv_usec+fps_usec) > current.tv_usec))
+        if(((_last.tv_sec + fps_sec) >= current.tv_sec) &&
+           ((_last.tv_usec + fps_usec) > current.tv_usec))
         {
                 /* calc time to delay */
-                unsigned long _usec = (_last.tv_usec+fps_usec)-current.tv_usec;
-                unsigned long _sec = (_last.tv_sec+fps_sec)-current.tv_sec;
-                usleep(_usec + (_sec*1000000));
-                
+                unsigned long _usec =
+                        (_last.tv_usec + fps_usec) - current.tv_usec;
+                unsigned long _sec =
+                        (_last.tv_sec + fps_sec) - current.tv_sec;
+                usleep(_usec + (_sec * 1000000));
+
                 /* calculate current fps */
-                _current_fps = 1000000/
-                        (
-                                (current.tv_usec-_last.tv_usec + (current.tv_sec-_last.tv_sec)*1000000)+
-                                (_usec + (_sec*1000000))
-                         );
+                _current_fps = 1000000 /
+                        ((current.tv_usec - _last.tv_usec +
+                          (current.tv_sec - _last.tv_sec) * 1000000) +
+                         (_usec + (_sec * 1000000)));
         }
         else
         {
                 /* calculate current fps */
-                _current_fps = 1000000/(current.tv_usec-_last.tv_usec + (current.tv_sec-_last.tv_sec)*1000000);
+                _current_fps =
+                        1000000 / (current.tv_usec - _last.tv_usec +
+                                   (current.tv_sec - _last.tv_sec) * 1000000);
         }
-        
+
         return NFT_SUCCESS;
 }
 
