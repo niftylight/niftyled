@@ -34,12 +34,12 @@ pkgconfig_DATA = $(PACKAGE).pc
 
 
 # indent source & header-files
-INDENT_C_ARGS=-bl -bls -cli8 -cbi0 -bli0 -cs -fca -i8 -sc -npsl -nut -npcs \
+INDENT_C_ARGS=-pmt -bl -bls -cli8 -cbi0 -bli0 -cs -fca -i8 -sc -npsl -nut -npcs \
 		-nsaf -nsai -cd2 -nce -ncdw -lc80 -nprs -nsaw -il0 -nbbo -bap \
-		-hnl
-INDENT_H_ARGS=-bl -bls -cli8 -cbi0 -bli0 -cs -fca -i8 -sc -npsl -nut -npcs \
+		-hnl -lp -blf -ip0
+INDENT_H_ARGS=-pmt -bl -bls -cli8 -cbi0 -bli0 -cs -fca -i8 -sc -npsl -nut -npcs \
 		-nsaf -nsai -cd2 -nce -ncdw -l800 -lc800 -bad -nprs -nsaw \
-		-di32 -hnl -nbc -nbfda -nbfde
+		-di32 -hnl -nbc -nbfda -nbfde 
 
 .PHONY: indent
 indent:
