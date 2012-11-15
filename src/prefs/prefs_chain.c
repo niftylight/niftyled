@@ -97,8 +97,7 @@ static NftResult _prefs_from_chain(NftPrefs * p, NftPrefsNode * n, void *obj,
 
         /* pixel-format of this chain */
         if(!nft_prefs_node_prop_string_set(n, LED_CHAIN_PROP_FORMAT,
-                                           (char *)
-                                           led_pixel_format_to_string
+                                           (char *) led_pixel_format_to_string
                                            (led_chain_get_format(c))))
                 return NFT_FAILURE;
 
@@ -354,7 +353,7 @@ static NftResult _prefs_to_led(LedPrefs * c, void **newObj, NftPrefsNode * n,
 /**
  * register "chain" prefs class (called once for initialization)
  */
-NftResult _prefs_chain_class_register(NftPrefs * p)
+NftResult prefs_chain_class_register(NftPrefs * p)
 {
         if(!p)
                 NFT_LOG_NULL(NFT_FAILURE);
@@ -367,7 +366,7 @@ NftResult _prefs_chain_class_register(NftPrefs * p)
 /**
  * register "led" prefs class (called once for initialization)
  */
-NftResult _prefs_led_class_register(NftPrefs * p)
+NftResult prefs_led_class_register(NftPrefs * p)
 {
         if(!p)
                 NFT_LOG_NULL(NFT_FAILURE);

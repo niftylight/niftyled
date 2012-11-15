@@ -110,23 +110,23 @@ LedPrefs *led_prefs_init()
 
 
         /* register overall setup class */
-        if(!(_prefs_setup_class_register(p)))
+        if(!(prefs_setup_class_register(p)))
                 goto _lpi_error;
 
         /* register hardware class */
-        if(!(_prefs_hardware_class_register(p)))
+        if(!(prefs_hardware_class_register(p)))
                 goto _lpi_error;
 
         /* register tile class */
-        if(!(_prefs_tile_class_register(p)))
+        if(!(prefs_tile_class_register(p)))
                 goto _lpi_error;
 
         /* register chain class */
-        if(!(_prefs_chain_class_register(p)))
+        if(!(prefs_chain_class_register(p)))
                 goto _lpi_error;
 
         /* register LED class */
-        if(!(_prefs_led_class_register(p)))
+        if(!(prefs_led_class_register(p)))
                 goto _lpi_error;
 
         return p;

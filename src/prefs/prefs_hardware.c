@@ -110,8 +110,9 @@ static NftResult _prefs_from_hardware(NftPrefs * p, NftPrefsNode * n,
 
         /* plugin family of hardware */
         if(!nft_prefs_node_prop_string_set(n, LED_HARDWARE_PROP_PLUGIN,
-                                           (char *)
-                                           led_hardware_plugin_get_family(h)))
+                                           (char
+                                            *) led_hardware_plugin_get_family
+                                           (h)))
                 return NFT_FAILURE;
 
 
@@ -590,7 +591,7 @@ _pth_end:
 /**
  * register "hardware" prefs class (called once for initialization)
  */
-NftResult _prefs_hardware_class_register(NftPrefs * p)
+NftResult prefs_hardware_class_register(NftPrefs * p)
 {
         if(!p)
                 NFT_LOG_NULL(NFT_FAILURE);

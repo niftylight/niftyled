@@ -349,7 +349,7 @@ static void _map_matrix(LedTile * m)
  * @param h LedHardware descriptor of parent hardware
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult _tile_set_parent_hardware(LedTile * t, LedHardware * h)
+NftResult tile_set_parent_hardware(LedTile * t, LedHardware * h)
 {
         if(!t)
                 NFT_LOG_NULL(NFT_FAILURE);
@@ -871,7 +871,7 @@ NftResult led_tile_set_chain(LedTile * m, LedChain * c)
 
         /* register tile to chain */
         if(c)
-                _chain_set_parent_tile(c, m);
+                chain_set_parent_tile(c, m);
 
         return NFT_SUCCESS;
 }
@@ -1207,9 +1207,11 @@ LedCount led_tile_to_chain(LedTile * m, LedChain * dst, LedCount offset)
 
                         /* get destination LED */
                         Led *led = led_chain_get_nth(dst, offset + i);
+
                         /* copy current LED of this chain to dest */
                         led_copy(led,
                                  led_chain_get_nth(m->relation.chain, i));
+
                         /* transform position according to complex transform
                          * matrix */
                         double vector[3] = { ((double) led_get_x(led)) + 0.5,

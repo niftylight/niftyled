@@ -132,7 +132,7 @@ struct _LedChain
  * @param h LedHardware descriptor of parent hardware
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult _chain_set_parent_hardware(LedChain * c, LedHardware * h)
+NftResult chain_set_parent_hardware(LedChain * c, LedHardware * h)
 {
         if(!c)
                 NFT_LOG_NULL(NFT_FAILURE);
@@ -149,7 +149,7 @@ NftResult _chain_set_parent_hardware(LedChain * c, LedHardware * h)
  * @param t LedTile descriptor of parent tile
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult _chain_set_parent_tile(LedChain * c, LedTile * t)
+NftResult chain_set_parent_tile(LedChain * c, LedTile * t)
 {
         if(!c)
                 NFT_LOG_NULL(NFT_FAILURE);
@@ -165,7 +165,7 @@ NftResult _chain_set_parent_tile(LedChain * c, LedTile * t)
  *
  * @param c the chain which should be freed, the pointer will be invalid after this function returns
  */
-void _chain_destroy(LedChain * c)
+void chain_destroy(LedChain * c)
 {
         if(!c)
                 return;
@@ -211,7 +211,7 @@ void _chain_destroy(LedChain * c)
  * @param ledcount new amount of LEDs in this chain
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult _chain_set_ledcount(LedChain * c, LedCount ledcount)
+NftResult chain_set_ledcount(LedChain * c, LedCount ledcount)
 {
         /* calc old and new bufsize */
         int components = led_pixel_format_get_n_components(c->format);
@@ -399,7 +399,7 @@ void led_chain_destroy(LedChain * c)
                 return;
         }
 
-        _chain_destroy(c);
+        chain_destroy(c);
 }
 
 
@@ -479,7 +479,7 @@ NftResult led_chain_set_ledcount(LedChain * c, LedCount ledcount)
                 return NFT_FAILURE;
         }
 
-        return _chain_set_ledcount(c, ledcount);
+        return chain_set_ledcount(c, ledcount);
 }
 
 
@@ -1133,6 +1133,110 @@ static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
 }
 
 /**
+ * fill chain with greyscale values from another chain
+ *
+ * @param dst The LED chain whose brightness values should be set 
+ * @param src chain to take pixels from
+ * @param offset start writing dst at this offset
+ * @result amount of LEDs copied to dst 
+ */
+//~ LedCount led_chain_fill_from_chain(LedChain * dst, LedChain * src, LedCount offset)
+//~ {
+                // ~ if(!src || !dst)
+                                // ~ NFT_LOG_NULL(-1);
+
+                // ~ if(offset >= dst->ledcount)
+                // ~ {
+                                // ~ NFT_LOG(L_ERROR, "offset (%d) >= ledcount
+                                // (%d) of chain", offset, dst->ledcount);
+                                // ~ return -1;
+                // ~ }
+
+                // ~ /* equal pixelformats? */
+        // ~ if(led_pixel_format_is_equal(src->format, dst->format))
+                // ~ {
+                                // ~ /* amount of components to seek for this
+                                // pixel */
+                                // ~ char *srcbuf = src->ledbuffer;
+                                // ~ char *dstbuf =
+                                // dst->ledbuffer+led_pixel_format_get_component_offset(dst->format, 
+                                // 
+                                // 
+                                // 
+                                // 
+                                // 
+                                // 
+                                // 
+                                // 
+                                // 
+                                // 
+                                // offset);
+                                // ~ LedCount amount =
+                                // MIN(dst->ledcount-offset, src->ledcount);
+                                // ~ memcpy(dstbuf, srcbuf, amount);
+
+                                // ~ return amount;
+                // ~ }
+
+                // ~ /* differing pixelformats */
+                // ~ LedPixelFormatConverter *conv;
+                // ~ if(!(conv = led_pixel_format_get_converter(src->format,
+                // dst->format)))
+                // ~ {
+                                // ~ NFT_LOG(L_ERROR, "Failed to get converter
+                                // for \"%s\"->\"%s\"",
+                                        // ~
+                                        // led_pixel_format_to_string(src->format),
+                                        // ~
+                                        // led_pixel_format_to_string(dst->format));
+                                // ~ return -1;
+                // ~ }
+
+                // ~ /* convert */
+                // ~ LedCount amount =
+                // src->ledcount/led_pixel_format_get_n_components(src->format);
+        // ~ led_pixel_format_convert(conv,
+                                                 // ~ src->ledbuffer,
+                                                 // dst->ledbuffer,
+                                                 // ~ amount);
+                // ~ return amount;
+//~ }
+
+
+/**
+ * fill chain with pixels from a tile (and sub tiles/chains)
+ *
+ * @param c The LED chain whose brightness values should be set
+ * @param tile LedTile to take pixels from 
+ * @result amount of LEDs processed 
+ */
+//~ LedCount led_chain_fill_from_tile(LedChain * c, LedTile * t, LedCount offset)
+//~ {
+                // ~ if(!c || !t)
+                                // ~ NFT_LOG_NULL(-1);
+
+                // ~ LedCount offs = offset;
+                // ~ LedChain *tc;
+                // ~ if((tc = led_tile_get_chain(t)))
+                // ~ {
+                                // ~ if((offs += led_chain_fill_from_chain(c,
+                                // tc, offs)) < 0)
+                                                // ~ return -1;
+                // ~ }
+
+                // ~ LedTile *ct;
+                // ~ for(ct = led_tile_get_child(t); ct; ct =
+                // led_tile_list_get_next(ct))
+                // ~ {
+                                // ~ offs += led_chain_fill_from_tile(c, ct,
+                                // offs);
+                // ~ }
+
+                // ~ return offs;
+//~ }
+
+
+/**
  * fill chain with pixels from a frame
  *
  * @param c - The LED chain whose brightness values should be set
@@ -1235,7 +1339,8 @@ NftResult led_chain_fill_from_frame(LedChain * c, LedFrame * f)
         /* map frame src-buffer to chain dest-buffer */
         char *srcbuf = led_frame_get_buffer(srcframe);
         char *dstbuf = c->ledbuffer;
-        /* amount of bytes to move one component further */
+        /* amount of bytes to add for moving from one component to the next
+         * component */
         const size_t offset =
                 led_pixel_format_get_component_offset(c->format, 1);
         LedCount i;
@@ -1332,6 +1437,44 @@ NftResult led_chain_set_greyscale(LedChain * c, LedCount pos,
         char *src = (char *) &value;
         char *dst = c->ledbuffer;
         dst += led_pixel_format_get_component_offset(c->format, (size_t) pos);
+
+        /* handle different bytes-per-component */
+        const size_t bpc =
+                led_pixel_format_get_bytes_per_pixel(c->format) /
+                led_pixel_format_get_n_components(c->format);
+
+        /* copy one greyscale value */
+        _set_greyscale_value(bpc, src, dst);
+
+        return NFT_SUCCESS;
+}
+
+
+/**
+ * get greyscale value of a specific LED in a chain
+ * @todo merge with frame.c:component_setter
+ *
+ * @param c LedChain descriptor
+ * @param pos LED number
+ * @param value greyscale-value cast to long long int
+ */
+NftResult led_chain_get_greyscale(LedChain * c, LedCount pos,
+                                  long long int *value)
+{
+        if(!c)
+                NFT_LOG_NULL(NFT_FAILURE);
+
+        if(pos >= c->ledcount)
+        {
+                NFT_LOG(L_ERROR,
+                        "Invalid LED position: %d (Chainlength is: %d)", pos,
+                        c->ledcount);
+                return NFT_FAILURE;
+        }
+
+        char *src = c->ledbuffer;
+        char *dst = (char *) value;
+        src += led_pixel_format_get_component_offset(c->format, (size_t) pos);
 
         /* handle different bytes-per-component */
         const size_t bpc =

@@ -79,7 +79,7 @@ typedef struct _Led             Led;
 typedef struct _LedChain        LedChain;
 
 /** type to count LEDs */
-typedef unsigned long           LedCount;
+typedef long int                LedCount;
 
 /** type to define the gain-setting of an LED-driver (0 = turned off, 65535 = full brightness) */
 typedef LED_T_GAIN              LedGain;
@@ -103,6 +103,8 @@ LedChain                       *led_chain_new(LedCount ledcount, const char *pix
 void                            led_chain_destroy(LedChain * c);
 LedChain                       *led_chain_dup(LedChain * c);
 NftResult                       led_chain_map_from_frame(LedChain * c, LedFrame * f);
+
+//~ LedCount                                            led_chain_fill_from_tile(LedChain * c, LedTile * t, LedCount offset);
 NftResult                       led_chain_fill_from_frame(LedChain * c, LedFrame * f);
 void                            led_chain_print(LedChain * f, NftLoglevel l);
 LedCount                        led_chain_stride_map(LedChain * c, LedCount stride, LedCount offset);
@@ -114,6 +116,7 @@ NftResult                       led_chain_set_greyscale(LedChain * c, LedCount p
 NftResult                       led_chain_set_ledcount(LedChain * c, LedCount ledcount);
 NftResult                       led_chain_set_privdata(LedChain * c, void *privdata);
 
+NftResult                       led_chain_get_greyscale(LedChain * c, LedCount pos, long long int *value);
 LedCount                        led_chain_get_ledcount(LedChain * c);
 void                           *led_chain_get_privdata(LedChain * c);
 Led                            *led_chain_get_nth(LedChain * c, LedCount n);

@@ -130,7 +130,7 @@ void led_setup_set_hardware(LedSetup * s, LedHardware * h)
 
         if(h)
         {
-                _hardware_set_parent_setup(h, s);
+                hardware_set_parent_setup(h, s);
         }
 }
 

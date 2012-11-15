@@ -311,7 +311,7 @@ _ptt_error:
 /**
  * register "hardware" prefs class (called once for initialization)
  */
-NftResult _prefs_tile_class_register(NftPrefs * p)
+NftResult prefs_tile_class_register(NftPrefs * p)
 {
         if(!p)
                 NFT_LOG_NULL(NFT_FAILURE);

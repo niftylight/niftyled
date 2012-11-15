@@ -462,7 +462,7 @@ int main(int argc, char *argv[])
 
 			/* first run through all LEDs once */
 			NFT_LOG(L_INFO, "Turning off all LEDs...");
-			unsigned int l;
+			LedCount l;
 			for(l=0; l < _c.ledcount; l++)
 			{
 				_light_led_n(firstHw, l, 0);
@@ -515,7 +515,7 @@ int main(int argc, char *argv[])
 				/* ask for channel of LED n (if format uses more than one channel) */
 				if(led_pixel_format_get_n_components(led_chain_get_format(led_hardware_get_chain(firstHw))) != 1)
 				{
-					printf("Enter component of LED %d: ", l);
+					printf("Enter component of LED %ld: ", l);
 					if(!_readint(&component))
 					{
 						NFT_LOG(L_ERROR, "Parsing error. Please enter valid integer.");
@@ -532,7 +532,7 @@ int main(int argc, char *argv[])
 
 
 				/* ask for X of LED n */
-				printf("Enter X for LED %d: ", l);
+				printf("Enter X for LED %ld: ", l);
 				if(!_readint(&x))
 				{
 					NFT_LOG(L_ERROR, "Parsing error. Please enter valid integer.");
@@ -543,7 +543,7 @@ int main(int argc, char *argv[])
 
 
 				/* ask for Y of LED n */
-				printf("Enter Y for LED %d: ", l);
+				printf("Enter Y for LED %ld: ", l);
 				if(!_readint(&y))
 				{
 					NFT_LOG(L_ERROR, "Parsing error. Please enter valid integer.");
@@ -565,7 +565,7 @@ int main(int argc, char *argv[])
 			}
 
 			/* apply stride */
-			NftResult r;
+			LedCount r;
 			if((r = led_chain_stride_unmap(chain, led_hardware_get_stride(firstHw), 0)) != _c.ledcount)
 			{
 				NFT_LOG(L_ERROR, "Amount of LEDs stride-mapped (%d) != total amount of LEDs (%d)",
