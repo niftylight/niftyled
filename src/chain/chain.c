@@ -71,9 +71,15 @@ struct _Led
 {
         /** position of LED inside map */
         LedFrameCord x, y;
-        /** component-number this LED has in one pixel (red, green, blue, cyan, ...) */
+        /** component-number this LED has in a pixel
+		    (red, green, blue, cyan, ...) For example, in a RGB system, a red
+			LED would have component number 0, a green one has 1 and a blue one
+			has 2 */
         LedFrameComponent component;
-        /** 32 bit gain value of this LED */
+        /** 32 bit gain value of this LED - use this to define brightness 
+		    for LED hardware that supports it. The hardware plugin has to 
+		    scale the 32 bit value so it can be used by the hardware.
+		    0 should be lowest brightness, UINT32_MAX should be maximum brightness */
         LedGain gain;
         /** private userdata */
         void *privdata;
@@ -107,7 +113,6 @@ struct _LedChain
                 /** if this chain belongs to a hardware, this will be set */
                 LedHardware *parent_hw;
         } relation;
-
         /**
          * temporary mapping-buffer. holds one offset per led in chain.
          * Offset points to coresponding location in LedFrame of same LedPixelFormat
@@ -1160,6 +1165,7 @@ static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
                                 // ~ char *srcbuf = src->ledbuffer;
                                 // ~ char *dstbuf =
                                 // dst->ledbuffer+led_pixel_format_get_component_offset(dst->format, 
+                                // 
                                 // 
                                 // 
                                 // 
