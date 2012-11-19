@@ -123,6 +123,8 @@ Led                            *led_chain_get_nth(LedChain * c, LedCount n);
 LedPixelFormat                 *led_chain_get_format(LedChain * c);
 void                           *led_chain_get_buffer(LedChain * chain);
 size_t                          led_chain_get_buffer_size(LedChain * chain);
+LedFrameCord                    led_chain_get_min_x(LedChain * chain);
+LedFrameCord                    led_chain_get_min_y(LedChain * chain);
 LedFrameCord                    led_chain_get_max_x(LedChain * chain);
 LedFrameCord                    led_chain_get_max_y(LedChain * chain);
 LedFrameComponent               led_chain_get_max_component(LedChain * chain);

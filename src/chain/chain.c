@@ -574,6 +574,56 @@ void led_chain_print(LedChain * c, NftLoglevel l)
 }
 
 /**
+ * get smallest x-coordinate of all LEDs in chain
+ *
+ * @param c LedChain descriptor
+ * @result x coordinate in pixels or -1 upon error
+ */
+LedFrameCord led_chain_get_min_x(LedChain * c)
+{
+        LedFrameCord r = 0;
+        LedCount i;
+
+        if(!c)
+                NFT_LOG_NULL(-1);
+
+        /* empty chain? */
+        if(c->ledcount == 0)
+                return -1;
+
+        for(i = 0; i < c->ledcount; i++)
+                r = MIN(r, led_get_x(led_chain_get_nth(c, i)));
+
+        return r;
+}
+
+
+/**
+ * get smallest y-coordinate of all LEDs in chain
+ *
+ * @param c LedChain descriptor
+ * @result y coordinate in pixels or -1 upon error
+ */
+LedFrameCord led_chain_get_min_y(LedChain * c)
+{
+        LedFrameCord r = 0;
+        LedCount i;
+
+        if(!c)
+                NFT_LOG_NULL(-1);
+
+        /* empty chain? */
+        if(c->ledcount == 0)
+                return -1;
+
+        for(i = 0; i < c->ledcount; i++)
+                r = MIN(r, led_get_y(led_chain_get_nth(c, i)));
+
+        return r;
+}
+
+
+/**
  * get largest x-coordinate of all LEDs in chain
  *
  * @param c LedChain descriptor
@@ -1003,6 +1053,11 @@ LedCount led_chain_stride_map(LedChain * c, LedCount stride, LedCount offset)
                 if(!led_copy(led_chain_get_nth(dst, offset + i), led))
                         goto _lhs_exit;
 
+				/* copy greyscale value */
+				long long int greyscale = 0;
+				led_chain_get_greyscale(src, offset + pos, &greyscale);
+				led_chain_set_greyscale(dst, offset + i, greyscale);
+
                 if((pos += stride) >= c->ledcount)
                 {
                         off++;
@@ -1071,6 +1126,11 @@ LedCount led_chain_stride_unmap(LedChain * c, LedCount stride,
                 if(!led_copy(led_chain_get_nth(dst, offset + pos), led))
                         goto _lhs_exit;
 
+				/* copy greyscale value */
+				long long int greyscale = 0;
+				led_chain_get_greyscale(src, offset + i, &greyscale);
+				led_chain_set_greyscale(dst, offset + pos, greyscale);
+				
                 if((pos += stride) >= c->ledcount)
                 {
                         off++;
@@ -1165,6 +1225,7 @@ static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
                                 // ~ char *srcbuf = src->ledbuffer;
                                 // ~ char *dstbuf =
                                 // dst->ledbuffer+led_pixel_format_get_component_offset(dst->format, 
+                                // 
                                 // 
                                 // 
                                 // 
