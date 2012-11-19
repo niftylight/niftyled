@@ -1150,9 +1150,10 @@ LedHardware *led_tile_get_parent_hardware(LedTile * t)
 
 
 /**
- * convert a tile to a flat LedChain
+ * translate the chain of a tile (or subtile(s)) to a
+ * LedChain with respect to the offset, rotation and pivot of
+ * tile(s) 
  *
- * @todo improve accuracy (rotation)
  * @param m a LedTile
  * @param dst The destination LedChain
  * @param offset Start writing LEDs at this
@@ -1211,6 +1212,12 @@ LedCount led_tile_to_chain(LedTile * m, LedChain * dst, LedCount offset)
                         /* copy current LED of this chain to dest */
                         led_copy(led,
                                  led_chain_get_nth(m->relation.chain, i));
+
+                        /* copy greyscale value */
+                        long long int greyscale = 0;
+                        led_chain_get_greyscale(m->relation.chain, i,
+                                                &greyscale);
+                        led_chain_set_greyscale(dst, offset + i, greyscale);
 
                         /* transform position according to complex transform
                          * matrix */
