@@ -559,15 +559,47 @@ void led_chain_print(LedChain * c, NftLoglevel l)
                 c->src_format ? led_pixel_format_to_string(c->src_format) :
                 "none", c->buffersize);
 
-        if(nft_log_level_get() < L_DEBUG)
+        if(nft_log_level_get() <= L_NOISY)
         {
+				
+				int bpc = led_pixel_format_get_bytes_per_pixel(c->format) / 
+						  led_pixel_format_get_n_components(c->format);
+				
                 LedCount i;
                 for(i = 0; i < c->ledcount; i++)
                 {
-                        NFT_LOG(l,
-                                "Pos: %d\tX: %d\tY: %d\tComponent: %d\tGain: %hu",
-                                i, c->leds[i].x, c->leds[i].y,
-                                c->leds[i].component, c->leds[i].gain);
+						/* get greyscale value */
+						long long int value;
+						led_chain_get_greyscale(c, i, &value);
+
+						switch(bpc)
+						{
+								case 1:
+								{
+										NFT_LOG(l,
+												"Pos: %d\tX: %d\tY: %d\tComponent: %d\tGain: %hu\tGreyscale: %hhu",
+												i, c->leds[i].x, c->leds[i].y,
+												c->leds[i].component, c->leds[i].gain,
+												(unsigned char) value);
+										break;
+								}
+
+								case 2:
+								{
+										NFT_LOG(l,
+												"Pos: %d\tX: %d\tY: %d\tComponent: %d\tGain: %hu\tGreyscale: %hu",
+												i, c->leds[i].x, c->leds[i].y,
+												c->leds[i].component, c->leds[i].gain,
+												(unsigned short) value);
+										break;
+								}
+
+								default:
+								{
+										NFT_LOG(L_ERROR, "Unsupported bytes-per-component: %d", bpc);
+										break;
+								}
+						}
                 }
         }
 
@@ -729,7 +761,7 @@ LedHardware *led_chain_get_parent_hardware(LedChain * chain)
 
         if(!chain->relation.parent_hw && chain->relation.parent_tile)
         {
-                NFT_LOG(L_DEBUG,
+                NFT_LOG(L_NOISY,
                         "Requested parent hardware but this chain is child of a tile.");
                 return NULL;
         }
@@ -751,7 +783,7 @@ LedTile *led_chain_get_parent_tile(LedChain * chain)
 
         if(!chain->relation.parent_tile && chain->relation.parent_hw)
         {
-                NFT_LOG(L_DEBUG,
+                NFT_LOG(L_NOISY,
                         "Requested parent tile but this chain is child of a hardware.");
                 return NULL;
         }
