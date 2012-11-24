@@ -128,11 +128,11 @@ static NftResult _prefs_from_hardware(NftPrefs * p, NftPrefsNode * n,
                 return NFT_FAILURE;
 
         /* handle custom plugin properties */
-        int i, a = led_hardware_plugin_prop_count(h);
+        int i, a = led_hardware_plugin_prop_get_count(h);
         for(i = 0; i < a; i++)
         {
                 LedPluginCustomProp *prop;
-                if(!(prop = led_hardware_plugin_prop_nth(h, i)))
+                if(!(prop = led_hardware_plugin_prop_get_nth(h, i)))
                 {
                         NFT_LOG(L_ERROR,
                                 "Could not get property %d (but %d registered). This is a bug!",
@@ -381,6 +381,10 @@ static NftResult _prefs_to_hardware(LedPrefs * p, void **newObj,
         }
 
 
+		/** @todo handle custom properties */
+
+
+		
         /* process child nodes */
         LedPrefsNode *child;
         for(child = nft_prefs_node_get_first_child(n);

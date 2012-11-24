@@ -2073,7 +2073,7 @@ void led_hardware_plugin_prop_unregister(LedHardware * h,
  * @param h LedHardware
  * @result amount or properties currently registered to hardware
  */
-int led_hardware_plugin_prop_count(LedHardware * h)
+int led_hardware_plugin_prop_get_count(LedHardware * h)
 {
         if(!h)
                 NFT_LOG_NULL(0);
@@ -2088,7 +2088,7 @@ int led_hardware_plugin_prop_count(LedHardware * h)
  * @param p current property
  * @result next sibling property or NULL
  */
-LedPluginCustomProp *led_hardware_plugin_prop_next(LedPluginCustomProp * p)
+LedPluginCustomProp *led_hardware_plugin_prop_get_next(LedPluginCustomProp * p)
 {
         if(!p)
                 NFT_LOG_NULL(NULL);
@@ -2104,7 +2104,7 @@ LedPluginCustomProp *led_hardware_plugin_prop_next(LedPluginCustomProp * p)
  * @param n get the nth param (minimum: 0, maximum: led_hardware_plugin_prop_count()-1)
  * @result nth LedPluginCustomProp or NULL
  */
-LedPluginCustomProp *led_hardware_plugin_prop_nth(LedHardware * h, int n)
+LedPluginCustomProp *led_hardware_plugin_prop_get_nth(LedHardware * h, int n)
 {
         if(!h)
                 NFT_LOG_NULL(NULL);
@@ -2114,7 +2114,7 @@ LedPluginCustomProp *led_hardware_plugin_prop_nth(LedHardware * h, int n)
         {
                 NFT_LOG(L_ERROR,
                         "Failed to get property %d. (Only %d properties registered to \"%s\")",
-                        n, led_hardware_plugin_prop_count(h),
+                        n, led_hardware_plugin_prop_get_count(h),
                         led_hardware_get_name(h));
                 return NULL;
         }
