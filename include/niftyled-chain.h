@@ -69,7 +69,7 @@
 
 
 /** type used for LedGain */
-#define LED_T_GAIN short
+#define LED_T_GAIN unsigned short
 
 
 /** model of one single LED */
@@ -88,7 +88,7 @@ typedef LED_T_GAIN              LedGain;
 /** minimum value for LedGain type (LED is turned off) */
 #define LED_GAIN_MIN    (0)
 /** maximum value for LedGain type (LED at full brightness) */
-#define LED_GAIN_MAX    ((unsigned LED_T_GAIN)((1<<(sizeof(LedGain)*8))-1))
+#define LED_GAIN_MAX    ((LED_T_GAIN)((1<<(sizeof(LedGain)*8))-1))
 
 
 #include "niftyled-tile.h"
