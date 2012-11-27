@@ -55,6 +55,7 @@
  */
 
 #include <math.h>
+#include <stdint.h>
 #include "niftyled-chain.h"
 #include "niftyled-frame.h"
 
@@ -1185,16 +1186,16 @@ static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
         {
                 case 1:
                 {
-                        char *s = srcbuf;
-                        char *d = dstbuf;
+                        uint8_t *s = srcbuf;
+                        uint8_t *d = dstbuf;
                         *d = *s;
                         break;
                 }
 
                 case 2:
                 {
-                        short *s = srcbuf;
-                        short *d = dstbuf;
+                        uint16_t *s = srcbuf;
+                        uint16_t *d = dstbuf;
                         *d = *s;
                         break;
                 }
@@ -1217,6 +1218,14 @@ static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
                         break;
                 }
 
+				case 8:
+				{
+						double *s = srcbuf;
+						double *d = dstbuf;
+						*d = *s;
+						break;
+				}
+						
                 default:
                 {
                         NFT_LOG(L_ERROR, "Unsupported component-size: %d",
