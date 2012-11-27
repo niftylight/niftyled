@@ -96,24 +96,33 @@
 /** macro to get total amount of siblings of a hardware */
 #define HARDWARE_COUNT(h) (relation_sibling_count(RELATION(h)))
 
+/** casting macro @todo add type validty check */
+#define PLUGIN_PROP(p) ((LedPluginCustomProp *) p)
+/** macro to get next plugin property */
+#define PLUGIN_PROP_NEXT(p) (PLUGIN_PROP(relation_next(RELATION(p))))
+/** macro to get previous plugin property */
+#define PLUGIN_PROP_PREV(p) (PLUGIN_PROP(relation_prev(RELATION(p))))
+/** macro to unlink plugin property from any relations */
+#define PLUGIN_PROP_UNLINK(p) (relation_unlink(RELATION(p)))
+/** macro to append plugin property at end of sibling list */
+#define PLUGIN_PROP_APPEND(p, s) (relation_append(RELATION(p), RELATION(s)))
+/** macro to get nth sibling of a plugin property */
+#define PLUGIN_PROP_NTH(p, n) (PLUGIN_PROP(relation_nth(RELATION(p), n)))
+/** macro to get total amount of siblings of a plugin property */
+#define PLUGIN_PROP_COUNT(p) (relation_sibling_count(RELATION(p)))
+
 
 
 
 /** dynamic runtime plugin property */
 struct _LedPluginCustomProp
 {
+		/** relations of this property */
+		Relation relation;
         /** name of this property */
         char name[64];
         /** type of this property */
         LedPluginCustomPropType type;
-        /** relations of this property */
-        struct
-        {
-            /** previous sibling */
-                LedPluginCustomProp *prev;
-            /** next sibling */
-                LedPluginCustomProp *next;
-        } list;
 };
 
 
@@ -1866,42 +1875,7 @@ NftResult led_hardware_list_send(LedHardware * first)
 
 
 
-/** find plugin custom property by its name */
-static LedPluginCustomProp *_prop_get_by_name(LedPluginCustomProp * p,
-                                              const char *name)
-{
-        if(!name)
-                NFT_LOG_NULL(NULL);
 
-        if(!p)
-                return NULL;
-
-        if(strcmp(p->name, name) == 0)
-                return p;
-
-        return _prop_get_by_name(p->list.next, name);
-}
-
-/** helper to count the length of a custom property list - returns amount of siblings */
-static int _prop_list_count(LedPluginCustomProp * p, int cnt)
-{
-        if(!p)
-                return cnt;
-
-        return _prop_list_count(p->list.next, cnt + 1);
-}
-
-/** helper to get nth property from list */
-static LedPluginCustomProp *_prop_list_nth(LedPluginCustomProp * p, int n)
-{
-        if(!p)
-                return NULL;
-
-        if(n <= 0)
-                return p;
-
-        return _prop_list_nth(p->list.next, n - 1);
-}
 
 
 /**
@@ -1976,21 +1950,8 @@ NftResult led_hardware_plugin_prop_register(LedHardware * h,
                 h->first_prop = p;
                 return NFT_SUCCESS;
         }
-
-        /* seek to end of list of custom properties */
-        LedPluginCustomProp *e;
-        for(e = h->first_prop; e; e = e->list.next)
-        {
-                if(e->list.next)
-                        continue;
-
-                /* append property */
-                e->list.next = p;
-                p->list.prev = e;
-                break;
-        }
-
-        return NFT_SUCCESS;
+		
+		return PLUGIN_PROP_APPEND(h->first_prop, p);
 }
 
 
@@ -2007,29 +1968,23 @@ void led_hardware_plugin_prop_unregister(LedHardware * h,
                 NFT_LOG_NULL();
 
         LedPluginCustomProp *p;
-        if(!(p = _prop_get_by_name(h->first_prop, propname)))
+        if(!(p = led_hardware_plugin_prop_find(h, propname)))
         {
                 NFT_LOG(L_ERROR, "Failed to find property \"%s\" in \"%s\"",
                         propname, led_hardware_get_name(h));
                 return;
         }
 
-        /* unlink from list */
-        if(p->list.next)
-        {
-                p->list.next->list.prev = p->list.prev;
-        }
-
-        if(p->list.prev)
-        {
-                p->list.prev->list.next = p->list.next;
-        }
-
+		/* this property is first property of hardware? */
         if(p == h->first_prop)
         {
-                h->first_prop = p->list.next;
+                h->first_prop = PLUGIN_PROP_NEXT(p);
         }
 
+		/* unlink */
+		PLUGIN_PROP_UNLINK(p);
+		
+      
         free(p);
 }
 
@@ -2045,7 +2000,7 @@ int led_hardware_plugin_prop_get_count(LedHardware * h)
         if(!h)
                 NFT_LOG_NULL(0);
 
-        return _prop_list_count(h->first_prop, 0);
+        return PLUGIN_PROP_COUNT(h->first_prop);
 }
 
 
@@ -2057,10 +2012,7 @@ int led_hardware_plugin_prop_get_count(LedHardware * h)
  */
 LedPluginCustomProp *led_hardware_plugin_prop_get_next(LedPluginCustomProp * p)
 {
-        if(!p)
-                NFT_LOG_NULL(NULL);
-
-        return p->list.next;
+        return PLUGIN_PROP_NEXT(p);
 }
 
 
@@ -2076,17 +2028,24 @@ LedPluginCustomProp *led_hardware_plugin_prop_get_nth(LedHardware * h, int n)
         if(!h)
                 NFT_LOG_NULL(NULL);
 
-        LedPluginCustomProp *p;
-        if(!(p = _prop_list_nth(h->first_prop, n)))
-        {
-                NFT_LOG(L_ERROR,
-                        "Failed to get property %d. (Only %d properties registered to \"%s\")",
-                        n, led_hardware_plugin_prop_get_count(h),
-                        led_hardware_get_name(h));
-                return NULL;
-        }
+		return PLUGIN_PROP_NTH(h->first_prop, n);
+}
 
-        return p;
+
+/** find plugin custom property by its name */
+static LedPluginCustomProp *_prop_get_by_name(LedPluginCustomProp * p,
+                                              const char *name)
+{
+        if(!name)
+                NFT_LOG_NULL(NULL);
+
+        if(!p)
+                return NULL;
+
+        if(strcmp(p->name, name) == 0)
+                return p;
+
+        return _prop_get_by_name(PLUGIN_PROP_NEXT(p), name);
 }
 
 
