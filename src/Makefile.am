@@ -23,7 +23,8 @@ lib_LTLIBRARIES = lib@PACKAGE@.la
 
 # sources
 lib@PACKAGE@_la_SOURCES = \
-	version.c
+	version.c \
+	relation.c
 
 # cflags
 lib@PACKAGE@_la_CFLAGS = \
