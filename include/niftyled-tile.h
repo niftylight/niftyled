@@ -112,7 +112,6 @@ NftResult                       led_tile_set_privdata(LedTile * t, void *privdat
 void                            led_tile_list_destroy(LedTile * first);
 NftResult                       led_tile_list_append_head(LedTile * head, LedTile * sibling);
 NftResult                       led_tile_list_append_child(LedTile * t, LedTile * child);
-NftResult                       led_tile_list_append(LedTile * t, LedTile * sibling);
 LedTile                        *led_tile_list_get_nth(LedTile * c, int n);
 LedTile                        *led_tile_list_get_prev(LedTile * t);
 LedTile                        *led_tile_list_get_next(LedTile * t);

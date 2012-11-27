@@ -224,14 +224,14 @@ LedPixelFormat *led_pixel_format_from_string(const char *s)
  *
  * @param a one LedPixelFormat
  * @param b another LedPixelFormat
- * @result TRUE if formats match, FALSE otherwise
+ * @result true if formats match, false otherwise
  */
 bool led_pixel_format_is_equal(LedPixelFormat * a, LedPixelFormat * b)
 {
         if(a == b)
-                return TRUE;
+                return true;
 
-        return FALSE;
+        return false;
 }
 
 
@@ -305,14 +305,14 @@ void led_pixel_format_convert(LedPixelFormatConverter * converter,
 /**
  * check for endianess
  *
- * @result TRUE if we run on a big-endian or universal system, FALSE otherwise
+ * @result true if we run on a big-endian or universal system, false otherwise
  */
 bool led_pixel_format_is_big_endian()
 {
 #ifdef __BIG_ENDIAN__
-        return TRUE;
+        return true;
 #else
-        return FALSE;
+        return false;
 #endif
 }
 
@@ -391,11 +391,11 @@ static int _get_format(LedPixelFormat * f, void *udata)
         if(arg->n > 0)
         {
                 arg->n--;
-                return FALSE;
+                return false;
         }
 
         arg->format = f;
-        return TRUE;
+        return true;
 }
 
 

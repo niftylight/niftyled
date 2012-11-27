@@ -355,7 +355,6 @@ NftResult                       led_hardware_refresh_mapping(LedHardware * h);
 
 /* LedHardware linked list functions */
 void                            led_hardware_list_destroy(LedHardware * first);
-NftResult                       led_hardware_list_append(LedHardware * h, LedHardware * sibling);
 NftResult                       led_hardware_list_append_head(LedHardware * head, LedHardware * sibling);
 NftResult                       led_hardware_list_refresh_gain(LedHardware * first);
 NftResult                       led_hardware_list_refresh_mapping(LedHardware * first);

@@ -86,7 +86,7 @@ struct _LedFrame
         /** data buffer */
         void *buffer;
         /** 
-         * TRUE if framebuffer is big-endian, FALSE otherwise
+         * true if framebuffer is big-endian, false otherwise
          * (set after buffer-contents change because flag might 
          * be changed in frame_convert_endianess()) 
          */
@@ -470,7 +470,7 @@ void led_frame_print(LedFrame * f, NftLoglevel l)
  * set endianess-flag of a frame
  *
  * @param f a LedFrame
- * @param is_big_endian TRUE if buffer of frame is big-endian ordered, FALSE otherwise
+ * @param is_big_endian true if buffer of frame is big-endian ordered, false otherwise
  */
 void led_frame_set_big_endian(LedFrame * f, bool is_big_endian)
 {
@@ -487,13 +487,13 @@ void led_frame_set_big_endian(LedFrame * f, bool is_big_endian)
  * get endianess-flag of a frame
  *
  * @param f an LedFrame
- * @result is_big_endian TRUE if buffer of frame is big-endian ordered, FALSE otherwise
+ * @result is_big_endian true if buffer of frame is big-endian ordered, false otherwise
  */
 bool led_frame_get_big_endian(LedFrame * f)
 {
         if(!f)
                 /** prefer wrong result over crash (we'll fail later) */
-                NFT_LOG_NULL(FALSE);
+                NFT_LOG_NULL(false);
 
         return f->is_big_endian;
 }

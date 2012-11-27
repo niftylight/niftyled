@@ -330,7 +330,7 @@ NftResult prefs_tile_class_register(NftPrefs * p)
  * check if NftPrefsNode represents a tile object
  *
  * @param n LedPrefsNode
- * @result TRUE if node represents a tile object, FALSE otherwise
+ * @result true if node represents a tile object, false otherwise
  */
 bool led_prefs_is_tile_node(LedPrefsNode * n)
 {

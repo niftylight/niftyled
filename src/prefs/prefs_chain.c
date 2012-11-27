@@ -386,7 +386,7 @@ NftResult prefs_led_class_register(NftPrefs * p)
  * check if NftPrefsNode represents a chain object
  *
  * @param n LedPrefsNode
- * @result TRUE if node represents a chain object, FALSE otherwise
+ * @result true if node represents a chain object, false otherwise
  */
 bool led_prefs_is_chain_node(LedPrefsNode * n)
 {
@@ -398,7 +398,7 @@ bool led_prefs_is_chain_node(LedPrefsNode * n)
  * check if NftPrefsNode represents a led object
  *
  * @param n LedPrefsNode
- * @result TRUE if node represents a led object, FALSE otherwise
+ * @result true if node represents a led object, false otherwise
  */
 bool led_prefs_is_led_node(LedPrefsNode * n)
 {

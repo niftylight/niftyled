@@ -616,7 +616,7 @@ NftResult prefs_hardware_class_register(NftPrefs * p)
  * check if NftPrefsNode represents a hardware object
  *
  * @param n LedPrefsNode
- * @result TRUE if node represents a hardware object, FALSE otherwise
+ * @result true if node represents a hardware object, false otherwise
  */
 bool led_prefs_is_hardware_node(LedPrefsNode * n)
 {

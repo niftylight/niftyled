@@ -105,14 +105,10 @@ struct _LedChain
         size_t buffersize;
         /** buffer that holds LEDs' greyscale-values */
         void *ledbuffer;
-        /** relation of this chain to other elements */
-        struct
-        {
-                /** if this chain belongs to a tile, this contains the pointer of the tile */
-                LedTile *parent_tile;
-                /** if this chain belongs to a hardware, this will be set */
-                LedHardware *parent_hw;
-        } relation;
+		/** if this chain belongs to a tile, this contains the pointer of the tile */
+		LedTile *parent_tile;
+		/** if this chain belongs to a hardware, this will be set */
+		LedHardware *parent_hw;
         /**
          * temporary mapping-buffer. holds one offset per led in chain.
          * Offset points to coresponding location in LedFrame of same LedPixelFormat
@@ -142,7 +138,7 @@ NftResult chain_set_parent_hardware(LedChain * c, LedHardware * h)
         if(!c)
                 NFT_LOG_NULL(NFT_FAILURE);
 
-        c->relation.parent_hw = h;
+        c->parent_hw = h;
 
         return NFT_SUCCESS;
 }
@@ -159,7 +155,7 @@ NftResult chain_set_parent_tile(LedChain * c, LedTile * t)
         if(!c)
                 NFT_LOG_NULL(NFT_FAILURE);
 
-        c->relation.parent_tile = t;
+        c->parent_tile = t;
 
         return NFT_SUCCESS;
 }
@@ -179,10 +175,10 @@ void chain_destroy(LedChain * c)
 
 
         /* unlink from parent tile */
-        if(c->relation.parent_tile)
+        if(c->parent_tile)
         {
                 /* clear chain in tile */
-                led_tile_set_chain(c->relation.parent_tile, NULL);
+                led_tile_set_chain(c->parent_tile, NULL);
         }
 
         /* unregister from config context */
@@ -397,7 +393,7 @@ void led_chain_destroy(LedChain * c)
                 return;
 
         /* don't destroy chain that belongs to a hardware */
-        if(c->relation.parent_hw)
+        if(c->parent_hw)
         {
                 NFT_LOG(L_ERROR,
                         "Chain belongs to a LedHardware. Destroy it by destroying the parent");
@@ -477,7 +473,7 @@ NftResult led_chain_set_ledcount(LedChain * c, LedCount ledcount)
 
         /* if this chain is a mapped hardware chain,
          * led_hardware_set_ledcount() must be used */
-        if(c->relation.parent_hw)
+        if(c->parent_hw)
         {
                 NFT_LOG(L_ERROR,
                         "This is a hardware chain. You must use led_hardware_set_ledcount()!");
@@ -759,14 +755,14 @@ LedHardware *led_chain_get_parent_hardware(LedChain * chain)
         if(!chain)
                 NFT_LOG_NULL(NULL);
 
-        if(!chain->relation.parent_hw && chain->relation.parent_tile)
+        if(!chain->parent_hw && chain->parent_tile)
         {
                 NFT_LOG(L_NOISY,
                         "Requested parent hardware but this chain is child of a tile.");
                 return NULL;
         }
 
-        return chain->relation.parent_hw;
+        return chain->parent_hw;
 }
 
 
@@ -781,14 +777,14 @@ LedTile *led_chain_get_parent_tile(LedChain * chain)
         if(!chain)
                 NFT_LOG_NULL(NULL);
 
-        if(!chain->relation.parent_tile && chain->relation.parent_hw)
+        if(!chain->parent_tile && chain->parent_hw)
         {
                 NFT_LOG(L_NOISY,
                         "Requested parent tile but this chain is child of a hardware.");
                 return NULL;
         }
 
-        return chain->relation.parent_tile;
+        return chain->parent_tile;
 }
 
 
@@ -1356,7 +1352,7 @@ NftResult led_chain_fill_from_frame(LedChain * c, LedFrame * f)
                 led_frame_convert_endianess(f);
 
                 /* mark frame as converted */
-                led_frame_set_big_endian(f, TRUE);
+                led_frame_set_big_endian(f, true);
         }
 #else
         /* convert big to little endian? */
@@ -1365,7 +1361,7 @@ NftResult led_chain_fill_from_frame(LedChain * c, LedFrame * f)
                 led_frame_convert_endianess(f);
 
                 /* mark frame as converted */
-                led_frame_set_big_endian(f, FALSE);
+                led_frame_set_big_endian(f, false);
         }
 #endif
 
@@ -1588,26 +1584,26 @@ NftResult led_chain_get_greyscale(LedChain * c, LedCount pos,
 
 
 /**
- * return TRUE if this LedChain belongs to a LedHardware
+ * return true if this LedChain belongs to a LedHardware
  *
  * @param c a LedChain descriptor
- * @result TRUE or FALSE
+ * @result true or false
  */
 bool led_chain_parent_is_hardware(LedChain * c)
 {
-        return (c->relation.parent_hw ? TRUE : FALSE);
+        return (c->parent_hw ? true : false);
 }
 
 
 /**
- * return TRUE if this LedChain belongs to a LedTile
+ * return true if this LedChain belongs to a LedTile
  *
  * @param c a LedChain descriptor
- * @result TRUE or FALSE
+ * @result true or false
  */
 bool led_chain_parent_is_tile(LedChain * c)
 {
-        return (c->relation.parent_tile ? TRUE : FALSE);
+        return (c->parent_tile ? true : false);
 }
 
 /**
