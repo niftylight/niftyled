@@ -125,6 +125,11 @@ Relation *relation_first(Relation * r)
         if(!r)
                 NFT_LOG_NULL(NULL);
 
+        /* take the shortcut? */
+        if(r->parent)
+				/* first child of parent == head of this list */
+                return r->parent->child;
+
         Relation *first;
         for(first = r; first->prev; first = first->prev);
 
