@@ -2124,6 +2124,18 @@ LedPluginCustomProp *led_hardware_plugin_prop_get_nth(LedHardware * h, int n)
 
 
 /**
+ * find property by name
+ */
+LedPluginCustomProp *led_hardware_plugin_prop_find(LedHardware *h, const char *propname)
+{
+	if(!h || !propname)
+			NFT_LOG_NULL(NULL);
+		
+	return _prop_get_by_name(h->first_prop, propname);
+}
+
+
+/**
  * convert custom property type name to value
  *
  * @param type printable name string of type
