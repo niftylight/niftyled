@@ -117,8 +117,8 @@
 /** dynamic runtime plugin property */
 struct _LedPluginCustomProp
 {
-		/** relations of this property */
-		Relation relation;
+                /** relations of this property */
+        Relation relation;
         /** name of this property */
         char name[64];
         /** type of this property */
@@ -129,15 +129,15 @@ struct _LedPluginCustomProp
 /** model of LED-hardware to interface with LEDs */
 struct _LedHardware
 {
-		/** relations of this hardware (must stay first entry in struct)*/
-		Relation relation;
-		/** chain of this hardware-plugin (holds all currently configured
+                /** relations of this hardware (must stay first entry in struct)*/
+        Relation relation;
+                /** chain of this hardware-plugin (holds all currently configured
 			LEDs this plugin can control) */
-		LedChain *chain;
-		/** first LedTile registered to this hardware */
-		LedTile *first_tile;
-		/** setup of this hardware */
-		LedSetup *setup;
+        LedChain *chain;
+                /** first LedTile registered to this hardware */
+        LedTile *first_tile;
+                /** setup of this hardware */
+        LedSetup *setup;
         /** plugin handle as returned by dlopen() */
         void *libhandle;
         /** descriptor that has been provided by plugin */
@@ -469,15 +469,16 @@ void led_hardware_destroy(LedHardware * h)
                 h->plugin->family ? h->plugin->family : "<undefined>",
                 h->params.id ? h->params.id : "<undefined>");
 
-		/* unlink from any relations */
-		HARDWARE_UNLINK(h);
-		
-        
+        /* unlink from any relations */
+        HARDWARE_UNLINK(h);
+
+
         /* is this the first hardware in setup? */
         if(h == led_setup_get_hardware(h->setup))
         {
                 /* set next sibling as head of setup */
-                led_setup_set_hardware(h->setup, HARDWARE(relation_next(RELATION(h))));
+                led_setup_set_hardware(h->setup,
+                                       HARDWARE(relation_next(RELATION(h))));
         }
 
         /* deinitialize hardware */
@@ -558,8 +559,7 @@ NftResult led_hardware_init(LedHardware * h, const char *id,
         if(!h->chain)
         {
                 /** initialize LedChain of this hardware */
-                if(!
-                   (h->chain = led_chain_new(ledcount, pixelformat)))
+                if(!(h->chain = led_chain_new(ledcount, pixelformat)))
                 {
                         NFT_LOG(L_ERROR,
                                 "Failed to create chain. Initialization failed");
@@ -943,9 +943,9 @@ NftResult led_hardware_set_ledcount(LedHardware * h, LedCount leds)
                         LedPluginParamData set_ledcount = {.ledcount = leds };
 
                         if(!
-                           (h->
-                            plugin->set(h->plugin_privdata, LED_HW_LEDCOUNT,
-                                        &set_ledcount)))
+                           (h->plugin->
+                            set(h->plugin_privdata, LED_HW_LEDCOUNT,
+                                &set_ledcount)))
                         {
                                 NFT_LOG(L_ERROR,
                                         "Plugin %s (\"%s\") failed ledcount (%d) event",
@@ -997,8 +997,8 @@ LedCount led_hardware_get_ledcount(LedHardware * h)
         LedPluginParamData get_ledcount;
 
         if(!
-           (h->
-            plugin->get(h->plugin_privdata, LED_HW_LEDCOUNT, &get_ledcount)))
+           (h->plugin->
+            get(h->plugin_privdata, LED_HW_LEDCOUNT, &get_ledcount)))
         {
                 NFT_LOG(L_WARNING,
                         "Plugin %s (\"%s\") failed to deliver ledcount. Continuing with current chainlength: %d",
@@ -1033,16 +1033,16 @@ LedCount led_hardware_get_ledcount(LedHardware * h)
 
 
 /** helper to sum up LEDs of all related hardware elements */
-NftResult _count_leds(Relation *r, void *u)
+NftResult _count_leds(Relation * r, void *u)
 {
-		LedCount *count = u;
+        LedCount *count = u;
 
-		*count += led_hardware_get_ledcount(HARDWARE(r));
-		NFT_LOG(L_INFO, "Hardware \"%s\" has %d LEDs",
-				led_hardware_get_name(HARDWARE(r)),
-				led_hardware_get_ledcount(HARDWARE(r)));
+        *count += led_hardware_get_ledcount(HARDWARE(r));
+        NFT_LOG(L_INFO, "Hardware \"%s\" has %d LEDs",
+                led_hardware_get_name(HARDWARE(r)),
+                led_hardware_get_ledcount(HARDWARE(r)));
 
-		return NFT_SUCCESS;
+        return NFT_SUCCESS;
 }
 
 
@@ -1061,8 +1061,8 @@ LedCount led_hardware_list_get_ledcount(LedHardware * h)
 
         /* count total LEDs on hardware adapters */
         LedCount res = 0;
-		HARDWARE_FOREACH(h, _count_leds, &res);
-        
+        HARDWARE_FOREACH(h, _count_leds, &res);
+
         return res;
 }
 
@@ -1199,14 +1199,14 @@ void led_hardware_print(LedHardware * h, NftLoglevel l)
 
 
 /** foreach helper to register setup */
-static NftResult _register_setup(Relation *r, void *u)
+static NftResult _register_setup(Relation * r, void *u)
 {
-		LedHardware *h = HARDWARE(r);
-		LedSetup *s = u;
+        LedHardware *h = HARDWARE(r);
+        LedSetup *s = u;
 
-		h->setup = s;
+        h->setup = s;
 
-		return NFT_SUCCESS;
+        return NFT_SUCCESS;
 }
 
 
@@ -1224,9 +1224,9 @@ NftResult led_hardware_list_append_head(LedHardware * h,
                 NFT_LOG_NULL(NFT_FAILURE);
 
         HARDWARE_APPEND(h, sibling);
-		
-		/* register setup for this & all siblings */
-		return HARDWARE_FOREACH(sibling, _register_setup, h->setup);
+
+        /* register setup for this & all siblings */
+        return HARDWARE_FOREACH(sibling, _register_setup, h->setup);
 }
 
 
@@ -1239,7 +1239,7 @@ NftResult led_hardware_list_append_head(LedHardware * h,
  */
 LedHardware *led_hardware_list_get_nth(LedHardware * h, int n)
 {
-		return HARDWARE_NTH(h, n);
+        return HARDWARE_NTH(h, n);
 }
 
 
@@ -1251,7 +1251,7 @@ LedHardware *led_hardware_list_get_nth(LedHardware * h, int n)
  */
 LedHardware *led_hardware_list_get_next(LedHardware * h)
 {
-		return HARDWARE_NEXT(h);
+        return HARDWARE_NEXT(h);
 }
 
 
@@ -1275,7 +1275,7 @@ LedHardware *led_hardware_list_get_prev(LedHardware * h)
  */
 int led_hardware_list_get_length(LedHardware * h)
 {
-		return HARDWARE_COUNT(h);
+        return HARDWARE_COUNT(h);
 }
 
 
@@ -1629,8 +1629,7 @@ NftResult led_hardware_refresh_mapping(LedHardware * h)
         for(t = h->first_tile; t; t = led_tile_list_get_next(t))
         {
                 LedCount res;
-                if((res =
-                    led_tile_to_chain(t, h->chain, mapped)) == 0)
+                if((res = led_tile_to_chain(t, h->chain, mapped)) == 0)
                 {
                         NFT_LOG(L_WARNING,
                                 "Failed to map hardware-tile(s) to hardware-chain");
@@ -1648,9 +1647,8 @@ NftResult led_hardware_refresh_mapping(LedHardware * h)
         }
 
         /* apply hardware-stride */
-        led_chain_stride_map(led_hardware_get_chain(h), 
-                             led_hardware_get_stride(h),
-                             0);
+        led_chain_stride_map(led_hardware_get_chain(h),
+                             led_hardware_get_stride(h), 0);
 
         /* output mapped raw chain (for debugging) */
         led_chain_print(h->chain, L_NOISY);
@@ -1660,12 +1658,12 @@ NftResult led_hardware_refresh_mapping(LedHardware * h)
 
 
 /** foreach helper to refresh mapping of a hardware */
-static NftResult _refresh_mapping(Relation *r, void *u)
+static NftResult _refresh_mapping(Relation * r, void *u)
 {
-		if(!led_hardware_refresh_mapping(HARDWARE(r)))
-                        return NFT_FAILURE;
+        if(!led_hardware_refresh_mapping(HARDWARE(r)))
+                return NFT_FAILURE;
 
-		return NFT_SUCCESS;
+        return NFT_SUCCESS;
 }
 
 
@@ -1680,7 +1678,7 @@ NftResult led_hardware_list_refresh_mapping(LedHardware * first)
         if(!first)
                 NFT_LOG_NULL(NFT_FAILURE);
 
-		return HARDWARE_FOREACH(first, _refresh_mapping, NULL);
+        return HARDWARE_FOREACH(first, _refresh_mapping, NULL);
 }
 
 
@@ -1711,9 +1709,9 @@ NftResult led_hardware_refresh_gain(LedHardware * h)
 
 
 /** foreach helper to refresh gain of a hardware */
-static NftResult _refresh_gain(Relation *r, void *u)
+static NftResult _refresh_gain(Relation * r, void *u)
 {
-		return led_hardware_refresh_gain(HARDWARE(r));
+        return led_hardware_refresh_gain(HARDWARE(r));
 }
 
 
@@ -1729,7 +1727,7 @@ NftResult led_hardware_list_refresh_gain(LedHardware * first)
         if(!first)
                 NFT_LOG_NULL(NFT_FAILURE);
 
-		return HARDWARE_FOREACH(first, _refresh_gain, NULL);
+        return HARDWARE_FOREACH(first, _refresh_gain, NULL);
 }
 
 
@@ -1779,14 +1777,15 @@ NftResult led_hardware_show(LedHardware * h)
 
 
 /** foreach helper to show hardware */
-static NftResult _show(Relation *r, void *u)
+static NftResult _show(Relation * r, void *u)
 {
-		if(!led_hardware_show(HARDWARE(r)))
-		{
-				NFT_LOG(L_ERROR, "Failed to latch \"%s\"", HARDWARE(r)->params.name);
-		}
+        if(!led_hardware_show(HARDWARE(r)))
+        {
+                NFT_LOG(L_ERROR, "Failed to latch \"%s\"",
+                        HARDWARE(r)->params.name);
+        }
 
-		return NFT_SUCCESS;
+        return NFT_SUCCESS;
 }
 
 
@@ -1801,7 +1800,7 @@ NftResult led_hardware_list_show(LedHardware * first)
         if(!first)
                 NFT_LOG_NULL(NFT_FAILURE);
 
-		return HARDWARE_FOREACH(first, _show, NULL);
+        return HARDWARE_FOREACH(first, _show, NULL);
 }
 
 
@@ -1849,9 +1848,9 @@ NftResult led_hardware_send(LedHardware * h)
 
 
 /** foreach helper to send data of hardware */
-static NftResult _send(Relation *r, void *u)
+static NftResult _send(Relation * r, void *u)
 {
-		return led_hardware_send(HARDWARE(r));
+        return led_hardware_send(HARDWARE(r));
 }
 
 
@@ -1865,7 +1864,7 @@ NftResult led_hardware_list_send(LedHardware * first)
         if(!first)
                 NFT_LOG_NULL(NFT_FAILURE);
 
-		return HARDWARE_FOREACH(first, _send, NULL);
+        return HARDWARE_FOREACH(first, _send, NULL);
 }
 
 
@@ -1950,8 +1949,8 @@ NftResult led_hardware_plugin_prop_register(LedHardware * h,
                 h->first_prop = p;
                 return NFT_SUCCESS;
         }
-		
-		return PLUGIN_PROP_APPEND(h->first_prop, p);
+
+        return PLUGIN_PROP_APPEND(h->first_prop, p);
 }
 
 
@@ -1975,16 +1974,16 @@ void led_hardware_plugin_prop_unregister(LedHardware * h,
                 return;
         }
 
-		/* this property is first property of hardware? */
+        /* this property is first property of hardware? */
         if(p == h->first_prop)
         {
                 h->first_prop = PLUGIN_PROP_NEXT(p);
         }
 
-		/* unlink */
-		PLUGIN_PROP_UNLINK(p);
-		
-      
+        /* unlink */
+        PLUGIN_PROP_UNLINK(p);
+
+
         free(p);
 }
 
@@ -2010,7 +2009,8 @@ int led_hardware_plugin_prop_get_count(LedHardware * h)
  * @param p current property
  * @result next sibling property or NULL
  */
-LedPluginCustomProp *led_hardware_plugin_prop_get_next(LedPluginCustomProp * p)
+LedPluginCustomProp *led_hardware_plugin_prop_get_next(LedPluginCustomProp *
+                                                       p)
 {
         return PLUGIN_PROP_NEXT(p);
 }
@@ -2028,7 +2028,7 @@ LedPluginCustomProp *led_hardware_plugin_prop_get_nth(LedHardware * h, int n)
         if(!h)
                 NFT_LOG_NULL(NULL);
 
-		return PLUGIN_PROP_NTH(h->first_prop, n);
+        return PLUGIN_PROP_NTH(h->first_prop, n);
 }
 
 
@@ -2052,12 +2052,13 @@ static LedPluginCustomProp *_prop_get_by_name(LedPluginCustomProp * p,
 /**
  * find property by name
  */
-LedPluginCustomProp *led_hardware_plugin_prop_find(LedHardware *h, const char *propname)
+LedPluginCustomProp *led_hardware_plugin_prop_find(LedHardware * h,
+                                                   const char *propname)
 {
-	if(!h || !propname)
-			NFT_LOG_NULL(NULL);
-		
-	return _prop_get_by_name(h->first_prop, propname);
+        if(!h || !propname)
+                NFT_LOG_NULL(NULL);
+
+        return _prop_get_by_name(h->first_prop, propname);
 }
 
 
@@ -2344,8 +2345,8 @@ NftResult led_hardware_plugin_prop_get_string(LedHardware * h,
                 .custom.type = LED_HW_CUSTOM_PROP_STRING,
         };
 
-        if(h->
-           plugin->get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
+        if(h->plugin->
+           get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
         {
                 /* buffer id from hardware */
                 NFT_LOG(L_DEBUG, "Got \"%s\"=\"%s\" from %s",
@@ -2406,8 +2407,8 @@ NftResult led_hardware_plugin_prop_get_int(LedHardware * h,
                 .custom.type = LED_HW_CUSTOM_PROP_INT,
         };
 
-        if(h->
-           plugin->get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
+        if(h->plugin->
+           get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
         {
                 /* buffer id from hardware */
                 NFT_LOG(L_DEBUG, "Got \"%s\"=\"%d\" from %s",
@@ -2467,8 +2468,8 @@ NftResult led_hardware_plugin_prop_get_float(LedHardware * h,
                 .custom.type = LED_HW_CUSTOM_PROP_FLOAT,
         };
 
-        if(h->
-           plugin->get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
+        if(h->plugin->
+           get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
         {
                 /* buffer id from hardware */
                 NFT_LOG(L_DEBUG, "Got \"%s\"=\"%f\" from %s",

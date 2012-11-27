@@ -387,7 +387,7 @@ const char                     *led_hardware_plugin_get_param_name(LedPluginPara
 NftResult                       led_hardware_plugin_prop_register(LedHardware * h, const char *propname, LedPluginCustomPropType type);
 void                            led_hardware_plugin_prop_unregister(LedHardware * h, const char *propname);
 LedPluginCustomPropType         led_hardware_plugin_prop_type_from_string(const char *type);
-LedPluginCustomProp	*			led_hardware_plugin_prop_find(LedHardware *h, const char *propname);
+LedPluginCustomProp            *led_hardware_plugin_prop_find(LedHardware * h, const char *propname);
 
 NftResult                       led_hardware_plugin_prop_set_string(LedHardware * h, const char *propname, const char *s);
 NftResult                       led_hardware_plugin_prop_set_int(LedHardware * h, const char *propname, int i);

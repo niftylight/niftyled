@@ -62,30 +62,30 @@
 
 
 /** include this at the beginning of a struct to relate it to other structs */
-typedef struct _Relation Relation;
+typedef struct _Relation        Relation;
 struct _Relation
 {
-	Relation *next;
-	Relation *prev;
-	Relation *child;
-	Relation *parent;
+        Relation                       *next;
+        Relation                       *prev;
+        Relation                       *child;
+        Relation                       *parent;
 };
 
 
-Relation *	relation_next(Relation *r);
-Relation *	relation_prev(Relation *r);
-Relation *  relation_child(Relation *r);
-Relation * 	relation_parent(Relation *r);
-Relation *	relation_first(Relation *r);
-Relation *	relation_last(Relation *r);
-Relation *	relation_nth(Relation *h, int n);
+Relation                       *relation_next(Relation * r);
+Relation                       *relation_prev(Relation * r);
+Relation                       *relation_child(Relation * r);
+Relation                       *relation_parent(Relation * r);
+Relation                       *relation_first(Relation * r);
+Relation                       *relation_last(Relation * r);
+Relation                       *relation_nth(Relation * h, int n);
 
-NftResult   relation_append(Relation *p, Relation *s);
-NftResult	relation_append_child(Relation *p, Relation *c);
-void  		relation_unlink(Relation *r);
-int 		relation_sibling_count(Relation *r);
-NftResult	relation_foreach(Relation *r, NftResult (*func)(Relation *r, void *userptr), void *userptr);
-NftResult	relation_foreach_recursive(Relation *r, NftResult (*func)(Relation *r, void *userptr));
+NftResult                       relation_append(Relation * p, Relation * s);
+NftResult                       relation_append_child(Relation * p, Relation * c);
+void                            relation_unlink(Relation * r);
+int                             relation_sibling_count(Relation * r);
+NftResult                       relation_foreach(Relation * r, NftResult(*func) (Relation * r, void *userptr), void *userptr);
+NftResult                       relation_foreach_recursive(Relation * r, NftResult(*func) (Relation * r, void *userptr));
 
 
 #endif /* _RELATION_H */

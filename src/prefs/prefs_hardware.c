@@ -381,10 +381,10 @@ static NftResult _prefs_to_hardware(LedPrefs * p, void **newObj,
         }
 
 
-		/** @todo handle custom properties */
+                /** @todo handle custom properties */
 
 
-		
+
         /* process child nodes */
         LedPrefsNode *child;
         for(child = nft_prefs_node_get_first_child(n);

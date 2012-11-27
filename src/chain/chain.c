@@ -106,10 +106,10 @@ struct _LedChain
         size_t buffersize;
         /** buffer that holds LEDs' greyscale-values */
         void *ledbuffer;
-		/** if this chain belongs to a tile, this contains the pointer of the tile */
-		LedTile *parent_tile;
-		/** if this chain belongs to a hardware, this will be set */
-		LedHardware *parent_hw;
+                /** if this chain belongs to a tile, this contains the pointer of the tile */
+        LedTile *parent_tile;
+                /** if this chain belongs to a hardware, this will be set */
+        LedHardware *parent_hw;
         /**
          * temporary mapping-buffer. holds one offset per led in chain.
          * Offset points to coresponding location in LedFrame of same LedPixelFormat
@@ -558,45 +558,49 @@ void led_chain_print(LedChain * c, NftLoglevel l)
 
         if(nft_log_level_get() <= L_NOISY)
         {
-				
-				int bpc = led_pixel_format_get_bytes_per_pixel(c->format) / 
-						  led_pixel_format_get_n_components(c->format);
-				
+
+                int bpc = led_pixel_format_get_bytes_per_pixel(c->format) /
+                        led_pixel_format_get_n_components(c->format);
+
                 LedCount i;
                 for(i = 0; i < c->ledcount; i++)
                 {
-						/* get greyscale value */
-						long long int value;
-						led_chain_get_greyscale(c, i, &value);
+                        /* get greyscale value */
+                        long long int value;
+                        led_chain_get_greyscale(c, i, &value);
 
-						switch(bpc)
-						{
-								case 1:
-								{
-										NFT_LOG(l,
-												"Pos: %d\tX: %d\tY: %d\tComponent: %d\tGain: %hu\tGreyscale: %hhu",
-												i, c->leds[i].x, c->leds[i].y,
-												c->leds[i].component, c->leds[i].gain,
-												(unsigned char) value);
-										break;
-								}
+                        switch (bpc)
+                        {
+                                case 1:
+                                {
+                                        NFT_LOG(l,
+                                                "Pos: %d\tX: %d\tY: %d\tComponent: %d\tGain: %hu\tGreyscale: %hhu",
+                                                i, c->leds[i].x, c->leds[i].y,
+                                                c->leds[i].component,
+                                                c->leds[i].gain,
+                                                (unsigned char) value);
+                                        break;
+                                }
 
-								case 2:
-								{
-										NFT_LOG(l,
-												"Pos: %d\tX: %d\tY: %d\tComponent: %d\tGain: %hu\tGreyscale: %hu",
-												i, c->leds[i].x, c->leds[i].y,
-												c->leds[i].component, c->leds[i].gain,
-												(unsigned short) value);
-										break;
-								}
+                                case 2:
+                                {
+                                        NFT_LOG(l,
+                                                "Pos: %d\tX: %d\tY: %d\tComponent: %d\tGain: %hu\tGreyscale: %hu",
+                                                i, c->leds[i].x, c->leds[i].y,
+                                                c->leds[i].component,
+                                                c->leds[i].gain,
+                                                (unsigned short) value);
+                                        break;
+                                }
 
-								default:
-								{
-										NFT_LOG(L_ERROR, "Unsupported bytes-per-component: %d", bpc);
-										break;
-								}
-						}
+                                default:
+                                {
+                                        NFT_LOG(L_ERROR,
+                                                "Unsupported bytes-per-component: %d",
+                                                bpc);
+                                        break;
+                                }
+                        }
                 }
         }
 
@@ -1082,10 +1086,10 @@ LedCount led_chain_stride_map(LedChain * c, LedCount stride, LedCount offset)
                 if(!led_copy(led_chain_get_nth(dst, offset + i), led))
                         goto _lhs_exit;
 
-				/* copy greyscale value */
-				long long int greyscale = 0;
-				led_chain_get_greyscale(src, offset + pos, &greyscale);
-				led_chain_set_greyscale(dst, offset + i, greyscale);
+                /* copy greyscale value */
+                long long int greyscale = 0;
+                led_chain_get_greyscale(src, offset + pos, &greyscale);
+                led_chain_set_greyscale(dst, offset + i, greyscale);
 
                 if((pos += stride) >= c->ledcount)
                 {
@@ -1155,11 +1159,11 @@ LedCount led_chain_stride_unmap(LedChain * c, LedCount stride,
                 if(!led_copy(led_chain_get_nth(dst, offset + pos), led))
                         goto _lhs_exit;
 
-				/* copy greyscale value */
-				long long int greyscale = 0;
-				led_chain_get_greyscale(src, offset + i, &greyscale);
-				led_chain_set_greyscale(dst, offset + pos, greyscale);
-				
+                /* copy greyscale value */
+                long long int greyscale = 0;
+                led_chain_get_greyscale(src, offset + i, &greyscale);
+                led_chain_set_greyscale(dst, offset + pos, greyscale);
+
                 if((pos += stride) >= c->ledcount)
                 {
                         off++;
@@ -1218,14 +1222,14 @@ static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
                         break;
                 }
 
-				case 8:
-				{
-						double *s = srcbuf;
-						double *d = dstbuf;
-						*d = *s;
-						break;
-				}
-						
+                case 8:
+                {
+                        double *s = srcbuf;
+                        double *d = dstbuf;
+                        *d = *s;
+                        break;
+                }
+
                 default:
                 {
                         NFT_LOG(L_ERROR, "Unsupported component-size: %d",
@@ -1262,6 +1266,7 @@ static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
                                 // ~ char *srcbuf = src->ledbuffer;
                                 // ~ char *dstbuf =
                                 // dst->ledbuffer+led_pixel_format_get_component_offset(dst->format, 
+                                // 
                                 // 
                                 // 
                                 // 
