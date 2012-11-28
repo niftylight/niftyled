@@ -127,7 +127,7 @@ Relation *relation_first(Relation * r)
 
         /* take the shortcut? */
         if(r->parent)
-				/* first child of parent == head of this list */
+                /* first child of parent == head of this list */
                 return r->parent->child;
 
         Relation *first;
@@ -220,8 +220,7 @@ NftResult relation_append(Relation * p, Relation * s)
 NftResult relation_append_child(Relation * p, Relation * c)
 {
         if(!p)
-                NFT_LOG_NULL(NFT_FAILURE;
-                )
+                NFT_LOG_NULL(NFT_FAILURE;)
                 /* do we have a child, yet? */
         Relation *child;
         if(!(child = p->child))
