@@ -59,7 +59,7 @@
 #ifdef HAVE_THREADS
 #ifdef THREAD_MODEL_POSIX
 #include <pthread.h>
-#elif defined(THREAD_MODEL_GTHREAD2) /* !THREAD_MODEL_POSIX */
+#elif defined(THREAD_MODEL_GTHREAD2)    /* !THREAD_MODEL_POSIX */
 #include <glib/gthread.h>
 #else /* !THREAD_MODEL_GTHREAD2 */
 
@@ -72,17 +72,17 @@
  * The Mutex data structure and the Mutex subsystem is a wrapper system for native
  * thread locking implementations.
  */
-struct _Mutex 
+struct _Mutex
 {
 #ifdef HAVE_THREADS
 #ifdef THREAD_MODEL_POSIX
-	pthread_mutex_t mutex;
-#elif defined(THREAD_MODEL_WIN32) /* !THREAD_MODEL_POSIX */
+        pthread_mutex_t mutex;
+#elif defined(THREAD_MODEL_WIN32)       /* !THREAD_MODEL_POSIX */
 
-#elif defined(THREAD_MODEL_GTHREAD) /* !THREAD_MODEL_WIN32 */
-	GMutex *mutex;
-	GStaticMutex static_mutex;
-	int static_mutex_used;
+#elif defined(THREAD_MODEL_GTHREAD)     /* !THREAD_MODEL_WIN32 */
+        GMutex *mutex;
+        GStaticMutex static_mutex;
+        int static_mutex_used;
 #endif
 #endif /* HAVE_THREADS */
 };
@@ -102,23 +102,23 @@ struct _Mutex
  */
 Mutex *thread_mutex_new(void)
 {
-		Mutex *r;
-		if(!(r = calloc(1, sizeof(Mutex))))
-		{
-				NFT_LOG_PERROR("calloc");
-				return NULL;
-		}
+        Mutex *r;
+        if(!(r = calloc(1, sizeof(Mutex))))
+        {
+                NFT_LOG_PERROR("calloc");
+                return NULL;
+        }
 
 #if defined(THREAD_MODEL_POSIX)
-		if(pthread_mutex_init(&r->mutex, NULL) != 0)
-		{
-				NFT_LOG_PERROR("failed to init mutex");
-				free(r);
-				return NULL;
-		}
+        if(pthread_mutex_init(&r->mutex, NULL) != 0)
+        {
+                NFT_LOG_PERROR("failed to init mutex");
+                free(r);
+                return NULL;
+        }
 #endif
-		
-		return r;
+
+        return r;
 }
 
 
@@ -132,44 +132,44 @@ Mutex *thread_mutex_new(void)
 NftResult thread_mutex_free(Mutex * mutex)
 {
 
-		thread_mutex_unlock(mutex);
+        thread_mutex_unlock(mutex);
 
 #if defined(THREAD_MODEL_POSIX)
-		pthread_mutex_destroy(&mutex->mutex);
+        pthread_mutex_destroy(&mutex->mutex);
 #endif
 
-		
-		free(mutex);
-		
-		return NFT_SUCCESS;
+
+        free(mutex);
+
+        return NFT_SUCCESS;
 }
 
 
 /**
  * lock mutex
  */
-NftResult thread_mutex_lock (Mutex *mutex)
+NftResult thread_mutex_lock(Mutex * mutex)
 {
 
 #if defined(THREAD_MODEL_POSIX)
-	if (pthread_mutex_lock(&mutex->mutex) < 0)
-		return NFT_FAILURE;
+        if(pthread_mutex_lock(&mutex->mutex) < 0)
+                return NFT_FAILURE;
 #endif
-		
-	return NFT_SUCCESS;
+
+        return NFT_SUCCESS;
 }
 
 
 /**
  * unlock mutex
  */
-NftResult thread_mutex_unlock(Mutex *mutex)
+NftResult thread_mutex_unlock(Mutex * mutex)
 {
 
 #if defined(THREAD_MODEL_POSIX)
-	if (pthread_mutex_unlock (&mutex->mutex) < 0)
-		return NFT_FAILURE;
+        if(pthread_mutex_unlock(&mutex->mutex) < 0)
+                return NFT_FAILURE;
 #endif
-	
-	return NFT_SUCCESS;
+
+        return NFT_SUCCESS;
 }

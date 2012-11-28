@@ -170,8 +170,8 @@ struct _LedHardware
             /** advance this many LEDs to reach the next LED when sending */
                 LedCount stride;
         } params;
-		/** mutex to lock plugin interaction */
-		Mutex *mutex;
+                /** mutex to lock plugin interaction */
+        Mutex *mutex;
 };
 
 
@@ -424,42 +424,43 @@ LedHardware *led_hardware_new(const char *name, const char *plugin_name)
                 "Trying to create new hardware \"%s\" (plugin: \"%s\")", name,
                 plugin_name);
 
-				
+
         LedHardware *h;
         if(!(h = _load_plugin(name, plugin_name)))
                 return NULL;
 
-		/* allocate mutex */
-		if(!(h->mutex = thread_mutex_new()))
-		{
-				_unload_plugin(h);
-				return NULL;
-		}
-		
+        /* allocate mutex */
+        if(!(h->mutex = thread_mutex_new()))
+        {
+                _unload_plugin(h);
+                return NULL;
+        }
+
         NFT_LOG(L_DEBUG, "Loaded new plugin instance \"%s\"", h->params.name);
 
         /* print info about loaded plugin */
         led_hardware_plugin_print(h->plugin, L_INFO);
 
 
-		
+
         /* initialize plugin */
         if(LED_HARDWARE_PLUGIN_HAS_FUNC(h, plugin_init))
         {
-				/* lock */
-				if(!thread_mutex_lock(h->mutex))
-				{
-						goto _lhn_plugin_fail;
-				}
+                /* lock */
+                if(!thread_mutex_lock(h->mutex))
+                {
+                        goto _lhn_plugin_fail;
+                }
 
-				NftResult r = h->plugin->plugin_init(&(h->plugin_privdata), h);
+                NftResult r =
+                        h->plugin->plugin_init(&(h->plugin_privdata), h);
 
-				/* unlock */
-				if(!thread_mutex_unlock(h->mutex))
-				{
-						goto _lhn_plugin_fail;
-				}
-				
+                /* unlock */
+                if(!thread_mutex_unlock(h->mutex))
+                {
+                        goto _lhn_plugin_fail;
+                }
+
                 if(!r)
                 {
                         NFT_LOG(L_ERROR,
@@ -468,7 +469,7 @@ LedHardware *led_hardware_new(const char *name, const char *plugin_name)
                 }
         }
 
-		
+
         /* register to current LedConfCtxt */
         // ~ if(!led_settings_hardware_register(h))
         // ~ {
@@ -477,10 +478,10 @@ LedHardware *led_hardware_new(const char *name, const char *plugin_name)
         // ~ }
 
         return h;
-		
+
 _lhn_plugin_fail:
-		_unload_plugin(h);
-		return NULL;
+        _unload_plugin(h);
+        return NULL;
 }
 
 
@@ -522,21 +523,21 @@ void led_hardware_destroy(LedHardware * h)
         /* destroy chain */
         chain_destroy(h->chain);
 
-		/* lock */
-		thread_mutex_lock(h->mutex);
-		
+        /* lock */
+        thread_mutex_lock(h->mutex);
+
         /* plugin deinitialize */
         if(LED_HARDWARE_PLUGIN_HAS_FUNC(h, plugin_deinit))
         {
                 h->plugin->plugin_deinit(h->plugin_privdata);
         }
-		
-		/* deallocate mutex */
-		thread_mutex_free(h->mutex);
-		
+
+        /* deallocate mutex */
+        thread_mutex_free(h->mutex);
+
         /* unload plugin */
         _unload_plugin(h);
-		
+
         /* free descriptor */
         free(h);
 }
@@ -620,17 +621,17 @@ NftResult led_hardware_init(LedHardware * h, const char *id,
         /* no init function */
         if(LED_HARDWARE_PLUGIN_HAS_FUNC(h, hw_init))
         {
-				/* lock */
-				if(!thread_mutex_lock(h->mutex))
-						return NFT_FAILURE;
-				
-                /* initialize */
-				NftResult r = h->plugin->hw_init(h->plugin_privdata, id);
+                /* lock */
+                if(!thread_mutex_lock(h->mutex))
+                        return NFT_FAILURE;
 
-				/* unlock */
-				if(!thread_mutex_unlock(h->mutex))
-						return NFT_FAILURE;
-				
+                /* initialize */
+                NftResult r = h->plugin->hw_init(h->plugin_privdata, id);
+
+                /* unlock */
+                if(!thread_mutex_unlock(h->mutex))
+                        return NFT_FAILURE;
+
                 if(!r)
                 {
                         NFT_LOG(L_ERROR, "Failed to initialize hardware");
@@ -693,15 +694,15 @@ void led_hardware_deinit(LedHardware * h)
         NFT_LOG(L_DEBUG, "Deinitializing \"%s\" (%s)", h->params.name,
                 h->params.id);
         if(LED_HARDWARE_PLUGIN_HAS_FUNC(h, hw_deinit))
-		{
-				/* lock */
-				thread_mutex_lock(h->mutex);
-				
+        {
+                /* lock */
+                thread_mutex_lock(h->mutex);
+
                 h->plugin->hw_deinit(h->plugin_privdata);
 
-				/* unlock */
-				thread_mutex_unlock(h->mutex);
-		}
+                /* unlock */
+                thread_mutex_unlock(h->mutex);
+        }
 
         /* mark hardware as "deinitialized" */
         h->params.initialized = false;
@@ -745,10 +746,10 @@ const char *led_hardware_get_id(LedHardware * h)
         if(!LED_HARDWARE_PLUGIN_HAS_FUNC(h, get))
                 return h->params.id;
 
-		/* lock */
-		if(!thread_mutex_lock(h->mutex))
-				return NULL;
-		
+        /* lock */
+        if(!thread_mutex_lock(h->mutex))
+                return NULL;
+
         /* get operation */
         LedPluginParamData get_id;
         if(h->plugin->get(h->plugin_privdata, LED_HW_ID, &get_id))
@@ -761,9 +762,9 @@ const char *led_hardware_get_id(LedHardware * h)
         else
                 NFT_LOG(L_WARNING, "Plugin failed to deliver an id.");
 
-		/* unlock */
-		if(!thread_mutex_unlock(h->mutex))
-				return NULL;
+        /* unlock */
+        if(!thread_mutex_unlock(h->mutex))
+                return NULL;
 
         return h->params.id;
 }
@@ -791,19 +792,20 @@ NftResult led_hardware_set_id(LedHardware * h, const char *id)
                 /* does plugin provide operations? */
                 if(LED_HARDWARE_PLUGIN_HAS_FUNC(h, set))
                 {
-						/* lock */
-						if(!thread_mutex_lock(h->mutex))
-								return NFT_FAILURE;
-						
+                        /* lock */
+                        if(!thread_mutex_lock(h->mutex))
+                                return NFT_FAILURE;
+
                         /* set id operation */
                         LedPluginParamData set_id = {.id = id };
-						NftResult r = h->plugin->set(h->plugin_privdata, LED_HW_ID,
-                                           &set_id);
+                        NftResult r =
+                                h->plugin->set(h->plugin_privdata, LED_HW_ID,
+                                               &set_id);
 
-						/* unlock */
-						if(!thread_mutex_unlock(h->mutex))
-								return NFT_FAILURE;
-						
+                        /* unlock */
+                        if(!thread_mutex_unlock(h->mutex))
+                                return NFT_FAILURE;
+
                         if(!r)
                         {
                                 NFT_LOG(L_ERROR,
@@ -1011,16 +1013,17 @@ NftResult led_hardware_set_ledcount(LedHardware * h, LedCount leds)
         {
                 /* set operation */
                 if(LED_HARDWARE_PLUGIN_HAS_FUNC(h, set))
-                {						
+                {
                         LedPluginParamData set_ledcount = {.ledcount = leds };
-						NftResult r = h->
-                            plugin->set(h->plugin_privdata, LED_HW_LEDCOUNT,
-                                        &set_ledcount);
+                        NftResult r =
+                                h->plugin->set(h->plugin_privdata,
+                                               LED_HW_LEDCOUNT,
+                                               &set_ledcount);
 
-						/* unlock */
-						if(!thread_mutex_unlock(h->mutex))
-								return NFT_FAILURE;
-	
+                        /* unlock */
+                        if(!thread_mutex_unlock(h->mutex))
+                                return NFT_FAILURE;
+
                         if(!r)
                         {
                                 NFT_LOG(L_ERROR,
@@ -1070,18 +1073,19 @@ LedCount led_hardware_get_ledcount(LedHardware * h)
                 return ledcount;
         }
 
-		/* lock */
-		if(!thread_mutex_lock(h->mutex))
-				return ledcount;
+        /* lock */
+        if(!thread_mutex_lock(h->mutex))
+                return ledcount;
 
         LedPluginParamData get_ledcount;
-		NftResult r = h->
-            plugin->get(h->plugin_privdata, LED_HW_LEDCOUNT, &get_ledcount);
+        NftResult r =
+                h->plugin->get(h->plugin_privdata, LED_HW_LEDCOUNT,
+                               &get_ledcount);
 
-		/* unlock */
-		if(!thread_mutex_unlock(h->mutex))
-				return ledcount;
-		
+        /* unlock */
+        if(!thread_mutex_unlock(h->mutex))
+                return ledcount;
+
         if(!r)
         {
                 NFT_LOG(L_WARNING,
@@ -1176,17 +1180,18 @@ NftResult led_hardware_set_gain(LedHardware * h, LedCount pos, LedGain gain)
                 return NFT_SUCCESS;
         }
 
-		/* lock */
-		if(!thread_mutex_lock(h->mutex))
-				return NFT_FAILURE;
-		
-        LedPluginParamData set_gain = {.gain.pos = pos,.gain.value = gain };
-		NftResult r = h->plugin->set(h->plugin_privdata, LED_HW_GAIN, &set_gain);
+        /* lock */
+        if(!thread_mutex_lock(h->mutex))
+                return NFT_FAILURE;
 
-		/* unlock */
-		if(!thread_mutex_unlock(h->mutex))
-				return NFT_FAILURE;
-		
+        LedPluginParamData set_gain = {.gain.pos = pos,.gain.value = gain };
+        NftResult r =
+                h->plugin->set(h->plugin_privdata, LED_HW_GAIN, &set_gain);
+
+        /* unlock */
+        if(!thread_mutex_unlock(h->mutex))
+                return NFT_FAILURE;
+
         if(!r)
         {
                 NFT_LOG(L_ERROR,
@@ -1223,17 +1228,18 @@ LedGain led_hardware_get_gain(LedHardware * h, LedCount pos)
                 return 0;
         }
 
-		/* lock */
-		if(!thread_mutex_lock(h->mutex))
-				return NFT_FAILURE;
-		
-        LedPluginParamData get_gain = {.gain.pos = pos };
-		NftResult r = h->plugin->get(h->plugin_privdata, LED_HW_GAIN, &get_gain);
+        /* lock */
+        if(!thread_mutex_lock(h->mutex))
+                return NFT_FAILURE;
 
-		/* unlock */
-		if(!thread_mutex_unlock(h->mutex))
-				return NFT_FAILURE;
-		
+        LedPluginParamData get_gain = {.gain.pos = pos };
+        NftResult r =
+                h->plugin->get(h->plugin_privdata, LED_HW_GAIN, &get_gain);
+
+        /* unlock */
+        if(!thread_mutex_unlock(h->mutex))
+                return NFT_FAILURE;
+
         if(!r)
         {
                 NFT_LOG(L_ERROR,
@@ -1725,10 +1731,10 @@ NftResult led_hardware_refresh_mapping(LedHardware * h)
                 return NFT_FAILURE;
         }
 
-		/* lock */
-		if(!thread_mutex_lock(h->mutex))
-				return NFT_FAILURE;
-		
+        /* lock */
+        if(!thread_mutex_lock(h->mutex))
+                return NFT_FAILURE;
+
         /* map tiles to chain */
         LedTile *t;
         LedCount mapped = 0;
@@ -1741,20 +1747,20 @@ NftResult led_hardware_refresh_mapping(LedHardware * h)
                         NFT_LOG(L_WARNING,
                                 "Failed to map hardware-tile(s) to hardware-chain");
 
-						/* unlock */
-						if(!thread_mutex_unlock(h->mutex))
-								return NFT_FAILURE;
-						
+                        /* unlock */
+                        if(!thread_mutex_unlock(h->mutex))
+                                return NFT_FAILURE;
+
                         return NFT_SUCCESS;
                 }
 
                 mapped += res;
         }
 
-		/* unlock */
-		if(!thread_mutex_unlock(h->mutex))
-				return NFT_FAILURE;
-		
+        /* unlock */
+        if(!thread_mutex_unlock(h->mutex))
+                return NFT_FAILURE;
+
         if(mapped != led_hardware_get_ledcount(h))
         {
                 NFT_LOG(L_WARNING,
@@ -1767,7 +1773,7 @@ NftResult led_hardware_refresh_mapping(LedHardware * h)
                              led_hardware_get_stride(h), 0);
 
 
-		
+
         /* output mapped raw chain (for debugging) */
         led_chain_print(h->chain, L_NOISY);
 
@@ -1881,16 +1887,16 @@ NftResult led_hardware_show(LedHardware * h)
                 return NFT_SUCCESS;
         }
 
-		/* lock */
-		if(!thread_mutex_lock(h->mutex))
-				return NFT_FAILURE;
+        /* lock */
+        if(!thread_mutex_lock(h->mutex))
+                return NFT_FAILURE;
 
-		NftResult r = h->plugin->show(h->plugin_privdata);
+        NftResult r = h->plugin->show(h->plugin_privdata);
 
-		/* unlock */
-		if(!thread_mutex_unlock(h->mutex))
-				return NFT_FAILURE;
-		
+        /* unlock */
+        if(!thread_mutex_unlock(h->mutex))
+                return NFT_FAILURE;
+
         if(!r)
         {
                 NFT_LOG(L_ERROR, "Error while latching %s", h->params.name);
@@ -1963,17 +1969,17 @@ NftResult led_hardware_send(LedHardware * h)
         NFT_LOG(L_DEBUG, "Sending %d LEDs to %s",
                 led_chain_get_ledcount(h->chain), h->params.name);
 
-		/* lock */
-		if(!thread_mutex_lock(h->mutex))
-				return NFT_FAILURE;
+        /* lock */
+        if(!thread_mutex_lock(h->mutex))
+                return NFT_FAILURE;
 
-		NftResult r = h->plugin->send(h->plugin_privdata, h->chain,
-                            led_chain_get_ledcount(h->chain), 0);
+        NftResult r = h->plugin->send(h->plugin_privdata, h->chain,
+                                      led_chain_get_ledcount(h->chain), 0);
 
-		/* unlock */
-		if(!thread_mutex_unlock(h->mutex))
-				return NFT_FAILURE;
-		
+        /* unlock */
+        if(!thread_mutex_unlock(h->mutex))
+                return NFT_FAILURE;
+
         if(!r)
         {
                 NFT_LOG(L_ERROR, "Error while sending to %s", h->params.name);
@@ -2483,8 +2489,8 @@ NftResult led_hardware_plugin_prop_get_string(LedHardware * h,
                 .custom.type = LED_HW_CUSTOM_PROP_STRING,
         };
 
-        if(h->
-           plugin->get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
+        if(h->plugin->
+           get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
         {
                 /* buffer id from hardware */
                 NFT_LOG(L_DEBUG, "Got \"%s\"=\"%s\" from %s",
@@ -2545,8 +2551,8 @@ NftResult led_hardware_plugin_prop_get_int(LedHardware * h,
                 .custom.type = LED_HW_CUSTOM_PROP_INT,
         };
 
-        if(h->
-           plugin->get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
+        if(h->plugin->
+           get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
         {
                 /* buffer id from hardware */
                 NFT_LOG(L_DEBUG, "Got \"%s\"=\"%d\" from %s",
@@ -2606,8 +2612,8 @@ NftResult led_hardware_plugin_prop_get_float(LedHardware * h,
                 .custom.type = LED_HW_CUSTOM_PROP_FLOAT,
         };
 
-        if(h->
-           plugin->get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
+        if(h->plugin->
+           get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
         {
                 /* buffer id from hardware */
                 NFT_LOG(L_DEBUG, "Got \"%s\"=\"%f\" from %s",

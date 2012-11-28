@@ -220,8 +220,9 @@ NftResult relation_append(Relation * p, Relation * s)
 NftResult relation_append_child(Relation * p, Relation * c)
 {
         if(!p)
-                NFT_LOG_NULL(NFT_FAILURE;)
-                /* do we have a child, yet? */
+                NFT_LOG_NULL(NFT_FAILURE);
+
+        /* do we have a child, yet? */
         Relation *child;
         if(!(child = p->child))
         {
@@ -231,8 +232,12 @@ NftResult relation_append_child(Relation * p, Relation * c)
         /* append to last sibling of child */
         else
         {
-                return relation_append(child, c);
+                if(!relation_append(child, c))
+                        return NFT_FAILURE;
         }
+
+        /* set parent */
+        c->parent = p;
 
         return NFT_SUCCESS;
 }
@@ -263,6 +268,8 @@ void relation_unlink(Relation * r)
                         r->parent->child = r->next;
         }
 
+        /* clear structure */
+        memset(r, 0, sizeof(Relation));
 }
 
 
@@ -297,9 +304,11 @@ NftResult relation_foreach(Relation * r,
         if(!r || !func)
                 NFT_LOG_NULL(NFT_FAILURE);
 
-        Relation *t;
-        for(t = r; t; t = relation_next(t))
+        Relation *t, *tmp;
+        for(t = r; t; t = tmp)
         {
+                tmp = relation_next(t);
+
                 if(!func(t, userptr))
                         return NFT_FAILURE;
         }

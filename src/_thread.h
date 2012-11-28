@@ -57,14 +57,14 @@
 
 
 /** mutex to synchronize data between threads */
-typedef struct _Mutex Mutex;
+typedef struct _Mutex           Mutex;
 
 
 
 Mutex                          *thread_mutex_new(void);
 NftResult                       thread_mutex_free(Mutex * mutex);
-NftResult						thread_mutex_lock(Mutex * mutex);
-NftResult						thread_mutex_unlock(Mutex * mutex);
+NftResult                       thread_mutex_lock(Mutex * mutex);
+NftResult                       thread_mutex_unlock(Mutex * mutex);
 
 
 

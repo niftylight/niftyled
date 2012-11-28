@@ -1126,9 +1126,11 @@ LedCount led_tile_to_chain(LedTile * m, LedChain * dst, LedCount offset)
                 LedCount *total;
                 LedChain *dst;
                 LedCount *offset;
-        } desc =
+        }
+        desc =
         {
         .total = &leds_total,.dst = dst,.offset = &offset};
+
         TILE_FOREACH(TILE_CHILD(m), _to_chain, &desc);
 
         /* if there's a chain in this tile, process it */
