@@ -93,7 +93,7 @@ static LedTile *_create_subsubmodule(LedPrefs *c, LedFrameCord x, LedFrameCord y
 
 int main(int argc, char *argv[])
 {
-		int result = -1;
+		int result;
 		LedPrefs *conf = NULL;
 		LedTile *m = NULL;
 		LedTile *msub1 = NULL;
@@ -104,9 +104,11 @@ int main(int argc, char *argv[])
 		/* check library version */
 		NFT_LED_CHECK_VERSION
 
-				/* set maximum verbosity */
-				nft_log_level_set(L_NOISY);
+		/* set maximum verbosity */
+		nft_log_level_set(L_NOISY);
 
+                /* initial returncode */
+                result = -1;
 
 		/* create new config */
 		if(!(conf = led_prefs_init()))
@@ -192,7 +194,7 @@ int main(int argc, char *argv[])
 				goto m_deinit;
 
 		/* dump node to file */
-		if(!(led_prefs_node_to_file(n, "-", false)))
+		if(!(led_prefs_node_to_file(n, "test.xml", false)))
 				goto m_deinit;
 
 		/* free node */
