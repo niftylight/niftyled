@@ -42,4 +42,4 @@ ledset_LDADD = \
 	$(babl_LIBS)
 
 ledset_LDFLAGS = \
-	-Wall -no-undefined
+	-Wall -no-undefined -pthread

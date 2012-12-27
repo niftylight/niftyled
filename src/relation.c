@@ -302,7 +302,7 @@ NftResult relation_foreach(Relation * r,
                            void *userptr)
 {
         if(!r || !func)
-                NFT_LOG_NULL(NFT_FAILURE);
+                return NFT_FAILURE;
 
         Relation *t, *tmp;
         for(t = r; t; t = tmp)

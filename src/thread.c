@@ -47,6 +47,7 @@
 
 
 #include <stdlib.h>
+#include <stdbool.h>
 #include <niftylog.h>
 #include "_thread.h"
 
@@ -65,7 +66,28 @@
 
 
 #endif
-#endif /* VISUAL_HAVE_THREADS */
+#endif /* HAVE_THREADS */
+
+
+
+
+/**
+ * The Thread data structure and the Thread subsystem is a wrapper system for native
+ * threading implementations.
+ */
+struct _Thread 
+{
+#ifdef HAVE_THREADS
+#ifdef THREAD_MODEL_POSIX
+	pthread_t thread;		/**< Private used for the pthread implementation. */
+#elif defined(THREAD_MODEL_WIN32) /* !THREAD_MODEL_POSIX */
+	HANDLE thread;
+	DWORD threadId;
+#elif defined(THREAD_MODEL_GTHREAD) /* !THREAD_MODEL_WIN32 */
+	GThread *thread;
+#endif
+#endif /* HAVE_THREADS */
+};
 
 
 /**
@@ -90,6 +112,72 @@ struct _Mutex
 
 
 
+
+Thread *thread_create(ThreadFunc func, void *data, bool joinable)
+{
+	Thread *thread = NULL;
+
+	if(!(thread = calloc(0, sizeof(Thread))))
+	{
+			NFT_LOG_PERROR("calloc");
+			return NULL;
+	}
+		
+#if defined(THREAD_MODEL_POSIX)
+	pthread_attr_t attr;
+	int res;
+
+	pthread_attr_init(&attr);
+
+	if(joinable)
+		pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_JOINABLE);
+	else
+		pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED);
+
+	res = pthread_create (&thread->thread, &attr, func, data);
+		
+	pthread_attr_destroy (&attr);
+
+	if(res != 0) 
+	{
+		NFT_LOG(L_ERROR, "Error while creating thread");
+		free(thread);
+		return NULL;
+	}
+
+#endif
+		
+	return thread;
+}
+
+
+void thread_free(Thread *thread)
+{
+	return free(thread);
+}
+
+
+void *thread_join(Thread *thread)
+{
+	void *result = NULL;
+
+#if defined(THREAD_MODEL_POSIX)
+	if(pthread_join (thread->thread, &result) < 0) 
+	{
+		NFT_LOG(L_ERROR, "Error while joining thread");
+		return NULL;
+	}
+#endif
+
+	return result;
+}
+
+void thread_exit(void *retval)
+{
+#if defined(THREAD_MODEL_POSIX)
+	pthread_exit (retval);
+#endif
+}
 
 
 /**
