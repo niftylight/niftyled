@@ -36,6 +36,7 @@ lib@PACKAGE@_la_CFLAGS = \
 lib@PACKAGE@_la_LDFLAGS = \
 	-version-info @PACKAGE_API_CURRENT@:@PACKAGE_API_REVISION@:@PACKAGE_API_AGE@ \
 	-release @PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ \
+	-pthread \
 	$(COMMON_LDFLAGS_N) \
 	$(niftylog_LIBS) \
 	$(niftyprefs_LIBS) \
