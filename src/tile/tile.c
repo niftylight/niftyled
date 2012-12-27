@@ -518,8 +518,9 @@ LedTile *led_tile_dup(LedTile * m)
         memcpy(r, m, sizeof(LedTile));
 
         /* clear fields we don't want to duplicate */
+        relation_clear(RELATION(r));
         r->parent_hw = NULL;
-
+        
         /* copy chain */
         LedChain *c;
         if((c = led_tile_get_chain(m)))
@@ -529,8 +530,12 @@ LedTile *led_tile_dup(LedTile * m)
         }
 
         /* copy children */
-        if(!TILE_FOREACH(TILE_CHILD(m), _append_child, r))
-                goto _lmd_error;
+        LedTile *child;
+        if((child = TILE_CHILD(m)))
+        {
+                if(!TILE_FOREACH(child, _append_child, r))
+                        goto _lmd_error;
+        }
 
         return r;
 
