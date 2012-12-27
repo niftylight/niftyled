@@ -15,7 +15,10 @@ SUBDIRS = \
 	setup \
 	tile
 
-EXTRA_DIST = Makefile.global.am
+EXTRA_DIST = \
+	_relation.h \
+	_thread.h \
+	Makefile.global.am
 
 
 # target library

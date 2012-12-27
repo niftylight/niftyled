@@ -2,6 +2,9 @@
 # libniftyled Makefile.am
 # v0.4 - Daniel Hiepler <daniel@niftylight.de>
 
+EXTRA_DIST = \
+	tests.env
+
 INCLUDE_DIRS = \
 	-I$(top_srcdir)/include \
 	-I$(top_builddir)/include \
@@ -30,6 +33,7 @@ TESTLDADD = \
 
 check_PROGRAMS = mapping
 TESTS = $(check_PROGRAMS)
+TESTS_ENVIRONMENT = $(srcdir)/tests.env
 
 
 mapping_SOURCES = mapping.c
