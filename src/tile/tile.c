@@ -520,7 +520,7 @@ LedTile *led_tile_dup(LedTile * m)
         /* clear fields we don't want to duplicate */
         relation_clear(RELATION(r));
         r->parent_hw = NULL;
-        
+
         /* copy chain */
         LedChain *c;
         if((c = led_tile_get_chain(m)))
