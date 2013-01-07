@@ -8,6 +8,7 @@ include Makefile.global.am
 
 # module-subdirs to include
 SUBDIRS = \
+        util \
 	chain \
 	frame \
 	hardware \
@@ -16,8 +17,6 @@ SUBDIRS = \
 	tile
 
 EXTRA_DIST = \
-	_relation.h \
-	_thread.h \
 	Makefile.global.am
 
 
@@ -26,9 +25,8 @@ lib_LTLIBRARIES = lib@PACKAGE@.la
 
 # sources
 lib@PACKAGE@_la_SOURCES = \
-	thread.c \
-	version.c \
-	relation.c
+	version.c
+	
 
 # cflags
 lib@PACKAGE@_la_CFLAGS = \
@@ -50,6 +48,7 @@ lib@PACKAGE@_la_LIBADD = \
 	$(SUBDIRS) \
 	$(niftyprefs_LIBS) \
 	$(babl_LIBS) \
+        util/libutil.la \
 	chain/libchain.la \
 	frame/libframe.la \
 	hardware/libhardware.la \
