@@ -15,8 +15,9 @@ endif
 
 # include dirs
 INCLUDE_DIRS = \
-		-I$(top_srcdir)/include \
+	-I$(top_srcdir)/include \
         -I$(top_srcdir)/src \
+        -I$(top_srcdir)/src/util \
         -I$(top_srcdir)/src/chain \
         -I$(top_srcdir)/src/frame \
         -I$(top_srcdir)/src/hardware \

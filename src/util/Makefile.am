@@ -6,17 +6,16 @@
 include $(top_srcdir)/src/Makefile.global.am
 
 EXTRA_DIST = \
-	_thread.h \
-	_relation.h
-
+        _relation.h \
+        _thread.h
 
 # targets
 noinst_LTLIBRARIES = libutil.la
 
 # sources
 libutil_la_SOURCES = \
-	thread.c \
-	relation.c
+	relation.c \
+        thread.c
 
 # cflags
 libutil_la_CFLAGS = \

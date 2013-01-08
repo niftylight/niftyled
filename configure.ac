@@ -142,6 +142,7 @@ AC_CONFIG_FILES([
 	include/niftyled-version.h \
 	src/version.c \
 	src/Makefile \
+        src/util/Makefile \
 	src/chain/Makefile \
 	src/frame/Makefile \
 	src/hardware/Makefile \

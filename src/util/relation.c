@@ -248,7 +248,7 @@ NftResult relation_append_child(Relation * p, Relation * c)
  *
  * @param r relation to clear
  */
-void relation_clear(Relation *r)
+void relation_clear(Relation * r)
 {
         if(!r)
                 NFT_LOG_NULL();
@@ -284,7 +284,7 @@ void relation_unlink(Relation * r)
 
         /* clear structure */
         relation_clear(r);
-        
+
 }
 
 
