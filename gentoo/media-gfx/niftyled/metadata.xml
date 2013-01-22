@@ -6,7 +6,7 @@
   <email>daniel-gentoo@niftylight.de</email>
 </maintainer>
 <use>
-  <flag name='debug'>Compile for debugging (also modify CFLAGS and FEATURES)</flag>
+  <flag name='debug'>Compile for debugging (don't forget to modify CFLAGS and FEATURES)</flag>
   <flag name='gstreamer'>Add support for using gStreamer to send pixeldata to LED hardware using niftyled</flag>
   <flag name='vlc'>Add support for using VLC to send pixeldata to LED hardware using niftyled</flag>
 </use>
