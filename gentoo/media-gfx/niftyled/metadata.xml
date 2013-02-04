@@ -3,6 +3,7 @@
 <pkgmetadata>
 <herd>niftylight</herd>
 <maintainer>
+  <name>Daniel Hiepler</name>
   <email>daniel-gentoo@niftylight.de</email>
 </maintainer>
 <use>
@@ -10,5 +11,9 @@
   <flag name='gstreamer'>Add support for using gStreamer to send pixeldata to LED hardware using niftyled</flag>
   <flag name='vlc'>Add support for using VLC to send pixeldata to LED hardware using niftyled</flag>
 </use>
-<bugs-to>http://github.com/niftylight/niftyled/issues</bugs-to>
+<upstream>
+  <remote-id type="github">niftylight/niftyled</remote-id>
+  <doc>http://wiki.niftylight.de/libniftyled</doc>
+  <changelog>http://github.com/niftylight/niftyled/commits/master</changelog>
+  <bugs-to>http://github.com/niftylight/niftyled/issues</bugs-to></upstream>
 </pkgmetadata>
