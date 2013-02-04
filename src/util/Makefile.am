@@ -15,7 +15,7 @@ noinst_LTLIBRARIES = libutil.la
 # sources
 libutil_la_SOURCES = \
 	relation.c \
-        thread.c
+	thread.c
 
 # cflags
 libutil_la_CFLAGS = \
