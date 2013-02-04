@@ -1,5 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
+# $Header: $
 
 EAPI=2
 
@@ -24,9 +25,8 @@ RDEPEND="dev-libs/niftylog
 	dev-libs/niftyprefs
 	media-libs/babl"
 
-DEPEND="${RDEPEND} 
+DEPEND="${RDEPEND}
 	virtual/pkgconfig"
-
 
 src_prepare()
 {
@@ -38,14 +38,15 @@ src_unpack()
 	git-2_src_unpack
 }
 
-src_configure() 
+src_configure()
 {
-    econf \
-        $(use_enable debug)
+	econf \
+	    $(use_enable debug)
 }
 
-src_install() {
-    emake DESTDIR="${D}" install || die
+src_install()
+{
+	emake DESTDIR="${D}" install || die
 
-    dodoc NEWS README COPYING AUTHORS ChangeLog
+	dodoc NEWS README AUTHORS ChangeLog
 }
