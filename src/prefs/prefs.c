@@ -328,7 +328,7 @@ NIFTYLED_TYPE led_prefs_type_from_string(const char *name)
         /* we don't need much space */
         char *tmp = alloca(256);
         size_t i;
-        for(i = 0; name[i] && i < 255; i++)
+        for(i = 0; i < 255 && name[i]; i++)
         {
                 tmp[i] = tolower(name[i]);
         }

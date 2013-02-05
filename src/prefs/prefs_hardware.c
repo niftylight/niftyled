@@ -94,7 +94,7 @@
 static NftResult _prefs_from_hardware(NftPrefs * p, NftPrefsNode * n,
                                       void *obj, void *userptr)
 {
-        if(!p || !n | !obj)
+        if(!p || !n || !obj)
                 NFT_LOG_NULL(NFT_FAILURE);
 
         /* hardware "object" */
