@@ -100,15 +100,17 @@ int main(int argc, char *argv[])
 		LedTile *msub2 = NULL;
 		LedChain *cm = NULL;
 
+                /* initial returncode */
+                result = -1;
+
 
 		/* check library version */
 		NFT_LED_CHECK_VERSION
 
 		/* set maximum verbosity */
-		nft_log_level_set(L_NOISY);
+		if(!nft_log_level_set(L_NOISY))
+                        goto m_deinit;
 
-                /* initial returncode */
-                result = -1;
 
 		/* create new config */
 		if(!(conf = led_prefs_init()))

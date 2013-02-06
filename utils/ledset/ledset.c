@@ -196,7 +196,7 @@ static NftResult _parse_args(int argc, char *argv[])
 				/* --pos */
 			case 'P':
 			{
-				if(sscanf(optarg, "%d", (int*) &_c.ledpos) != 1)
+				if(sscanf(optarg, "%32d", (int*) &_c.ledpos) != 1)
 				{
 					NFT_LOG(L_ERROR, "Invalid led position \"%s\" (Use a numerical value)", optarg);
 					return NFT_FAILURE;
@@ -208,9 +208,9 @@ static NftResult _parse_args(int argc, char *argv[])
 			case 'V':
 			{
 #ifdef WIN32
-				if(sscanf(optarg, "%d", &_c.ledval) != 1)
+				if(sscanf(optarg, "%32d", &_c.ledval) != 1)
 #else
-				if(sscanf(optarg, "%Ld", &_c.ledval) != 1)
+				if(sscanf(optarg, "%32Ld", &_c.ledval) != 1)
 #endif
 				{
 					NFT_LOG(L_ERROR, "Invalid greyscale-value \"%s\" (Use a numerical value)", optarg);
@@ -333,7 +333,7 @@ static NftResult _readint(int *i)
 	if(_readstr(tmp, sizeof(tmp)) < 0)
 		return NFT_FAILURE;
 
-	if(sscanf(tmp, "%d", i) != 1)
+	if(sscanf(tmp, "%32d", i) != 1)
 		return NFT_FAILURE;
 
 	return NFT_SUCCESS;
