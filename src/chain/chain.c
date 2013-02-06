@@ -257,6 +257,7 @@ NftResult chain_set_ledcount(LedChain * c, LedCount ledcount)
         {
                 NFT_LOG_PERROR("calloc");
                 free(newbuf);
+                free(mapoffsets);
                 return NFT_FAILURE;
         }
 
