@@ -242,6 +242,7 @@ NftResult chain_set_ledcount(LedChain * c, LedCount ledcount)
         if(!(mapoffsets = calloc(ledcount, sizeof(int))))
         {
                 NFT_LOG_PERROR("malloc");
+                free(newbuf);
                 return NFT_FAILURE;
         }
 
@@ -269,12 +270,14 @@ NftResult chain_set_ledcount(LedChain * c, LedCount ledcount)
         /* free resources */
         free(c->ledbuffer);
         free(c->leds);
+        free(c->mapoffsets);
 
         /* replace with resources that were just created */
         c->buffersize = nbufsize;
         c->ledbuffer = newbuf;
         c->leds = newleds;
         c->ledcount = ledcount;
+        c->mapoffsets = mapoffsets;
 
         return NFT_SUCCESS;
 }
