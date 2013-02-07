@@ -238,7 +238,7 @@ NftResult chain_set_ledcount(LedChain * c, LedCount ledcount)
 
 
         /* allocate new mapping buffer */
-        void **mapoffsets;
+        int *mapoffsets;
         if(!(mapoffsets = calloc(ledcount, sizeof(int))))
         {
                 NFT_LOG_PERROR("malloc");
