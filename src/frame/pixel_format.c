@@ -239,11 +239,18 @@ bool led_pixel_format_is_equal(LedPixelFormat * a, LedPixelFormat * b)
  * get amount of bytes per pixel of a format
  *
  * @param f LedPixelFormat descriptor
- * @result amount of bytes per pixel
+ * @result amount of bytes per pixel (or 0)
  */
 size_t led_pixel_format_get_bytes_per_pixel(LedPixelFormat * f)
 {
-        return (size_t) babl_format_get_bytes_per_pixel(f);
+	int b;
+        if((b = babl_format_get_bytes_per_pixel(f)) < 0)
+	{
+		NFT_LOG(L_ERROR, "babl_format_get_bytes_per_pixel() returned negative value");
+		return 0;
+	}
+
+	return (size_t) b;
 }
 
 
@@ -251,11 +258,18 @@ size_t led_pixel_format_get_bytes_per_pixel(LedPixelFormat * f)
  * get amount of components per pixel of a format
  *
  * @param f LedPixelFormat descriptor
- * @result amount of components per pixel
+ * @result amount of components per pixel (or 0)
  */
 size_t led_pixel_format_get_n_components(LedPixelFormat * f)
 {
-        return (size_t) babl_format_get_n_components(f);
+	int c;
+	if((c = babl_format_get_n_components(f)))
+	{
+		NFT_LOG(L_ERROR, "babl_format_get_n_components() returned negative value");
+		return 0;
+	}
+	
+        return (size_t) c;
 }
 
 
@@ -263,11 +277,11 @@ size_t led_pixel_format_get_n_components(LedPixelFormat * f)
  * calculate raw buffer size 
  * @param f LedPixelFormat descriptor
  * @param n amount of pixels
- * @result amount of bytes needed to store n pixels
+ * @result amount of bytes needed to store n pixels (or 0)
  */
 size_t led_pixel_format_get_buffer_size(LedPixelFormat * f, LedFrameCord n)
 {
-        return (size_t) (int) n *babl_format_get_bytes_per_pixel(f);
+        return (size_t) n * led_pixel_format_get_bytes_per_pixel(f);
 }
 
 
@@ -348,7 +362,7 @@ size_t led_pixel_format_get_component_offset(LedPixelFormat * f, size_t n)
                 NFT_LOG_NULL(0);
 
         /* calculate bytes-per-component */
-        int bpc =
+        size_t bpc =
                 led_pixel_format_get_bytes_per_pixel(f) /
                 led_pixel_format_get_n_components(f);
 
@@ -410,7 +424,7 @@ size_t led_pixel_format_get_n_formats()
         struct _foreach_arg arg = { NULL, 0 };
         babl_format_class_for_each(_count_format, &arg);
 
-        return arg.n;
+        return (size_t) arg.n;
 }
 
 

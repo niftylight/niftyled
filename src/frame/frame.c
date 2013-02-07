@@ -124,12 +124,6 @@ LedFrame *led_frame_new(LedFrameCord width, LedFrameCord height,
         /* size of pixelbuffer */
         size_t bufsize =
                 led_pixel_format_get_buffer_size(format, width * height);
-        if(bufsize <= 0)
-        {
-                NFT_LOG(L_ERROR, "Invalid calculated frame buffersize: %d",
-                        bufsize);
-                return NULL;
-        }
 
         /* allocate buffer */
         void *framebuffer;
