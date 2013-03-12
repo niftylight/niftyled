@@ -263,7 +263,7 @@ size_t led_pixel_format_get_bytes_per_pixel(LedPixelFormat * f)
 size_t led_pixel_format_get_n_components(LedPixelFormat * f)
 {
 	int c;
-	if((c = babl_format_get_n_components(f)))
+	if((c = babl_format_get_n_components(f)) < 0)
 	{
 		NFT_LOG(L_ERROR, "babl_format_get_n_components() returned negative value");
 		return 0;
