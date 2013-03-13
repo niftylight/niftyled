@@ -70,18 +70,6 @@
  */
 
 
-
-#ifndef FALSE
-#define FALSE (0)
-#endif
-
-#ifndef TRUE
-#define TRUE (!FALSE)
-#endif
-
-
-
-
 #include <niftylog.h>
 #include <niftyprefs.h>
 #include "nifty-primitives.h"
