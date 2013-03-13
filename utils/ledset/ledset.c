@@ -573,14 +573,14 @@ int main(int argc, char *argv[])
 			}
 
 			/* check if user did count correctly */
-			bool user_can_count = FALSE;
+			bool user_can_count = false;
 			for(l = 0; l < _c.ledcount; l++)
 			{
 				/* find 0 coordinate */
 				if(led_get_x(led_chain_get_nth(chain, l)) == 0 ||
 				   led_get_y(led_chain_get_nth(chain, l)) == 0)
 				{
-					user_can_count = TRUE;
+					user_can_count = true;
 					break;
 				}
 			}
