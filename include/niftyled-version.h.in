@@ -54,6 +54,9 @@
 #include "config.h"
 #endif
 
+#include "nifty-primitives.h"
+
+
 
 /** major version */
 #define NFT_LED_MAJOR_VERSION  (@PACKAGE_MAJOR_VERSION@)
@@ -80,11 +83,11 @@
 
 
 /** macro to check version-compatibility */
-#define NFT_LED_CHECK_VERSION led_version_check(NFT_LED_GIT_VERSION);
+#define NFT_LED_CHECK_VERSION led_version_check(NFT_LED_GIT_VERSION)
 
 
 
-void 		led_version_check(const char *version);
+NftResult	led_version_check(const char *version);
 const char *	led_version_git();
 const char *    led_version_long();
 

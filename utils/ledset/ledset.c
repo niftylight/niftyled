@@ -350,7 +350,8 @@ int main(int argc, char *argv[])
 	nft_log_level_set(L_NOTICE);
 
 	/* check binary version compatibility */
-	NFT_LED_CHECK_VERSION
+	if(!NFT_LED_CHECK_VERSION)
+		return EXIT_FAILURE;
 
 	/* for preferences context */
 	LedPrefs *p = NULL;
@@ -366,14 +367,14 @@ int main(int argc, char *argv[])
 
 	/* default prefs-filename */
 	if(!led_prefs_default_filename(_c.configfile, sizeof(_c.configfile), ".ledset.xml"))
-		return -1;
+		return EXIT_FAILURE;
 
 	/* default output filename (stdout) */
 	strncpy(_c.outputfile, "-", sizeof(_c.outputfile));
 
 	/* parse commandline arguments */
 	if(!_parse_args(argc, argv))
-		return -1;
+		return EXIT_FAILURE;
 
 
 	/* print welcome msg */
@@ -381,6 +382,10 @@ int main(int argc, char *argv[])
 	NFT_LOG(L_VERBOSE, "Loglevel: %s", nft_log_level_to_string(nft_log_level_get()));
 
 
+	/* main return value */
+	int result = EXIT_FAILURE;
+
+	
 	/* initialize settings context */
 	if(!(p = led_prefs_init()))
 		goto m_exit;
@@ -614,7 +619,9 @@ int main(int argc, char *argv[])
 	}
 
 
-
+	/* all fine... */
+	result = EXIT_SUCCESS;
+	
 m_exit:
 	/* destroy setup */
 	led_setup_destroy(s);
@@ -623,5 +630,5 @@ m_exit:
 	led_prefs_deinit(p);
 
 
-	return 0;
+	return result;
 }
