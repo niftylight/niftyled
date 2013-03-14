@@ -58,8 +58,10 @@
 
 /** mutex to synchronize data between threads */
 typedef struct _Mutex           Mutex;
+
 /** thread to wrap different threading mechanisms */
-typedef struct _Thread			Thread;
+typedef struct _Thread          Thread;
+
 /**
  * The function defination for a function that forms the base of a new Thread when
  * thread_create is used.
@@ -70,7 +72,7 @@ typedef struct _Thread			Thread;
  *
  * @return Pointer to the data when a thread is joined.
  */
-typedef void *(*ThreadFunc)(void *data);
+typedef void                   *(*ThreadFunc) (void *data);
 
 
 Mutex                          *thread_mutex_new(void);

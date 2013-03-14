@@ -243,14 +243,15 @@ bool led_pixel_format_is_equal(LedPixelFormat * a, LedPixelFormat * b)
  */
 size_t led_pixel_format_get_bytes_per_pixel(LedPixelFormat * f)
 {
-	int b;
+        int b;
         if((b = babl_format_get_bytes_per_pixel(f)) < 0)
-	{
-		NFT_LOG(L_ERROR, "babl_format_get_bytes_per_pixel() returned negative value");
-		return 0;
-	}
+        {
+                NFT_LOG(L_ERROR,
+                        "babl_format_get_bytes_per_pixel() returned negative value");
+                return 0;
+        }
 
-	return (size_t) b;
+        return (size_t) b;
 }
 
 
@@ -262,13 +263,14 @@ size_t led_pixel_format_get_bytes_per_pixel(LedPixelFormat * f)
  */
 size_t led_pixel_format_get_n_components(LedPixelFormat * f)
 {
-	int c;
-	if((c = babl_format_get_n_components(f)) < 0)
-	{
-		NFT_LOG(L_ERROR, "babl_format_get_n_components() returned negative value");
-		return 0;
-	}
-	
+        int c;
+        if((c = babl_format_get_n_components(f)) < 0)
+        {
+                NFT_LOG(L_ERROR,
+                        "babl_format_get_n_components() returned negative value");
+                return 0;
+        }
+
         return (size_t) c;
 }
 
@@ -281,7 +283,7 @@ size_t led_pixel_format_get_n_components(LedPixelFormat * f)
  */
 size_t led_pixel_format_get_buffer_size(LedPixelFormat * f, LedFrameCord n)
 {
-        return (size_t) n * led_pixel_format_get_bytes_per_pixel(f);
+        return (size_t) n *led_pixel_format_get_bytes_per_pixel(f);
 }
 
 

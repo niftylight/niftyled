@@ -87,9 +87,9 @@
 
 
 
-NftResult	led_version_check(const char *version);
-const char *	led_version_git();
-const char *    led_version_long();
+NftResult                       led_version_check(const char *version);
+const char                     *led_version_git();
+const char                     *led_version_long();
 
 
 #endif /** _LED_VERSION */
@@ -97,4 +97,3 @@ const char *    led_version_long();
 /**
  * @}
  */
- 

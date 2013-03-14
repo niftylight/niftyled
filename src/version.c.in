@@ -66,35 +66,37 @@
  * @note don't call this directly, use the NFT_LED_CHECK_VERSION macro
  * @result NFT_SUCCESS if all checks were passed, NFT_FAILURE otherwise
  */
-NftResult led_version_check(const char* version)
+NftResult led_version_check(const char *version)
 {
-    	/* welcome */
-        NFT_LOG(L_INFO, "%s v%s - %s", PACKAGE_NAME, NFT_LED_LONG_VERSION, PACKAGE_URL);
-    
+        /* welcome */
+        NFT_LOG(L_INFO, "%s v%s - %s", PACKAGE_NAME, NFT_LED_LONG_VERSION,
+                PACKAGE_URL);
+
         /* check version of dependencies */
         if(!NFT_LOG_CHECK_VERSION)
-		return NFT_FAILURE;
+                return NFT_FAILURE;
 
-	if(!NFT_PREFS_CHECK_VERSION)
-		return NFT_FAILURE;
-                
-       	if(strcmp(version, NFT_LED_GIT_VERSION) == 0)
+        if(!NFT_PREFS_CHECK_VERSION)
+                return NFT_FAILURE;
+
+        if(strcmp(version, NFT_LED_GIT_VERSION) == 0)
                 return NFT_SUCCESS;
-        
-        NFT_LOG(L_WARNING, "%s compiled against version %s but currently installed is %s.",
-                PACKAGE_NAME, version, NFT_LED_GIT_VERSION);             
-        
-	return NFT_FAILURE;
+
+        NFT_LOG(L_WARNING,
+                "%s compiled against version %s but currently installed is %s.",
+                PACKAGE_NAME, version, NFT_LED_GIT_VERSION);
+
+        return NFT_FAILURE;
 }
 
 
 /** 
  * return string holding GIT version. This is done to always reflect the correct
  * version by supplying the current git version via the -D compiler option
- */ 
+ */
 const char *led_version_git()
 {
-	return ("@PACKAGE_GIT_VERSION@");
+        return ("@PACKAGE_GIT_VERSION@");
 }
 
 
@@ -103,11 +105,11 @@ const char *led_version_git()
  */
 const char *led_version_long()
 {
-	static char tmp[128];
-    	snprintf(tmp, sizeof(tmp), "%s-%s", 
-	         "@PACKAGE_VERSION@", NFT_LED_GIT_VERSION);
+        static char tmp[128];
+        snprintf(tmp, sizeof(tmp), "%s-%s",
+                 "@PACKAGE_VERSION@", NFT_LED_GIT_VERSION);
 
-    	return tmp;
+        return tmp;
 }
 
 /**
