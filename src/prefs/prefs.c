@@ -164,7 +164,7 @@ NftResult led_prefs_default_filename(char *dst, size_t size,
 {
         /* try to get environment variable */
         char *env;
-        if((env = getenv("NIFTY_PREFS")))
+        if((env = getenv("NFT_SETUP")))
         {
                 strncpy(dst, env, size);
                 return NFT_SUCCESS;
