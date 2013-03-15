@@ -6,15 +6,11 @@ TARGET="i686-pc-mingw32"
 if test "$USER" == "root" ; then 
     echo "Converting pkg-config files in /usr/$TARGET/usr/lib/"
     # convert pkg-config files
-    cd /usr/$TARGET || exit 1
-    for f in ./usr/lib/pkgconfig/*.pc ; do
-        echo $f
-        sed -i "s|^prefix=.*$|prefix=/usr/$TARGET/usr|g" $f || exit 1
-    done
+    find /usr/$TARGET/usr/lib/pkgconfig/ -name '*.pc' -exec "echo {} ; sed -i "s|^prefix=.*$|prefix=/usr/$TARGET/usr|g" {} || exit 1 \;"
     echo "Initialization done. Please don't autogen as root."
     exit
 fi
 
 # autogen
 autoreconf -i
-PATH=".:$PATH" ./configure --prefix=/usr/$TARGET/usr/ --target=$TARGET $*
+PATH=".:$PATH" ./configure --prefix=/usr/$TARGET/usr/ --host=$TARGET $*
