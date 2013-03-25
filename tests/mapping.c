@@ -102,13 +102,15 @@ int main(int argc, char *argv[])
         LedChain *cm = NULL;
 
         /* initial returncode */
-        result = -1;
+        result = EXIT_FAILURE;
 
 
         /* check library version */
-        NFT_LED_CHECK_VERSION
-                /* set maximum verbosity */
-                if(!nft_log_level_set(L_NOISY))
+        if(!NFT_LED_CHECK_VERSION)
+                return EXIT_FAILURE;
+
+        /* set maximum verbosity */
+        if(!nft_log_level_set(L_NOISY))
                 goto m_deinit;
 
 
@@ -207,7 +209,7 @@ int main(int argc, char *argv[])
         // led_prefs_node_free(n);
 
 
-        result = 0;
+        result = EXIT_SUCCESS;
 
 
 
