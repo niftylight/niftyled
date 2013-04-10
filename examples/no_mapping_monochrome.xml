@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+     dummy config that controls 1 unmapped single color LED using
+     brightness values from 0 (LED off) to 255 (full brightness)
+          
+     Note: When using a mapping application (e.g. ledcat), brightness values are 
+     taken from position 0,0 of input pixels.
+     
+-->
+<niftyled>    
+    <hardware name="Example Hardware" plugin="dummy" id="*">
+        <chain ledcount="1" pixel_format="Y u8"/>
+    </hardware>
+</niftyled>

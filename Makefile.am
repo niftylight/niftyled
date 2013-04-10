@@ -8,7 +8,7 @@ ACLOCAL_AMFLAGS = -I m4
 
 
 # subdirs to build
-SUBDIRS = src include utils tests
+SUBDIRS = src include utils examples tests
 
 
 # files to include in archive

@@ -167,6 +167,7 @@ AC_CONFIG_FILES([
 	tests/Makefile \
 	utils/Makefile \
 	utils/ledset/Makefile \
+	examples/Makefile \
 	${PACKAGE}.pc \
 	debian/control.tmpl \
 	gentoo/media-gfx/niftyled/niftyled-9999.ebuild
