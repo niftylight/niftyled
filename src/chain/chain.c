@@ -560,7 +560,8 @@ void led_chain_print(LedChain * c, NftLoglevel l)
                 c->src_format ? led_pixel_format_to_string(c->src_format) :
                 "none", c->buffersize);
 
-        if(nft_log_level_get() <= L_NOISY)
+        /* only print if loglevel is higher than L_DEBUG */
+        if(nft_log_level_is_noisier_than(nft_log_level_get(), L_DEBUG))
         {
 
                 int bpc = led_pixel_format_get_bytes_per_pixel(c->format) /
@@ -1270,6 +1271,7 @@ static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
                                 // ~ char *srcbuf = src->ledbuffer;
                                 // ~ char *dstbuf =
                                 // dst->ledbuffer+led_pixel_format_get_component_offset(dst->format, 
+                                // 
                                 // offset);
                                 // ~ LedCount amount =
                                 // MIN(dst->ledcount-offset, src->ledcount);

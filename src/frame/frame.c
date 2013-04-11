@@ -312,7 +312,7 @@ void led_frame_print_buffer(LedFrame * f)
         if(!f)
                 NFT_LOG_NULL();
 
-        if(nft_log_level_get() > P_LOGLEVEL)
+        if(nft_log_level_is_noisier_than(P_LOGLEVEL, nft_log_level_get()))
                 return;
 
 
