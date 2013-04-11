@@ -4,7 +4,7 @@
      brightness values from 0 (LED off) to 255 (full brightness)
           
      Note: When using a mapping application (e.g. ledcat), brightness values are 
-     taken from position 0,0 of input pixels.
+     taken from position 0,0 of input pixmap.
      
 -->
 <niftyled>    

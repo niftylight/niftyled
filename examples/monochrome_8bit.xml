@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+     dummy config that controls 4 mapped single color LEDs using
+     brightness values from 0 (LED off) to 255 (full brightness)
+          
+     The input pixmap is 8 bit monochrome. Brightness values are 
+     taken from the input pixmap (2x2) like this:
+     
+     LED 0 - x: 0, y:0
+     LED 1 - x: 1, y:0
+     LED 2 - x: 0, y:1
+     LED 3 - x: 1, y:1
+     
+-->
+<niftyled>    
+    <hardware name="Example Hardware" plugin="dummy" id="*">
+        <chain ledcount="4" pixel_format="Y u8"/>
+    </hardware>
+    <tile>
+        <chain ledcount="4" pixel_format="Y u8">
+            <led x="1" y="1" component="0"/>
+            <led x="0" y="1" component="0"/>
+            <led x="1" y="0" component="0"/>
+            <led x="0" y="0" component="0"/>
+        </chain>
+    </tile>
+</niftyled>

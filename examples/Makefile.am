@@ -5,7 +5,9 @@
 examplesdir = $(pkgdatadir)/examples
 
 examples_DATA = \
-	no_mapping_monochrome.xml
+	no_mapping_monochrome_8bit.xml \
+	monochrome_8bit.xml \
+	RGB_16bit.xml
 
 EXTRA_DIST = \
 	$(examples_DATA)

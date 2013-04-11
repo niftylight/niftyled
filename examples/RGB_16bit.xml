@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+     dummy config that controls 9 mapped RGB LEDs (3 pixels) using
+     brightness values from 0 (LED off) to 255 (full brightness)
+          
+     The input pixmap is 16 bit RGB. 16->8 bit conversion happens
+     automatically on the fly. Brightness values are taken from 
+     the input pixmap (3x1) like this:
+     
+     LED 0 (R) - x: 0, y:0
+     LED 1 (G) - x: 0, y:0
+     LED 2 (B) - x: 0, y:0
+     LED 3 (R) - x: 1, y:0
+     LED 4 (G) - x: 1, y:0
+     LED 5 (B) - x: 1, y:0
+     LED 6 (R) - x: 2, y:0
+     LED 7 (G) - x: 2, y:0
+     LED 8 (B) - x: 2, y:0
+     
+-->
+<niftyled>    
+    <hardware name="Example Hardware" plugin="dummy" id="*">
+        <chain ledcount="9" pixel_format="RGB u8"/>
+    </hardware>
+    <tile>
+        <chain ledcount="9" pixel_format="RGB u16">
+            <led x="0" y="0" component="0"/>
+            <led x="0" y="0" component="1"/>
+            <led x="0" y="0" component="2"/>
+            <led x="1" y="0" component="0"/>
+            <led x="1" y="0" component="1"/>
+            <led x="1" y="0" component="2"/>
+			<led x="2" y="0" component="0"/>
+            <led x="2" y="0" component="1"/>
+            <led x="2" y="0" component="2"/>
+        </chain>
+    </tile>
+</niftyled>
