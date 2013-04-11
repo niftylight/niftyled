@@ -1270,25 +1270,6 @@ static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
                                 // ~ char *srcbuf = src->ledbuffer;
                                 // ~ char *dstbuf =
                                 // dst->ledbuffer+led_pixel_format_get_component_offset(dst->format, 
-                                // 
-                                // 
-                                // 
-                                // 
-                                // 
-                                // 
-                                // 
-                                // 
-                                // 
-                                // 
-                                // 
-                                // 
-                                // 
-                                // 
-                                // 
-                                // 
-                                // 
-                                // 
-                                // 
                                 // offset);
                                 // ~ LedCount amount =
                                 // MIN(dst->ledcount-offset, src->ledcount);

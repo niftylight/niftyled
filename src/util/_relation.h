@@ -84,8 +84,8 @@ NftResult                       relation_append(Relation * p, Relation * s);
 NftResult                       relation_append_child(Relation * p, Relation * c);
 void                            relation_unlink(Relation * r);
 int                             relation_sibling_count(Relation * r);
-NftResult                       relation_foreach(Relation * r, NftResult(*func) (Relation * r, void *userptr), void *userptr);
-NftResult                       relation_foreach_recursive(Relation * r, NftResult(*func) (Relation * r, void *userptr));
+NftResult                       relation_foreach(Relation * r, NftResult (*func) (Relation * r, void *userptr), void *userptr);
+NftResult                       relation_foreach_recursive(Relation * r, NftResult (*func) (Relation * r, void *userptr));
 void                            relation_clear(Relation * r);
 
 
