@@ -21,18 +21,18 @@
 <niftyled>    
     <hardware name="Example Hardware" plugin="dummy" id="*">
         <chain ledcount="9" pixel_format="RGB u8"/>
+        <tile>
+            <chain ledcount="9" pixel_format="RGB u16">
+                <led x="0" y="0" component="0"/>
+                <led x="0" y="0" component="1"/>
+                <led x="0" y="0" component="2"/>
+                <led x="1" y="0" component="0"/>
+                <led x="1" y="0" component="1"/>
+                <led x="1" y="0" component="2"/>
+			    <led x="2" y="0" component="0"/>
+                <led x="2" y="0" component="1"/>
+                <led x="2" y="0" component="2"/>
+            </chain>
+        </tile>
     </hardware>
-    <tile>
-        <chain ledcount="9" pixel_format="RGB u16">
-            <led x="0" y="0" component="0"/>
-            <led x="0" y="0" component="1"/>
-            <led x="0" y="0" component="2"/>
-            <led x="1" y="0" component="0"/>
-            <led x="1" y="0" component="1"/>
-            <led x="1" y="0" component="2"/>
-			<led x="2" y="0" component="0"/>
-            <led x="2" y="0" component="1"/>
-            <led x="2" y="0" component="2"/>
-        </chain>
-    </tile>
 </niftyled>

@@ -15,13 +15,13 @@
 <niftyled>    
     <hardware name="Example Hardware" plugin="dummy" id="*">
         <chain ledcount="4" pixel_format="Y u8"/>
+        <tile>
+            <chain ledcount="4" pixel_format="Y u8">
+                <led x="1" y="1" component="0"/>
+                <led x="0" y="1" component="0"/>
+                <led x="1" y="0" component="0"/>
+                <led x="0" y="0" component="0"/>
+            </chain>
+        </tile>
     </hardware>
-    <tile>
-        <chain ledcount="4" pixel_format="Y u8">
-            <led x="1" y="1" component="0"/>
-            <led x="0" y="1" component="0"/>
-            <led x="1" y="0" component="0"/>
-            <led x="0" y="0" component="0"/>
-        </chain>
-    </tile>
 </niftyled>
