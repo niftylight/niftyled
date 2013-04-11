@@ -54,9 +54,9 @@ src_install()
 pkg_postinst()
 {
         echo
-        elog "Sample configs are in /usr/share/${PF}/examples/"
+        elog "Sample configs are in /usr/share/${PN}/examples/"
         elog "Copy config to ~/.ledset.xml or use the -c argument"
         elog "to select a config. For further information,"
-        elog "see documentation at http://wiki.niftylight.de/${PF}"
+        elog "see documentation at http://wiki.niftylight.de/${PN}"
         echo
 }
