@@ -119,7 +119,7 @@
 /** dynamic runtime plugin property */
 struct _LedPluginCustomProp
 {
-                /** relations of this property */
+        /** relations of this property */
         Relation relation;
         /** name of this property */
         char name[64];
@@ -131,14 +131,14 @@ struct _LedPluginCustomProp
 /** model of LED-hardware to interface with LEDs */
 struct _LedHardware
 {
-                /** relations of this hardware (must stay first entry in struct)*/
+        /** relations of this hardware (must stay first entry in struct)*/
         Relation relation;
-                /** chain of this hardware-plugin (holds all currently configured
+        /** chain of this hardware-plugin (holds all currently configured
 			LEDs this plugin can control) */
         LedChain *chain;
-                /** first LedTile registered to this hardware */
+        /** first LedTile registered to this hardware */
         LedTile *first_tile;
-                /** setup of this hardware */
+        /** setup of this hardware */
         LedSetup *setup;
         /** plugin handle as returned by dlopen() */
         void *libhandle;
@@ -146,6 +146,10 @@ struct _LedHardware
         LedHardwarePlugin *plugin;
         /** first runtime registered dynamic plugin property */
         LedPluginCustomProp *first_prop;
+                /** if true, hardware is in initialized state */
+        bool hw_initialized;
+            /** if true, plugin is in initialized state */
+        bool plugin_initialized;
         /**
          * space for private data used by the plugin internally
          * (this is optional and thus may be NULL)
@@ -156,21 +160,19 @@ struct _LedHardware
         /** properties of this hardware */
         struct
         {
-            /** instance name of this hardware */
+                /** instance name of this hardware */
                 char name[1024];
-            /** unique id that defines one out of multiple hardwares of the
-             * same family */
+                /** unique id that defines one out of multiple hardwares of the
+                 *  same family */
                 char id[4096];
-            /** if != false device has been initialized successfully */
-                char initialized;
-            /** amount of LEDs controlled by this hardware (set while hw init) */
+                /** amount of LEDs controlled by this hardware (set while hw init) */
                 LedCount ledcount;
-            /** pixelformat name (set while hw init) */
+                /** pixelformat name (set while hw init) */
                 char pixelformat[1024];
-            /** advance this many LEDs to reach the next LED when sending */
+                /** advance this many LEDs to reach the next LED when sending */
                 LedCount stride;
         } params;
-                /** mutex to lock plugin interaction */
+        /** mutex to lock plugin interaction */
         Mutex *mutex;
 };
 
@@ -469,13 +471,8 @@ LedHardware *led_hardware_new(const char *name, const char *plugin_name)
                 }
         }
 
-
-        /* register to current LedConfCtxt */
-        // ~ if(!led_settings_hardware_register(h))
-        // ~ {
-        // ~ _unload_plugin(h);
-        // ~ return NULL;
-        // ~ }
+        /* mark plugin as "initialized" */
+        h->plugin_initialized = true;
 
         return h;
 
@@ -532,6 +529,9 @@ void led_hardware_destroy(LedHardware * h)
                 h->plugin->plugin_deinit(h->plugin_privdata);
         }
 
+        /* mark plugin as "not initialized" */
+        h->plugin_initialized = false;
+
         /* deallocate mutex */
         thread_mutex_free(h->mutex);
 
@@ -584,7 +584,7 @@ NftResult led_hardware_init(LedHardware * h, const char *id,
                 NFT_LOG_NULL(NFT_FAILURE);
 
         /* hardware already initialized? */
-        if(h->params.initialized)
+        if(h->hw_initialized)
         {
                 NFT_LOG(L_WARNING,
                         "Attempt to initialize already initialized \"%s\" (%s)",
@@ -640,7 +640,7 @@ NftResult led_hardware_init(LedHardware * h, const char *id,
         }
 
         /* mark hardware as "initialized" */
-        h->params.initialized = true;
+        h->hw_initialized = true;
 
         /* ID might have changed after initializing (when using a wildcard id) */
         NFT_LOG(L_INFO, "\t\033[1mHardware ID:\033[0m \"%s\"\n",
@@ -682,7 +682,7 @@ void led_hardware_deinit(LedHardware * h)
         if(!h)
                 NFT_LOG_NULL();
 
-        if(!h->params.initialized)
+        if(!h->hw_initialized)
         {
                 NFT_LOG(L_DEBUG,
                         "Attempt to deinitialize plugin %s - \"%s\" (%s) that wasn't initialized.",
@@ -705,7 +705,7 @@ void led_hardware_deinit(LedHardware * h)
         }
 
         /* mark hardware as "deinitialized" */
-        h->params.initialized = false;
+        h->hw_initialized = false;
 }
 
 
@@ -713,14 +713,14 @@ void led_hardware_deinit(LedHardware * h)
  * Get initialization-state of hardware
  *
  * @param h @ref LedHardware descriptor
- * @result NFT_SUCCESS if hardware was initialized, NFT_FAILURE otherwise
+ * @result true if hardware was initialized, false otherwise
  */
-NftResult led_hardware_is_initialized(LedHardware * h)
+bool led_hardware_is_initialized(LedHardware * h)
 {
-        if(!h || !h->params.initialized)
-                return NFT_FAILURE;
+        if(!h)
+                return false;
 
-        return NFT_SUCCESS;
+        return h->hw_initialized;
 }
 
 
@@ -1096,7 +1096,7 @@ LedCount led_hardware_get_ledcount(LedHardware * h)
         {
                 /* if hardware is initialized already, we might have a problem
                  * now */
-                if(h->params.initialized)
+                if(h->hw_initialized)
                 {
                         NFT_LOG(L_WARNING,
                                 "Plugin silently changed ledcount! I'm confused... Continuing with 0 LEDs");
@@ -1299,7 +1299,7 @@ void led_hardware_print(LedHardware * h, NftLoglevel l)
                 h,
                 h->params.name,
                 h->params.id,
-                h->params.initialized ? "initialized" : "not initialized",
+                h->hw_initialized ? "initialized" : "not initialized",
                 h->params.stride, led_hardware_list_get_length(h));
 }
 
@@ -2033,6 +2033,16 @@ NftResult led_hardware_plugin_prop_register(LedHardware * h,
 {
         if(!h || !propname)
                 NFT_LOG_NULL(NFT_FAILURE);
+
+        /* is plugin already initialized? */
+        if(h->plugin_initialized)
+        {
+                /* properties should only be registered in "plugin_init"
+                 * callback */
+                NFT_LOG(L_WARNING,
+                        "Plugin wants to register a property at runtime. "
+                        "It should do that only in the \"plugin_init\" callback. This might not work in the future!");
+        }
 
         /* validate type */
         if(type >= LED_HW_CUSTOM_PROP_MAX || type <= LED_HW_CUSTOM_PROP_MIN)

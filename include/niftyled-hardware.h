@@ -247,13 +247,13 @@ typedef struct LedHardwarePlugin
          * gets called first after loading a hardware_plugin. You may fill 
          * *privdata with a pointer to some own descriptor to differ multiple
          * pieces of hardware supported by your plugin connected at the same 
-         * time.
+         * time. You should also register custom properties here.
          * @note mandatory - plugin must provide this function
          * @param privdata The plugins private data-descriptor from LedHardware->privdata 
          * @param h - the LedHardware this plugin belongs to
          * @result NFT_SUCCESS or NFT_FAILURE
          */
-                                        NftResult(*plugin_init) (void **privdata, LedHardware * h);
+        NftResult                       (*plugin_init) (void **privdata, LedHardware * h);
         /** 
          * deinitialize the plugin when it's unloaded - free all resources 
          * @note function is optional - may be NULL
@@ -266,7 +266,7 @@ typedef struct LedHardwarePlugin
          * @param privdata The plugins private data-descriptor from LedHardware->privdata 
          * @result NFT_SUCCESS or NFT_FAILURE
          */
-                                        NftResult(*hw_init) (void *privdata, const char *id);
+        NftResult                       (*hw_init) (void *privdata, const char *id);
         /** 
          * deinitialize hardware 
          * @note function is optional - may be NULL
@@ -282,7 +282,7 @@ typedef struct LedHardwarePlugin
          * @p data union where plugin should store the data
          * @result NFT_SUCCESS or NFT_FAILURE
          */
-                                        NftResult(*get) (void *privdata, LedPluginParam param, LedPluginParamData * data);
+        NftResult                       (*get) (void *privdata, LedPluginParam param, LedPluginParamData * data);
         /**
          * set properties or data to plugin
          *
@@ -292,7 +292,7 @@ typedef struct LedHardwarePlugin
          * @p data union where plugin reads parameter-specific data from
          * @result NFT_SUCCESS or NFT_FAILURE if value isn't accepted
          */
-                                        NftResult(*set) (void *privdata, LedPluginParam param, LedPluginParamData * data);
+        NftResult                       (*set) (void *privdata, LedPluginParam param, LedPluginParamData * data);
         /**
          * send data from chain to hardware
          *
@@ -302,14 +302,14 @@ typedef struct LedHardwarePlugin
          * @p count amount of LEDs to send
          * @p offset start with data at this LED in chain
          */
-                                        NftResult(*send) (void *privdata, LedChain * chain, LedCount count, LedCount offset);
+        NftResult                       (*send) (void *privdata, LedChain * chain, LedCount count, LedCount offset);
         /**
          * show data sent to chain
          *
          * @note function is optional - may be NULL (but everything will stay pretty dark without it)
          * @p privdata The plugins private data-descriptor from LedHardware->privdata 
          */
-                                        NftResult(*show) (void *privdata);
+        NftResult                       (*show) (void *privdata);
 } LedHardwarePlugin;
 
 
@@ -324,7 +324,7 @@ LedHardware                    *led_hardware_new(const char *name, const char *p
 void                            led_hardware_destroy(LedHardware * h);
 NftResult                       led_hardware_init(LedHardware * h, const char *id, LedCount ledcount, const char *pixelformat);
 void                            led_hardware_deinit(LedHardware * h);
-NftResult                       led_hardware_is_initialized(LedHardware * h);
+bool                            led_hardware_is_initialized(LedHardware * h);
 
 LedHardwarePlugin              *led_hardware_get_plugin(LedHardware * h);
 const char                     *led_hardware_get_id(LedHardware * h);
