@@ -50,3 +50,13 @@ src_install()
 
 	dodoc NEWS README AUTHORS ChangeLog
 }
+
+pkg_postinst()
+{
+        echo
+        elog "Sample configs are in /usr/share/${PF}/examples/"
+        elog "Copy config to ~/.ledset.xml or use the -c argument"
+        elog "to select a config. For further information,"
+        elog "see documentation at http://wiki.niftylight.de/${PF}"
+        echo
+}
