@@ -106,7 +106,8 @@ NftResult                       led_chain_map_from_frame(LedChain * c, LedFrame 
 
 //~ LedCount                                            led_chain_fill_from_tile(LedChain * c, LedTile * t, LedCount offset);
 NftResult                       led_chain_fill_from_frame(LedChain * c, LedFrame * f);
-void                            led_chain_print(LedChain * f, NftLoglevel l);
+void                            led_chain_print(LedChain * c, NftLoglevel l);
+void                            led_chain_print_buffer(LedChain * c, NftLoglevel l);
 LedCount                        led_chain_stride_map(LedChain * c, LedCount stride, LedCount offset);
 LedCount                        led_chain_stride_unmap(LedChain * c, LedCount stride, LedCount offset);
 bool                            led_chain_parent_is_hardware(LedChain * c);
@@ -121,16 +122,16 @@ LedCount                        led_chain_get_ledcount(LedChain * c);
 void                           *led_chain_get_privdata(LedChain * c);
 Led                            *led_chain_get_nth(LedChain * c, LedCount n);
 LedPixelFormat                 *led_chain_get_format(LedChain * c);
-void                           *led_chain_get_buffer(LedChain * chain);
-size_t                          led_chain_get_buffer_size(LedChain * chain);
-LedFrameCord                    led_chain_get_min_x(LedChain * chain);
-LedFrameCord                    led_chain_get_min_y(LedChain * chain);
-LedFrameCord                    led_chain_get_max_x(LedChain * chain);
-LedFrameCord                    led_chain_get_max_y(LedChain * chain);
-LedFrameComponent               led_chain_get_max_component(LedChain * chain);
-LedGain                         led_chain_get_max_gain(LedChain * chain);
-LedHardware                    *led_chain_get_parent_hardware(LedChain * chain);
-LedTile                        *led_chain_get_parent_tile(LedChain * chain);
+void                           *led_chain_get_buffer(LedChain * c);
+size_t                          led_chain_get_buffer_size(LedChain * c);
+LedFrameCord                    led_chain_get_min_x(LedChain * c);
+LedFrameCord                    led_chain_get_min_y(LedChain * c);
+LedFrameCord                    led_chain_get_max_x(LedChain * c);
+LedFrameCord                    led_chain_get_max_y(LedChain * c);
+LedFrameComponent               led_chain_get_max_component(LedChain * c);
+LedGain                         led_chain_get_max_gain(LedChain * c);
+LedHardware                    *led_chain_get_parent_hardware(LedChain * c);
+LedTile                        *led_chain_get_parent_tile(LedChain * c);
 
 
 /* Led API */

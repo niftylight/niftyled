@@ -55,6 +55,7 @@
  */
 
 #include <math.h>
+#include <stdio.h>
 #include <stdint.h>
 #include "niftyled-chain.h"
 #include "niftyled-frame.h"
@@ -106,9 +107,9 @@ struct _LedChain
         size_t buffersize;
         /** buffer that holds LEDs' greyscale-values */
         void *ledbuffer;
-                /** if this chain belongs to a tile, this contains the pointer of the tile */
+        /** if this chain belongs to a tile, this contains the pointer of the tile */
         LedTile *parent_tile;
-                /** if this chain belongs to a hardware, this will be set */
+        /** if this chain belongs to a hardware, this will be set */
         LedHardware *parent_hw;
         /**
          * temporary mapping-buffer. holds one offset per led in chain.
@@ -537,11 +538,140 @@ LedPixelFormat *led_chain_get_format(LedChain * c)
 }
 
 
+
+/* print textual value of raw chain buffer to string buffer */
+static int _print_greyscale_value(LedChain * c, long long int *v,
+                                  char *buffer, size_t bufsize)
+{
+        /* select output format according to component type */
+        const char *component_type =
+                led_pixel_format_get_component_type(led_chain_get_format(c),
+                                                    0);
+
+        /* u8 */
+        if(strcmp(component_type, "u8") == 0)
+        {
+                unsigned char *t = (unsigned char *) v;
+                return snprintf(buffer, bufsize, "0x%.2hhx ", *t);
+        }
+        /* u16 */
+        else if(strcmp(component_type, "u16") == 0)
+        {
+                unsigned short *t = (unsigned short *) v;
+                return snprintf(buffer, bufsize, "0x%.4hhx ", *t);
+        }
+        /* float */
+        else if((strcmp(component_type, "float") == 0))
+        {
+                float *t = (float *) v;
+                return snprintf(buffer, bufsize, "%f ", *t);
+        }
+        /* double */
+        else if((strcmp(component_type, "double") == 0))
+        {
+                double *t = (double *) v;
+                return snprintf(buffer, bufsize, "%lf ", *t);
+        }
+        /* huh? */
+        else
+        {
+                NFT_LOG(L_ERROR,
+                        "Attempt to print value of unsupported component type: \"%s\"",
+                        component_type);
+        }
+
+        return -1;
+}
+
+/**
+ * print the raw buffer of a chain
+ *
+ * @param c a LedChain
+ * @param l minimum current loglevel so buffer gets printed
+ */
+void led_chain_print_buffer(LedChain * c, NftLoglevel l)
+{
+        /* print all greyscale-values */
+        NFT_LOG(l, "RAW Buffer:");
+
+        static char string[512];
+        LedCount i, a, b = 0;
+        int pos;
+
+
+
+        /* print 10 values per line */
+        for(a = 0; a < led_chain_get_ledcount(c) / 10; a++)
+        {
+                char *tmp = string;
+                size_t size = sizeof(string);
+
+                for(i = 0; i < 10; i++)
+                {
+                        /* get raw value */
+                        long long int value;
+                        if(!led_chain_get_greyscale(c, b, &value))
+                        {
+                                NFT_LOG(L_ERROR,
+                                        "Failed to get greyscale value from chain at pos %d",
+                                        b);
+                        }
+
+                        /* print raw value */
+                        if((pos =
+                            _print_greyscale_value(c, &value, tmp, size)) < 0)
+                        {
+                                NFT_LOG_PERROR("snprintf()");
+                        }
+
+                        tmp += pos;
+                        size -= pos;
+                        b++;
+                }
+
+                NFT_LOG(l, "%s", string);
+        }
+
+        /* are there remaining values? */
+        if(led_chain_get_ledcount(c) % 10 == 0)
+                return;
+
+        /* print remaining values */
+        char *tmp = string;
+        size_t size = sizeof(string);
+
+        for(i = 0; i < led_chain_get_ledcount(c) % 10; i++)
+        {
+                long long int value;
+
+                /* get raw value */
+                if(!led_chain_get_greyscale(c, b, &value))
+                {
+                        NFT_LOG(L_ERROR,
+                                "Failed to get greyscale value from chain at pos %d",
+                                b);
+                }
+
+                /* print raw value */
+                if((pos = _print_greyscale_value(c, &value, tmp, size)) < 0)
+                {
+                        NFT_LOG_PERROR("snprintf()");
+                }
+
+                tmp += pos;
+                size -= pos;
+                b++;
+        }
+
+        NFT_LOG(l, "%s", string);
+}
+
+
 /**
  * print debug-info of a chain
  *
  * @param c a LedChain
- * @param l minimum current loglevel so tile gets printed
+ * @param l minimum current loglevel so chain gets printed
  */
 void led_chain_print(LedChain * c, NftLoglevel l)
 {
@@ -561,54 +691,52 @@ void led_chain_print(LedChain * c, NftLoglevel l)
                 "none", c->buffersize);
 
         /* only print if loglevel is higher than L_DEBUG */
-        if(nft_log_level_is_noisier_than(nft_log_level_get(), L_DEBUG))
+        if(!nft_log_level_is_noisier_than(nft_log_level_get(), L_DEBUG))
+                return;
+
+        int bpc = led_pixel_format_get_bytes_per_pixel(c->format) /
+                led_pixel_format_get_n_components(c->format);
+
+        LedCount i;
+        for(i = 0; i < c->ledcount; i++)
         {
+                /* get greyscale value */
+                long long int value;
+                led_chain_get_greyscale(c, i, &value);
 
-                int bpc = led_pixel_format_get_bytes_per_pixel(c->format) /
-                        led_pixel_format_get_n_components(c->format);
-
-                LedCount i;
-                for(i = 0; i < c->ledcount; i++)
+                switch (bpc)
                 {
-                        /* get greyscale value */
-                        long long int value;
-                        led_chain_get_greyscale(c, i, &value);
-
-                        switch (bpc)
+                        case 1:
                         {
-                                case 1:
-                                {
-                                        NFT_LOG(l,
-                                                "Pos: %d\tX: %d\tY: %d\tComponent: %d\tGain: %hu\tGreyscale: %hhu",
-                                                i, c->leds[i].x, c->leds[i].y,
-                                                c->leds[i].component,
-                                                c->leds[i].gain,
-                                                (unsigned char) value);
-                                        break;
-                                }
+                                NFT_LOG(l,
+                                        "Pos: %d\tX: %d\tY: %d\tComponent: %d\tGain: %hu\tGreyscale: %hhu",
+                                        i, c->leds[i].x, c->leds[i].y,
+                                        c->leds[i].component,
+                                        c->leds[i].gain,
+                                        (unsigned char) value);
+                                break;
+                        }
 
-                                case 2:
-                                {
-                                        NFT_LOG(l,
-                                                "Pos: %d\tX: %d\tY: %d\tComponent: %d\tGain: %hu\tGreyscale: %hu",
-                                                i, c->leds[i].x, c->leds[i].y,
-                                                c->leds[i].component,
-                                                c->leds[i].gain,
-                                                (unsigned short) value);
-                                        break;
-                                }
+                        case 2:
+                        {
+                                NFT_LOG(l,
+                                        "Pos: %d\tX: %d\tY: %d\tComponent: %d\tGain: %hu\tGreyscale: %hu",
+                                        i, c->leds[i].x, c->leds[i].y,
+                                        c->leds[i].component,
+                                        c->leds[i].gain,
+                                        (unsigned short) value);
+                                break;
+                        }
 
-                                default:
-                                {
-                                        NFT_LOG(L_ERROR,
-                                                "Unsupported bytes-per-component: %d",
-                                                bpc);
-                                        break;
-                                }
+                        default:
+                        {
+                                NFT_LOG(L_ERROR,
+                                        "Unsupported bytes-per-component: %d",
+                                        bpc);
+                                break;
                         }
                 }
         }
-
 }
 
 /**
@@ -1271,6 +1399,7 @@ static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
                                 // ~ char *srcbuf = src->ledbuffer;
                                 // ~ char *dstbuf =
                                 // dst->ledbuffer+led_pixel_format_get_component_offset(dst->format, 
+                                // 
                                 // 
                                 // offset);
                                 // ~ LedCount amount =

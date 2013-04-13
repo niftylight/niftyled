@@ -2497,8 +2497,8 @@ NftResult led_hardware_plugin_prop_get_string(LedHardware * h,
                 .custom.type = LED_HW_CUSTOM_PROP_STRING,
         };
 
-        if(h->
-           plugin->get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
+        if(h->plugin->
+           get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
         {
                 /* buffer id from hardware */
                 NFT_LOG(L_DEBUG, "Got \"%s\"=\"%s\" from %s",
@@ -2559,8 +2559,8 @@ NftResult led_hardware_plugin_prop_get_int(LedHardware * h,
                 .custom.type = LED_HW_CUSTOM_PROP_INT,
         };
 
-        if(h->
-           plugin->get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
+        if(h->plugin->
+           get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
         {
                 /* buffer id from hardware */
                 NFT_LOG(L_DEBUG, "Got \"%s\"=\"%d\" from %s",
@@ -2620,8 +2620,8 @@ NftResult led_hardware_plugin_prop_get_float(LedHardware * h,
                 .custom.type = LED_HW_CUSTOM_PROP_FLOAT,
         };
 
-        if(h->
-           plugin->get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
+        if(h->plugin->
+           get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
         {
                 /* buffer id from hardware */
                 NFT_LOG(L_DEBUG, "Got \"%s\"=\"%f\" from %s",
