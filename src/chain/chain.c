@@ -558,8 +558,14 @@ static int _print_greyscale_value(LedChain * c, long long int *v,
         else if(strcmp(component_type, "u16") == 0)
         {
                 unsigned short *t = (unsigned short *) v;
-                return snprintf(buffer, bufsize, "0x%.4hhx ", *t);
+                return snprintf(buffer, bufsize, "0x%.4hx ", *t);
         }
+		/* u32 */
+    	else if(strcmp(component_type, "u32") == 0)
+        {
+                unsigned int *t = (unsigned int *) v;
+                return snprintf(buffer, bufsize, "0x%.8x ", *t);
+        }	
         /* float */
         else if((strcmp(component_type, "float") == 0))
         {
