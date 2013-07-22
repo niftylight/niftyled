@@ -214,7 +214,9 @@ static NftResult _parse_args(int argc, char *argv[])
 			{
 				if(!nft_log_level_set(nft_log_level_from_string(optarg)))
 				{
-					_print_loglevels();
+					printf("\nValid loglevels:\n\t");
+					nft_log_print_loglevels();
+					printf("\n\n");
 					return NFT_FAILURE;
 				}
 				break;
