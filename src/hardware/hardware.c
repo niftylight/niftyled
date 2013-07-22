@@ -1417,6 +1417,43 @@ void led_hardware_plugin_print(LedHardwarePlugin * p, NftLoglevel l)
 }
 
 
+/** 
+ * print list of installed plugins + all information they provide 
+ */
+void led_hardware_plugin_print_all()
+{
+
+        /* save current loglevel */
+        NftLoglevel ll_current = nft_log_level_get();
+
+		/* switch to "info" loglevel */
+        nft_log_level_set(L_INFO);
+
+        int i;
+        for(i = 0; i < led_hardware_plugin_total_count(); i++)
+        {
+                const char *name;
+                if(!(name = led_hardware_plugin_get_family_by_n(i)))
+                        continue;
+
+                printf("======================================\n\n");
+
+                LedHardware *h;
+                if(!(h = led_hardware_new("tmp01", name)))
+                        continue;
+
+                printf("\tID Example: %s\n",
+                       led_hardware_plugin_get_id_example(h));
+
+
+                led_hardware_destroy(h);
+        }
+
+        /* restore log-level */
+        nft_log_level_set(ll_current);
+}
+
+
 /**
  * get amount of available plugins, use this to iterate through all
  * installed plugins (e.g. led_hardware_plugin_name())

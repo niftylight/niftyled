@@ -103,41 +103,6 @@ static void _print_help(char *name)
 }
 
 
-/** print list of installed plugins + information they provide */
-static void _print_plugin_help()
-{
-
-	/* save current loglevel */
-	NftLoglevel ll_current = nft_log_level_get();
-	nft_log_level_set(L_NOTICE);
-
-
-	int i;
-	for(i = 0; i < led_hardware_plugin_total_count(); i++)
-	{
-		const char *name;
-		if(!(name = led_hardware_plugin_get_family_by_n(i)))
-			continue;
-
-		printf("======================================\n\n");
-
-		LedHardware *h;
-		if(!(h = led_hardware_new("tmp01", name)))
-			continue;
-
-		printf("\tID Example: %s\n",
-		       led_hardware_plugin_get_id_example(h));
-
-
-		led_hardware_destroy(h);
-
-	}
-
-	/* restore logolevel */
-	nft_log_level_set(ll_current);
-}
-
-
 /** parse commandline arguments */
 static NftResult _parse_args(int argc, char *argv[])
 {
@@ -171,7 +136,7 @@ static NftResult _parse_args(int argc, char *argv[])
 				/* --plugin-help */
 			case 'p':
 			{
-				_print_plugin_help();
+				led_hardware_plugin_print_all();
 				return NFT_FAILURE;
 			}
 
