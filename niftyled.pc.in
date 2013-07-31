@@ -7,7 +7,7 @@ includedir=@includedir@
 Name: @PACKAGE@
 Description: @PACKAGE_DESCRIPTION@
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -l@PACKAGE@ -ldl -pthread
+Libs: -L${libdir} -l@PACKAGE@
 Libs.private: 
 Requires: babl niftyprefs niftylog
 Requires.private:
