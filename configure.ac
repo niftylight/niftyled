@@ -73,6 +73,13 @@ if test -z "${PKG_CONFIG}"; then
   	AC_MSG_ERROR([*** pkg-config not found. See http://www.freedesktop.org/software/pkgconfig/ or check your distribution.])
 fi
 
+AC_CHECK_PROGS([DOXYGEN], [doxygen])
+if test -z "$DOXYGEN"; then 
+  AC_MSG_WARN([Doxygen not found - continuing without Doxygen support])
+fi
+AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
+
+
 
 # --------------------------------
 #    checks for libraries
@@ -152,7 +159,6 @@ AM_CONDITIONAL(DEBUG, test x$debug = xtrue)
 # --------------------------------
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
-	Doxyfile \
 	Makefile \
 	include/Makefile \
 	include/niftyled-version.h \
@@ -170,6 +176,8 @@ AC_CONFIG_FILES([
 	utils/ledset/Makefile \
 	examples/Makefile \
 	${PACKAGE}.pc \
+	doc/Doxyfile \
+	doc/Makefile \
 	debian/control.tmpl \
 	gentoo/media-gfx/niftyled/niftyled-9999.ebuild
 ])

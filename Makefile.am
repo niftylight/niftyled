@@ -10,6 +10,11 @@ ACLOCAL_AMFLAGS = -I m4
 # subdirs to build
 SUBDIRS = src include utils examples tests
 
+# build documentation ?
+if HAVE_DOXYGEN
+    SUBDIRS += doc
+endif
+
 
 # files to include in archive
 EXTRA_DIST = \
