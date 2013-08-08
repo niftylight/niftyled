@@ -150,7 +150,7 @@ void led_prefs_deinit(LedPrefs * p)
 
 /**
  * get or build default config-filename
- * if NIFTY_CONFIG environment variable is set, that is returned.
+ * if NFT_LED_SETUP environment variable is set, that is returned.
  * Other wise the path to the supplied filename in the HOME dir is returned.
  * If filename is NULL, the default-filename is returned
  *
@@ -164,7 +164,7 @@ NftResult led_prefs_default_filename(char *dst, size_t size,
 {
         /* try to get environment variable */
         char *env;
-        if((env = getenv("NFT_SETUP")))
+        if((env = getenv("NFT_LED_SETUP")))
         {
                 strncpy(dst, env, size);
                 return NFT_SUCCESS;
