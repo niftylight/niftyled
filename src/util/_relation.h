@@ -72,21 +72,21 @@ struct _Relation
 };
 
 
-Relation                       *relation_next(Relation * r);
-Relation                       *relation_prev(Relation * r);
-Relation                       *relation_child(Relation * r);
-Relation                       *relation_parent(Relation * r);
-Relation                       *relation_first(Relation * r);
-Relation                       *relation_last(Relation * r);
-Relation                       *relation_nth(Relation * h, int n);
+Relation                       *_relation_next(Relation * r);
+Relation                       *_relation_prev(Relation * r);
+Relation                       *_relation_child(Relation * r);
+Relation                       *_relation_parent(Relation * r);
+Relation                       *_relation_first(Relation * r);
+Relation                       *_relation_last(Relation * r);
+Relation                       *_relation_nth(Relation * h, int n);
 
-NftResult                       relation_append(Relation * p, Relation * s);
-NftResult                       relation_append_child(Relation * p, Relation * c);
-void                            relation_unlink(Relation * r);
-int                             relation_sibling_count(Relation * r);
-NftResult                       relation_foreach(Relation * r, NftResult (*func) (Relation * r, void *userptr), void *userptr);
-NftResult                       relation_foreach_recursive(Relation * r, NftResult (*func) (Relation * r, void *userptr));
-void                            relation_clear(Relation * r);
+NftResult                       _relation_append(Relation * p, Relation * s);
+NftResult                       _relation_append_child(Relation * p, Relation * c);
+void                            _relation_unlink(Relation * r);
+int                             _relation_sibling_count(Relation * r);
+NftResult                       _relation_foreach(Relation * r, NftResult (*func) (Relation * r, void *userptr), void *userptr);
+NftResult                       _relation_foreach_recursive(Relation * r, NftResult (*func) (Relation * r, void *userptr));
+void                            _relation_clear(Relation * r);
 
 
 #endif /* _RELATION_H */

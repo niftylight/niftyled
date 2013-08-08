@@ -60,7 +60,7 @@
  * @param r a relation
  * @result next sibling of r or NULL
  */
-Relation *relation_next(Relation * r)
+Relation *_relation_next(Relation * r)
 {
         if(!r)
                 NFT_LOG_NULL(NULL);
@@ -75,7 +75,7 @@ Relation *relation_next(Relation * r)
  * @param r a relation
  * @result previous sibling of r or NULL
  */
-Relation *relation_prev(Relation * r)
+Relation *_relation_prev(Relation * r)
 {
         if(!r)
                 NFT_LOG_NULL(NULL);
@@ -90,7 +90,7 @@ Relation *relation_prev(Relation * r)
  * @param r a relation
  * @result (first) child of relation or NULL
  */
-Relation *relation_child(Relation * r)
+Relation *_relation_child(Relation * r)
 {
         if(!r)
                 NFT_LOG_NULL(NULL);
@@ -105,7 +105,7 @@ Relation *relation_child(Relation * r)
  * @param r a relation
  * @result parent of relation or NULL
  */
-Relation *relation_parent(Relation * r)
+Relation *_relation_parent(Relation * r)
 {
         if(!r)
                 NFT_LOG_NULL(NULL);
@@ -120,7 +120,7 @@ Relation *relation_parent(Relation * r)
  * @param r a relation
  * @param first sibling of this relation
  */
-Relation *relation_first(Relation * r)
+Relation *_relation_first(Relation * r)
 {
         if(!r)
                 NFT_LOG_NULL(NULL);
@@ -143,7 +143,7 @@ Relation *relation_first(Relation * r)
  * @param object relation
  * @result last sibling of r or NULL. If r is the last sibling, r is returned.
  */
-Relation *relation_last(Relation * r)
+Relation *_relation_last(Relation * r)
 {
         if(!r)
                 NFT_LOG_NULL(NULL);
@@ -162,7 +162,7 @@ Relation *relation_last(Relation * r)
  * @param n position in list (starting from 0)
  * @result object at position n in list starting from r or NULL upon error
  */
-Relation *relation_nth(Relation * r, int n)
+Relation *_relation_nth(Relation * r, int n)
 {
         if(!r)
                 return NULL;
@@ -170,7 +170,7 @@ Relation *relation_nth(Relation * r, int n)
         if(n == 0)
                 return r;
 
-        return relation_nth(r, n - 1);
+        return _relation_nth(r, n - 1);
 }
 
 
@@ -181,13 +181,13 @@ Relation *relation_nth(Relation * r, int n)
  * @param s object to append to last sibling of p
  * @result NFT_SUCCESS or NFT_FAILURE 
  */
-NftResult relation_append(Relation * p, Relation * s)
+NftResult _relation_append(Relation * p, Relation * s)
 {
         if(!p)
                 NFT_LOG_NULL(NFT_FAILURE);
 
         Relation *last;
-        if(!(last = relation_last(p)))
+        if(!(last = _relation_last(p)))
                 return NFT_FAILURE;
 
         if(last == s)
@@ -217,7 +217,7 @@ NftResult relation_append(Relation * p, Relation * s)
  * @param c child
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult relation_append_child(Relation * p, Relation * c)
+NftResult _relation_append_child(Relation * p, Relation * c)
 {
         if(!p)
                 NFT_LOG_NULL(NFT_FAILURE);
@@ -232,7 +232,7 @@ NftResult relation_append_child(Relation * p, Relation * c)
         /* append to last sibling of child */
         else
         {
-                if(!relation_append(child, c))
+                if(!_relation_append(child, c))
                         return NFT_FAILURE;
         }
 
@@ -248,7 +248,7 @@ NftResult relation_append_child(Relation * p, Relation * c)
  *
  * @param r relation to clear
  */
-void relation_clear(Relation * r)
+void _relation_clear(Relation * r)
 {
         if(!r)
                 NFT_LOG_NULL();
@@ -262,7 +262,7 @@ void relation_clear(Relation * r)
  *
  * @param r relation to unlink 
  */
-void relation_unlink(Relation * r)
+void _relation_unlink(Relation * r)
 {
         if(!r)
                 NFT_LOG_NULL();
@@ -283,7 +283,7 @@ void relation_unlink(Relation * r)
         }
 
         /* clear structure */
-        relation_clear(r);
+        _relation_clear(r);
 
 }
 
@@ -294,7 +294,7 @@ void relation_unlink(Relation * r)
  * @param r object relation
  * @result amount of siblings r has
  */
-int relation_sibling_count(Relation * r)
+int _relation_sibling_count(Relation * r)
 {
         Relation *t = r;
         int i;
@@ -312,7 +312,7 @@ int relation_sibling_count(Relation * r)
  * @param func foreach function
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult relation_foreach(Relation * r,
+NftResult _relation_foreach(Relation * r,
                            NftResult(*func) (Relation * r, void *userptr),
                            void *userptr)
 {
@@ -322,7 +322,7 @@ NftResult relation_foreach(Relation * r,
         Relation *t, *tmp;
         for(t = r; t; t = tmp)
         {
-                tmp = relation_next(t);
+                tmp = _relation_next(t);
 
                 if(!func(t, userptr))
                         return NFT_FAILURE;
@@ -332,6 +332,6 @@ NftResult relation_foreach(Relation * r,
 }
 
 
-NftResult relation_foreach_recursive(Relation * r,
+NftResult _relation_foreach_recursive(Relation * r,
                                      NftResult(*func) (Relation * r,
                                                        void *userptr));

@@ -84,34 +84,34 @@
 /** casting macro @todo add type validty check */
 #define HARDWARE(h) ((LedHardware *) h)
 /** macro to get next hardware */
-#define HARDWARE_NEXT(h) (HARDWARE(relation_next(RELATION(h))))
+#define HARDWARE_NEXT(h) (HARDWARE(_relation_next(RELATION(h))))
 /** macro to get previous hardware */
-#define HARDWARE_PREV(h) (HARDWARE(relation_next(RELATION(h))))
+#define HARDWARE_PREV(h) (HARDWARE(_relation_next(RELATION(h))))
 /** macro to unlink hardware from any relations */
-#define HARDWARE_UNLINK(h) (relation_unlink(RELATION(h)))
+#define HARDWARE_UNLINK(h) (_relation_unlink(RELATION(h)))
 /** macro to run a function on each hardware */
-#define HARDWARE_FOREACH(h,f, u) (relation_foreach(RELATION(h), f, u))
+#define HARDWARE_FOREACH(h,f, u) (_relation_foreach(RELATION(h), f, u))
 /** macro to append hardware at end of sibling list */
-#define HARDWARE_APPEND(h, s) (relation_append(RELATION(h), RELATION(s)))
+#define HARDWARE_APPEND(h, s) (_relation_append(RELATION(h), RELATION(s)))
 /** macro to get nth sibling of a hardware */
-#define HARDWARE_NTH(h, n) (HARDWARE(relation_nth(RELATION(h), n)))
+#define HARDWARE_NTH(h, n) (HARDWARE(_relation_nth(RELATION(h), n)))
 /** macro to get total amount of siblings of a hardware */
-#define HARDWARE_COUNT(h) (relation_sibling_count(RELATION(h)))
+#define HARDWARE_COUNT(h) (_relation_sibling_count(RELATION(h)))
 
 /** casting macro @todo add type validty check */
 #define PLUGIN_PROP(p) ((LedPluginCustomProp *) p)
 /** macro to get next plugin property */
-#define PLUGIN_PROP_NEXT(p) (PLUGIN_PROP(relation_next(RELATION(p))))
+#define PLUGIN_PROP_NEXT(p) (PLUGIN_PROP(_relation_next(RELATION(p))))
 /** macro to get previous plugin property */
-#define PLUGIN_PROP_PREV(p) (PLUGIN_PROP(relation_prev(RELATION(p))))
+#define PLUGIN_PROP_PREV(p) (PLUGIN_PROP(_relation_prev(RELATION(p))))
 /** macro to unlink plugin property from any relations */
-#define PLUGIN_PROP_UNLINK(p) (relation_unlink(RELATION(p)))
+#define PLUGIN_PROP_UNLINK(p) (_relation_unlink(RELATION(p)))
 /** macro to append plugin property at end of sibling list */
-#define PLUGIN_PROP_APPEND(p, s) (relation_append(RELATION(p), RELATION(s)))
+#define PLUGIN_PROP_APPEND(p, s) (_relation_append(RELATION(p), RELATION(s)))
 /** macro to get nth sibling of a plugin property */
-#define PLUGIN_PROP_NTH(p, n) (PLUGIN_PROP(relation_nth(RELATION(p), n)))
+#define PLUGIN_PROP_NTH(p, n) (PLUGIN_PROP(_relation_nth(RELATION(p), n)))
 /** macro to get total amount of siblings of a plugin property */
-#define PLUGIN_PROP_COUNT(p) (relation_sibling_count(RELATION(p)))
+#define PLUGIN_PROP_COUNT(p) (_relation_sibling_count(RELATION(p)))
 
 
 
@@ -432,7 +432,7 @@ LedHardware *led_hardware_new(const char *name, const char *plugin_name)
                 return NULL;
 
         /* allocate mutex */
-        if(!(h->mutex = thread_mutex_new()))
+        if(!(h->mutex = _thread_mutex_new()))
         {
                 _unload_plugin(h);
                 return NULL;
@@ -449,7 +449,7 @@ LedHardware *led_hardware_new(const char *name, const char *plugin_name)
         if(LED_HARDWARE_PLUGIN_HAS_FUNC(h, plugin_init))
         {
                 /* lock */
-                if(!thread_mutex_lock(h->mutex))
+                if(!_thread_mutex_lock(h->mutex))
                 {
                         goto _lhn_plugin_fail;
                 }
@@ -458,7 +458,7 @@ LedHardware *led_hardware_new(const char *name, const char *plugin_name)
                         h->plugin->plugin_init(&(h->plugin_privdata), h);
 
                 /* unlock */
-                if(!thread_mutex_unlock(h->mutex))
+                if(!_thread_mutex_unlock(h->mutex))
                 {
                         goto _lhn_plugin_fail;
                 }
@@ -508,7 +508,7 @@ void led_hardware_destroy(LedHardware * h)
         {
                 /* set next sibling as head of setup */
                 led_setup_set_hardware(h->setup,
-                                       HARDWARE(relation_next(RELATION(h))));
+                                       HARDWARE(_relation_next(RELATION(h))));
         }
 
         /* deinitialize hardware */
@@ -518,10 +518,10 @@ void led_hardware_destroy(LedHardware * h)
         led_tile_list_destroy(led_hardware_get_tile(h));
 
         /* destroy chain */
-        chain_destroy(h->chain);
+        _chain_destroy(h->chain);
 
         /* lock */
-        thread_mutex_lock(h->mutex);
+        _thread_mutex_lock(h->mutex);
 
         /* plugin deinitialize */
         if(LED_HARDWARE_PLUGIN_HAS_FUNC(h, plugin_deinit))
@@ -533,7 +533,7 @@ void led_hardware_destroy(LedHardware * h)
         h->plugin_initialized = false;
 
         /* deallocate mutex */
-        thread_mutex_free(h->mutex);
+        _thread_mutex_free(h->mutex);
 
         /* unload plugin */
         _unload_plugin(h);
@@ -605,7 +605,7 @@ NftResult led_hardware_init(LedHardware * h, const char *id,
                 }
 
                 /* register hardware with chain */
-                chain_set_parent_hardware(h->chain, h);
+                _chain_set_parent_hardware(h->chain, h);
         }
 
         /* save ledcount */
@@ -622,14 +622,14 @@ NftResult led_hardware_init(LedHardware * h, const char *id,
         if(LED_HARDWARE_PLUGIN_HAS_FUNC(h, hw_init))
         {
                 /* lock */
-                if(!thread_mutex_lock(h->mutex))
+                if(!_thread_mutex_lock(h->mutex))
                         return NFT_FAILURE;
 
                 /* initialize */
                 NftResult r = h->plugin->hw_init(h->plugin_privdata, id);
 
                 /* unlock */
-                if(!thread_mutex_unlock(h->mutex))
+                if(!_thread_mutex_unlock(h->mutex))
                         return NFT_FAILURE;
 
                 if(!r)
@@ -696,12 +696,12 @@ void led_hardware_deinit(LedHardware * h)
         if(LED_HARDWARE_PLUGIN_HAS_FUNC(h, hw_deinit))
         {
                 /* lock */
-                thread_mutex_lock(h->mutex);
+                _thread_mutex_lock(h->mutex);
 
                 h->plugin->hw_deinit(h->plugin_privdata);
 
                 /* unlock */
-                thread_mutex_unlock(h->mutex);
+                _thread_mutex_unlock(h->mutex);
         }
 
         /* mark hardware as "deinitialized" */
@@ -747,7 +747,7 @@ const char *led_hardware_get_id(LedHardware * h)
                 return h->params.id;
 
         /* lock */
-        if(!thread_mutex_lock(h->mutex))
+        if(!_thread_mutex_lock(h->mutex))
                 return NULL;
 
         /* get operation */
@@ -763,7 +763,7 @@ const char *led_hardware_get_id(LedHardware * h)
                 NFT_LOG(L_WARNING, "Plugin failed to deliver an id.");
 
         /* unlock */
-        if(!thread_mutex_unlock(h->mutex))
+        if(!_thread_mutex_unlock(h->mutex))
                 return NULL;
 
         return h->params.id;
@@ -793,7 +793,7 @@ NftResult led_hardware_set_id(LedHardware * h, const char *id)
                 if(LED_HARDWARE_PLUGIN_HAS_FUNC(h, set))
                 {
                         /* lock */
-                        if(!thread_mutex_lock(h->mutex))
+                        if(!_thread_mutex_lock(h->mutex))
                                 return NFT_FAILURE;
 
                         /* set id operation */
@@ -803,7 +803,7 @@ NftResult led_hardware_set_id(LedHardware * h, const char *id)
                                                &set_id);
 
                         /* unlock */
-                        if(!thread_mutex_unlock(h->mutex))
+                        if(!_thread_mutex_unlock(h->mutex))
                                 return NFT_FAILURE;
 
                         if(!r)
@@ -915,7 +915,7 @@ NftResult led_hardware_set_tile(LedHardware * h, LedTile * t)
         if(t)
         {
                 /* register hardware with tile */
-                return tile_set_parent_hardware(t, h);
+                return _tile_set_parent_hardware(t, h);
         }
 
         return NFT_SUCCESS;
@@ -942,7 +942,7 @@ NftResult led_hardware_append_tile(LedHardware * h, LedTile * t)
                 return NFT_FAILURE;
         }
 
-        return tile_set_parent_hardware(t, h);
+        return _tile_set_parent_hardware(t, h);
 }
 
 /**
@@ -1020,7 +1020,7 @@ NftResult led_hardware_set_ledcount(LedHardware * h, LedCount leds)
                                                      &set_ledcount);
 
                         /* unlock */
-                        if(!thread_mutex_unlock(h->mutex))
+                        if(!_thread_mutex_unlock(h->mutex))
                                 return NFT_FAILURE;
 
                         if(!r)
@@ -1040,7 +1040,7 @@ NftResult led_hardware_set_ledcount(LedHardware * h, LedCount leds)
         }
 
         /* save in model */
-        if(!(chain_set_ledcount(h->chain, leds)))
+        if(!(_chain_set_ledcount(h->chain, leds)))
         {
                 NFT_LOG(L_ERROR,
                         "Failed to set chain of hardware to new ledcount (%d)",
@@ -1073,7 +1073,7 @@ LedCount led_hardware_get_ledcount(LedHardware * h)
         }
 
         /* lock */
-        if(!thread_mutex_lock(h->mutex))
+        if(!_thread_mutex_lock(h->mutex))
                 return ledcount;
 
         LedPluginParamData get_ledcount;
@@ -1081,7 +1081,7 @@ LedCount led_hardware_get_ledcount(LedHardware * h)
                                      &get_ledcount);
 
         /* unlock */
-        if(!thread_mutex_unlock(h->mutex))
+        if(!_thread_mutex_unlock(h->mutex))
                 return ledcount;
 
         if(!r)
@@ -1179,7 +1179,7 @@ NftResult led_hardware_set_gain(LedHardware * h, LedCount pos, LedGain gain)
         }
 
         /* lock */
-        if(!thread_mutex_lock(h->mutex))
+        if(!_thread_mutex_lock(h->mutex))
                 return NFT_FAILURE;
 
         LedPluginParamData set_gain = {.gain.pos = pos,.gain.value = gain };
@@ -1187,7 +1187,7 @@ NftResult led_hardware_set_gain(LedHardware * h, LedCount pos, LedGain gain)
                 h->plugin->set(h->plugin_privdata, LED_HW_GAIN, &set_gain);
 
         /* unlock */
-        if(!thread_mutex_unlock(h->mutex))
+        if(!_thread_mutex_unlock(h->mutex))
                 return NFT_FAILURE;
 
         if(!r)
@@ -1227,7 +1227,7 @@ LedGain led_hardware_get_gain(LedHardware * h, LedCount pos)
         }
 
         /* lock */
-        if(!thread_mutex_lock(h->mutex))
+        if(!_thread_mutex_lock(h->mutex))
                 return NFT_FAILURE;
 
         LedPluginParamData get_gain = {.gain.pos = pos };
@@ -1235,7 +1235,7 @@ LedGain led_hardware_get_gain(LedHardware * h, LedCount pos)
                 h->plugin->get(h->plugin_privdata, LED_HW_GAIN, &get_gain);
 
         /* unlock */
-        if(!thread_mutex_unlock(h->mutex))
+        if(!_thread_mutex_unlock(h->mutex))
                 return NFT_FAILURE;
 
         if(!r)
@@ -1767,7 +1767,7 @@ NftResult led_hardware_refresh_mapping(LedHardware * h)
         }
 
         /* lock */
-        if(!thread_mutex_lock(h->mutex))
+        if(!_thread_mutex_lock(h->mutex))
                 return NFT_FAILURE;
 
         /* map tiles to chain */
@@ -1783,7 +1783,7 @@ NftResult led_hardware_refresh_mapping(LedHardware * h)
                                 "Failed to map hardware-tile(s) to hardware-chain");
 
                         /* unlock */
-                        if(!thread_mutex_unlock(h->mutex))
+                        if(!_thread_mutex_unlock(h->mutex))
                                 return NFT_FAILURE;
 
                         return NFT_SUCCESS;
@@ -1793,7 +1793,7 @@ NftResult led_hardware_refresh_mapping(LedHardware * h)
         }
 
         /* unlock */
-        if(!thread_mutex_unlock(h->mutex))
+        if(!_thread_mutex_unlock(h->mutex))
                 return NFT_FAILURE;
 
         if(mapped != led_hardware_get_ledcount(h))
@@ -1923,13 +1923,13 @@ NftResult led_hardware_show(LedHardware * h)
         }
 
         /* lock */
-        if(!thread_mutex_lock(h->mutex))
+        if(!_thread_mutex_lock(h->mutex))
                 return NFT_FAILURE;
 
         NftResult r = h->plugin->show(h->plugin_privdata);
 
         /* unlock */
-        if(!thread_mutex_unlock(h->mutex))
+        if(!_thread_mutex_unlock(h->mutex))
                 return NFT_FAILURE;
 
         if(!r)
@@ -2005,14 +2005,14 @@ NftResult led_hardware_send(LedHardware * h)
                 led_chain_get_ledcount(h->chain), h->params.name);
 
         /* lock */
-        if(!thread_mutex_lock(h->mutex))
+        if(!_thread_mutex_lock(h->mutex))
                 return NFT_FAILURE;
 
         NftResult r = h->plugin->send(h->plugin_privdata, h->chain,
                                       led_chain_get_ledcount(h->chain), 0);
 
         /* unlock */
-        if(!thread_mutex_unlock(h->mutex))
+        if(!_thread_mutex_unlock(h->mutex))
                 return NFT_FAILURE;
 
         if(!r)

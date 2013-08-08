@@ -65,10 +65,10 @@
 
 
 
-#define        	LED_HARDWARE_PROP_NAME                  "name"
-#define        	LED_HARDWARE_PROP_PLUGIN                "plugin"
-#define        	LED_HARDWARE_PROP_ID                    "id"
-#define		LED_HARDWARE_PROP_STRIDE                "stride"
+#define     LED_HARDWARE_PROP_NAME              "name"
+#define     LED_HARDWARE_PROP_PLUGIN            "plugin"
+#define     LED_HARDWARE_PROP_ID                "id"
+#define		LED_HARDWARE_PROP_STRIDE            "stride"
 
 #define		LED_HARDWARE_PROPERTY_PROP_NAME		"name"
 #define		LED_HARDWARE_PROPERTY_PROP_TYPE		"type"
@@ -596,7 +596,7 @@ _pth_end:
 /**
  * register "hardware" prefs class (called once for initialization)
  */
-NftResult prefs_hardware_class_register(NftPrefs * p)
+NftResult _prefs_hardware_class_register(NftPrefs * p)
 {
         if(!p)
                 NFT_LOG_NULL(NFT_FAILURE);

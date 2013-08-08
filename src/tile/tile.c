@@ -64,25 +64,25 @@
 /** casting macro @todo add type validty check */
 #define TILE(t) ((LedTile *) t)
 /** macro to get next tile */
-#define TILE_NEXT(t) (TILE(relation_next(RELATION(t))))
+#define TILE_NEXT(t) (TILE(_relation_next(RELATION(t))))
 /** macro to get previous tile */
-#define TILE_PREV(t) (TILE(relation_next(RELATION(t))))
+#define TILE_PREV(t) (TILE(_relation_next(RELATION(t))))
 /** macro to unlink tile from any relations */
-#define TILE_UNLINK(t) (relation_unlink(RELATION(t)))
+#define TILE_UNLINK(t) (_relation_unlink(RELATION(t)))
 /** macro to run a function on each tile */
-#define TILE_FOREACH(t,f, u) (relation_foreach(RELATION(t), f, u))
+#define TILE_FOREACH(t,f, u) (_relation_foreach(RELATION(t), f, u))
 /** macro to append tile at end of sibling list */
-#define TILE_APPEND(t, s) (relation_append(RELATION(t), RELATION(s)))
+#define TILE_APPEND(t, s) (_relation_append(RELATION(t), RELATION(s)))
 /** macro to append tile to last sibling of a tile's child */
-#define TILE_APPEND_CHILD(t, s) (relation_append_child(RELATION(t), RELATION(s)))
+#define TILE_APPEND_CHILD(t, s) (_relation_append_child(RELATION(t), RELATION(s)))
 /** macro to get nth sibling of a tile */
-#define TILE_NTH(t, n) (TILE(relation_nth(RELATION(t), n)))
+#define TILE_NTH(t, n) (TILE(_relation_nth(RELATION(t), n)))
 /** macro to get total amount of siblings of a tile */
-#define TILE_COUNT(t) (relation_sibling_count(RELATION(t)))
+#define TILE_COUNT(t) (_relation_sibling_count(RELATION(t)))
 /** macro to get first child of this tile */
-#define TILE_CHILD(t) (TILE(relation_child(RELATION(t))))
+#define TILE_CHILD(t) (TILE(_relation_child(RELATION(t))))
 /** macro to get parent of this tile */
-#define TILE_PARENT(t) (TILE(relation_parent(RELATION(t))))
+#define TILE_PARENT(t) (TILE(_relation_parent(RELATION(t))))
 
 
 
@@ -367,7 +367,7 @@ static void _map_matrix(LedTile * m)
  * @param h LedHardware descriptor of parent hardware
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult tile_set_parent_hardware(LedTile * t, LedHardware * h)
+NftResult _tile_set_parent_hardware(LedTile * t, LedHardware * h)
 {
         if(!t)
                 NFT_LOG_NULL(NFT_FAILURE);
@@ -518,7 +518,7 @@ LedTile *led_tile_dup(LedTile * m)
         memcpy(r, m, sizeof(LedTile));
 
         /* clear fields we don't want to duplicate */
-        relation_clear(RELATION(r));
+        _relation_clear(RELATION(r));
         r->parent_hw = NULL;
 
         /* copy chain */
@@ -883,7 +883,7 @@ NftResult led_tile_set_chain(LedTile * m, LedChain * c)
 
         /* register tile to chain */
         if(c)
-                chain_set_parent_tile(c, m);
+                _chain_set_parent_tile(c, m);
 
         return NFT_SUCCESS;
 }

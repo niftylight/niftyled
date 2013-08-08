@@ -75,10 +75,10 @@ typedef struct _Thread          Thread;
 typedef void                   *(*ThreadFunc) (void *data);
 
 
-Mutex                          *thread_mutex_new(void);
-NftResult                       thread_mutex_free(Mutex * mutex);
-NftResult                       thread_mutex_lock(Mutex * mutex);
-NftResult                       thread_mutex_unlock(Mutex * mutex);
+Mutex                          *_thread_mutex_new(void);
+NftResult                       _thread_mutex_free(Mutex * mutex);
+NftResult                       _thread_mutex_lock(Mutex * mutex);
+NftResult                       _thread_mutex_unlock(Mutex * mutex);
 
 
 

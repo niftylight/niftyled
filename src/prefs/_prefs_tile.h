@@ -47,7 +47,7 @@
 #include "niftyled-prefs_tile.h"
 
 
-NftResult                       prefs_tile_class_register(NftPrefs * p);
+NftResult                       _prefs_tile_class_register(NftPrefs * p);
 
 
 

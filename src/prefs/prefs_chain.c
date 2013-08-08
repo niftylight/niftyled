@@ -353,7 +353,7 @@ static NftResult _prefs_to_led(LedPrefs * c, void **newObj, NftPrefsNode * n,
 /**
  * register "chain" prefs class (called once for initialization)
  */
-NftResult prefs_chain_class_register(NftPrefs * p)
+NftResult _prefs_chain_class_register(NftPrefs * p)
 {
         if(!p)
                 NFT_LOG_NULL(NFT_FAILURE);
@@ -366,7 +366,7 @@ NftResult prefs_chain_class_register(NftPrefs * p)
 /**
  * register "led" prefs class (called once for initialization)
  */
-NftResult prefs_led_class_register(NftPrefs * p)
+NftResult _prefs_led_class_register(NftPrefs * p)
 {
         if(!p)
                 NFT_LOG_NULL(NFT_FAILURE);

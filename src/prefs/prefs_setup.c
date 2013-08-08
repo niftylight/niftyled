@@ -188,7 +188,7 @@ _pts_error:
 /**
  * register "setup" prefs class (called once for initialization)
  */
-NftResult prefs_setup_class_register(NftPrefs * p)
+NftResult _prefs_setup_class_register(NftPrefs * p)
 {
         return nft_prefs_class_register(p, LED_SETUP_NAME, &_prefs_to_setup,
                                         &_prefs_from_setup);

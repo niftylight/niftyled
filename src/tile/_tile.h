@@ -45,7 +45,7 @@
 #define _LED__TILE_H
 
 
-NftResult                       tile_set_parent_hardware(LedTile * t, LedHardware * h);
+NftResult                       _tile_set_parent_hardware(LedTile * t, LedHardware * h);
 
 
 #endif /* _LED__TILE_H */

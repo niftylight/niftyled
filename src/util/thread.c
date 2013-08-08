@@ -113,7 +113,7 @@ struct _Mutex
 
 
 
-Thread *thread_create(ThreadFunc func, void *data, bool joinable)
+Thread *_thread_create(ThreadFunc func, void *data, bool joinable)
 {
         Thread *thread = NULL;
 
@@ -151,13 +151,13 @@ Thread *thread_create(ThreadFunc func, void *data, bool joinable)
 }
 
 
-void thread_free(Thread * thread)
+void _thread_free(Thread * thread)
 {
         return free(thread);
 }
 
 
-void *thread_join(Thread * thread)
+void *_thread_join(Thread * thread)
 {
         void *result = NULL;
 
@@ -172,7 +172,7 @@ void *thread_join(Thread * thread)
         return result;
 }
 
-void thread_exit(void *retval)
+void _thread_exit(void *retval)
 {
 #if defined(THREAD_MODEL_POSIX)
         pthread_exit(retval);
@@ -188,7 +188,7 @@ void thread_exit(void *retval)
  * @result A newly allocated Mutex that can be used with the thread_mutex_lock() and
  *	thread_mutex_unlock() functions or NULL on failure.
  */
-Mutex *thread_mutex_new(void)
+Mutex *_thread_mutex_new(void)
 {
         Mutex *r;
         if(!(r = calloc(1, sizeof(Mutex))))
@@ -217,10 +217,10 @@ Mutex *thread_mutex_new(void)
  * @param mutex Pointer to the Mutex that needs to be freed.
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult thread_mutex_free(Mutex * mutex)
+NftResult _thread_mutex_free(Mutex * mutex)
 {
 
-        thread_mutex_unlock(mutex);
+        _thread_mutex_unlock(mutex);
 
 #if defined(THREAD_MODEL_POSIX)
         pthread_mutex_destroy(&mutex->mutex);
@@ -236,7 +236,7 @@ NftResult thread_mutex_free(Mutex * mutex)
 /**
  * lock mutex
  */
-NftResult thread_mutex_lock(Mutex * mutex)
+NftResult _thread_mutex_lock(Mutex * mutex)
 {
 
 #if defined(THREAD_MODEL_POSIX)
@@ -251,7 +251,7 @@ NftResult thread_mutex_lock(Mutex * mutex)
 /**
  * unlock mutex
  */
-NftResult thread_mutex_unlock(Mutex * mutex)
+NftResult _thread_mutex_unlock(Mutex * mutex)
 {
 
 #if defined(THREAD_MODEL_POSIX)

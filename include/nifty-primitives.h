@@ -49,7 +49,6 @@
 /**
  * @defgroup primitives NftPrimitives
  * @brief arbitrary primitive datatypes
- * @todo move all NFT_* to LED_* namespace
  * @{
  */
 
@@ -59,7 +58,6 @@
 
 
 
-/** @todo remove this preprocessor macro & use clean structure instead */
 #ifndef NFT_RESULT_DEFINED
 #define NFT_RESULT_DEFINED
 /** type for returning failure-status */

@@ -135,7 +135,7 @@ struct _LedChain
  * @param h LedHardware descriptor of parent hardware
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult chain_set_parent_hardware(LedChain * c, LedHardware * h)
+NftResult _chain_set_parent_hardware(LedChain * c, LedHardware * h)
 {
         if(!c)
                 NFT_LOG_NULL(NFT_FAILURE);
@@ -152,7 +152,7 @@ NftResult chain_set_parent_hardware(LedChain * c, LedHardware * h)
  * @param t LedTile descriptor of parent tile
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult chain_set_parent_tile(LedChain * c, LedTile * t)
+NftResult _chain_set_parent_tile(LedChain * c, LedTile * t)
 {
         if(!c)
                 NFT_LOG_NULL(NFT_FAILURE);
@@ -168,7 +168,7 @@ NftResult chain_set_parent_tile(LedChain * c, LedTile * t)
  *
  * @param c the chain which should be freed, the pointer will be invalid after this function returns
  */
-void chain_destroy(LedChain * c)
+void _chain_destroy(LedChain * c)
 {
         if(!c)
                 return;
@@ -214,7 +214,7 @@ void chain_destroy(LedChain * c)
  * @param ledcount new amount of LEDs in this chain
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult chain_set_ledcount(LedChain * c, LedCount ledcount)
+NftResult _chain_set_ledcount(LedChain * c, LedCount ledcount)
 {
         /* calc old and new bufsize */
         int components = led_pixel_format_get_n_components(c->format);
@@ -406,7 +406,7 @@ void led_chain_destroy(LedChain * c)
                 return;
         }
 
-        chain_destroy(c);
+        _chain_destroy(c);
 }
 
 
@@ -486,7 +486,7 @@ NftResult led_chain_set_ledcount(LedChain * c, LedCount ledcount)
                 return NFT_FAILURE;
         }
 
-        return chain_set_ledcount(c, ledcount);
+        return _chain_set_ledcount(c, ledcount);
 }
 
 
@@ -1377,14 +1377,14 @@ static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
         }
 }
 
-/**
- * fill chain with greyscale values from another chain
- *
- * @param dst The LED chain whose brightness values should be set 
- * @param src chain to take pixels from
- * @param offset start writing dst at this offset
- * @result amount of LEDs copied to dst 
- */
+//~ /**
+ //~ * fill chain with greyscale values from another chain
+ //~ *
+ //~ * @param dst The LED chain whose brightness values should be set 
+ //~ * @param src chain to take pixels from
+ //~ * @param offset start writing dst at this offset
+ //~ * @result amount of LEDs copied to dst 
+ //~ */
 //~ LedCount led_chain_fill_from_chain(LedChain * dst, LedChain * src, LedCount offset)
 //~ {
                 // ~ if(!src || !dst)
@@ -1440,13 +1440,13 @@ static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
 //~ }
 
 
-/**
- * fill chain with pixels from a tile (and sub tiles/chains)
- *
- * @param c The LED chain whose brightness values should be set
- * @param tile LedTile to take pixels from 
- * @result amount of LEDs processed 
- */
+//~ /**
+ //~ * fill chain with pixels from a tile (and sub tiles/chains)
+ //~ *
+ //~ * @param c The LED chain whose brightness values should be set
+ //~ * @param tile LedTile to take pixels from 
+ //~ * @result amount of LEDs processed 
+ //~ */
 //~ LedCount led_chain_fill_from_tile(LedChain * c, LedTile * t, LedCount offset)
 //~ {
                 // ~ if(!c || !t)
@@ -1476,8 +1476,9 @@ static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
 /**
  * fill chain with pixels from a frame
  *
- * @param c - The LED chain whose brightness values should be set
- * @param f - A frame of pixels
+ * @param c The LED chain whose brightness values should be set
+ * @param f A frame of pixels
+ * @result NFT_SUCCESS or NFT_FAILURE
  */
 NftResult led_chain_fill_from_frame(LedChain * c, LedFrame * f)
 {
