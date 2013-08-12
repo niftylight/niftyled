@@ -74,8 +74,8 @@ if test -z "${PKG_CONFIG}"; then
 fi
 
 AC_CHECK_PROGS([DOXYGEN], [doxygen])
-if test -z "$DOXYGEN"; then 
-  AC_MSG_WARN([Doxygen not found - continuing without Doxygen support])
+if test -n "$DOXYGEN"; then 
+  AC_CONFIG_FILES([debian/docbase])
 fi
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 
@@ -159,32 +159,33 @@ AM_CONDITIONAL(DEBUG, test x$debug = xtrue)
 # --------------------------------
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
-	Makefile \
-	include/Makefile \
-	include/niftyled-version.h \
-	src/version.c \
-	src/Makefile \
+        Makefile \
+        include/Makefile \
+        include/niftyled-version.h \
+        src/version.c \
+        src/Makefile \
         src/util/Makefile \
-	src/chain/Makefile \
-	src/frame/Makefile \
-	src/hardware/Makefile \
-	src/prefs/Makefile \
-	src/setup/Makefile \
-	src/tile/Makefile \
-	tests/Makefile \
-	utils/Makefile \
-	utils/ledset/Makefile \
-	examples/Makefile \
-	${PACKAGE}.pc \
-	doc/Doxyfile \
-	doc/Makefile \
-	debian/control.tmpl \
-	gentoo/media-gfx/niftyled/niftyled-9999.ebuild
+        src/chain/Makefile \
+        src/frame/Makefile \
+        src/hardware/Makefile \
+        src/prefs/Makefile \
+        src/setup/Makefile \
+        src/tile/Makefile \
+        tests/Makefile \
+        utils/Makefile \
+        utils/ledset/Makefile \
+        examples/Makefile \
+        ${PACKAGE}.pc \
+        doc/Doxyfile \
+        doc/Makefile \
+        debian/control.tmpl \
+        debian/rules.tmpl
+        gentoo/media-gfx/niftyled/niftyled-9999.ebuild
 ])
 AC_OUTPUT
 
 
-echo -e "
+echo -ne "
 Configure report:
 
 \tPackage.....................:  ${PACKAGE_STRING}
@@ -199,4 +200,5 @@ Configure report:
 \tSystem CFLAGS...............:  ${CFLAGS}
 \tSystem CXXFLAGS.............:  ${CXXFLAGS}
 \tSystem LDFLAGS..............:  ${LDFLAGS}
-"
+\tBuilding documentation......:  "
+if test -n "${DOXYGEN}" ; then echo "yes" ; else echo "no" ; fi

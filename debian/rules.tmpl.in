@@ -9,5 +9,10 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+CFLAGS = -Wall -g
+
+binary-arch:
+	dh_strip --dbg-package=@PACKAGE_NAME@@PACKAGE_API_REVISION@-dbg
+
 %:
-	dh $@  --with autotools-dev
+	dh $@ --with autotools-dev

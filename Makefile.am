@@ -71,6 +71,8 @@ deb: dist-gzip
 	tar --directory "$(DEBTMPDIR)/" --extract --gunzip --file "$(DEBTMPDIR)/$(PACKAGE)_$(VERSION).orig.tar.gz" && \
 	mv "$(DEBTMPDIR)/$(PACKAGE)-$(VERSION)" "$(DEBSRCDIR)" && \
 	cp -r "$(top_builddir)/debian/"* "$(DEBSRCDIR)/debian" && \
+	cp "$(top_builddir)/debian/rules.tmpl" "$(DEBSRCDIR)/debian/rules" && \
 	cp "$(top_builddir)/debian/control.tmpl" "$(DEBSRCDIR)/debian/control" && \
+	cp "$(top_builddir)/debian/docbase" "$(DEBSRCDIR)/debian/@PACKAGE_NAME@-dev.doc-base" && \
 	cd "$(DEBSRCDIR)" && \
 	dpkg-buildpackage -D -v"$(VERSION)-$(PACKAGE_API_REVISION)"
