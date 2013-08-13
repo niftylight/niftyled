@@ -12,7 +12,7 @@
 CFLAGS = -Wall -g
 
 binary-arch:
-	dh_strip --dbg-package=@PACKAGE_NAME@@PACKAGE_API_REVISION@-dbg
+	dh_strip --dbg-package=@PACKAGE_NAME@-dbg
 
 %:
 	dh $@ --with autotools-dev

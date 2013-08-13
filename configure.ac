@@ -51,6 +51,7 @@ AC_SUBST([PACKAGE_API_REVISION], m4_esyscmd([./version --api-revision]), [api re
 AC_SUBST([PACKAGE_API_CURRENT], m4_esyscmd([./version --api-current]), [api current])
 AC_SUBST([PACKAGE_API_AGE], m4_esyscmd([./version --api-age]), [api age])
 AC_SUBST([PACKAGE_GIT_VERSION], m4_esyscmd([./version --git]), [git version])
+AC_SUBST([DEBIAN_RELEASE], m4_esyscmd([./version --debian]), [debian release])
 
 #AC_DEFINE(GENERIC_SETTINGS_FILE_VERSION, SETTINGS_FILE_VERSION, [version of config-files])
 
@@ -159,27 +160,28 @@ AM_CONDITIONAL(DEBUG, test x$debug = xtrue)
 # --------------------------------
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
-        Makefile \
-        include/Makefile \
-        include/niftyled-version.h \
-        src/version.c \
-        src/Makefile \
-        src/util/Makefile \
-        src/chain/Makefile \
-        src/frame/Makefile \
-        src/hardware/Makefile \
-        src/prefs/Makefile \
-        src/setup/Makefile \
-        src/tile/Makefile \
-        tests/Makefile \
-        utils/Makefile \
-        utils/ledset/Makefile \
-        examples/Makefile \
-        ${PACKAGE}.pc \
-        doc/Doxyfile \
-        doc/Makefile \
-        debian/control.tmpl \
+        Makefile 
+        include/Makefile 
+        include/niftyled-version.h 
+        src/version.c 
+        src/Makefile 
+        src/util/Makefile 
+        src/chain/Makefile 
+        src/frame/Makefile 
+        src/hardware/Makefile 
+        src/prefs/Makefile 
+        src/setup/Makefile 
+        src/tile/Makefile 
+        tests/Makefile 
+        utils/Makefile 
+        utils/ledset/Makefile 
+        examples/Makefile 
+        ${PACKAGE}.pc 
+        doc/Doxyfile 
+        doc/Makefile 
+        debian/control.tmpl 
         debian/rules.tmpl
+        debian/changelog
         gentoo/media-gfx/niftyled/niftyled-9999.ebuild
 ])
 AC_OUTPUT

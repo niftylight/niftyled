@@ -1,4 +1,4 @@
-Source: @PACKAGE@
+Source: @PACKAGE_NAME@
 Priority: optional
 Maintainer: Daniel Hiepler <daniel-ubuntu@niftylight.de>
 Build-Depends: debhelper (>= 9), autotools-dev
@@ -11,23 +11,23 @@ Homepage: @PACKAGE_URL@
 Package: @PACKAGE_NAME@-dev
 Section: libdevel
 Architecture: any
-Depends: ${misc:Depends}, @PACKAGE_NAME@@PACKAGE_API_REVISION@ (= ${binary:Version}), libbabl-dev (>= 0.1.4), libniftyprefs-dev, libniftylog-dev
+Depends: ${misc:Depends}, @PACKAGE_NAME@ (= ${binary:Version}), libbabl-dev (>= 0.1.4), libniftyprefs-dev, libniftylog-dev
 Description: @PACKAGE_NAME@ library headers
  This package contains development headers for @PACKAGE_NAME@ -
  @PACKAGE_DESCRIPTION_LONG@
 
-Package: @PACKAGE_NAME@@PACKAGE_API_REVISION@-dbg
+Package: @PACKAGE_NAME@-dbg
 Section: libdevel
 Architecture: any
-Depends: @PACKAGE_NAME@@PACKAGE_API_REVISION@ (= ${source:Version})
+Depends: @PACKAGE_NAME@ (= ${source:Version})
 Description: @PACKAGE_NAME@ debugging symbols
  This package contains debugging symbols for @PACKAGE_NAME@ -
  @PACKAGE_DESCRIPTION_LONG@
 
-Package: @PACKAGE_NAME@@PACKAGE_API_REVISION@
+Package: @PACKAGE_NAME@
 Section: libs
 Architecture: any
 Pre-Depends: ${misc:Pre-Depends}
-Depends: ${shlibs:Depends}, ${misc:Depends}, libbabl-0.1-0 (>= 0.1.4), libniftyprefs1 (>= 0.1.1), libniftylog1 (>= 0.1.3)
+Depends: ${shlibs:Depends}, ${misc:Depends}, libbabl-0.1-0 (>= 0.1.4), libniftyprefs (= 0.1.1), libniftylog (= 0.1.3)
 Description: @PACKAGE_DESCRIPTION@
  @PACKAGE_DESCRIPTION_LONG@

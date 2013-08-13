@@ -9,6 +9,10 @@ MINOR=1
 MICRO=1
 
 ######################
+# debian release
+DEBIAN_RELEASE=0
+
+######################
 # hw plugin API version
 HW_API_MAJOR=0
 HW_API_MINOR=0
@@ -20,13 +24,13 @@ HW_API_MICRO=0
 # updating: http://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html#Updating-version-info
 
 # The implementation number of the current interface.
-API_REVISION=1
+API_REVISION=0
 # The most recent interface number that this library implements.
-API_CURRENT=1
+API_CURRENT=0
 # The difference between the newest and oldest interfaces that this library
 # implements. In other words, the library implements all the interface numbers
 # in the range from number current - age to current.
-API_AGE=1
+API_AGE=0
 
 
 # ----------------------------------------------
@@ -73,6 +77,12 @@ function hw_major()
     echo -n $HW_API_MAJOR
 }
 
+# output debian release
+function debian()
+{
+    echo -n $DEBIAN_RELEASE
+}
+
 # output api revision
 function api_revision()
 {
@@ -111,7 +121,7 @@ function output_long()
 }
 
 # parse cmdline arguments
-TEMP=`getopt -o lsMmugrca123 --long long,short,major,minor,micro,git,api-revision,api-current,api-age,hw-major,hw-minor,hw-micro -n 'version.sh' -- "$@"`
+TEMP=`getopt -o lsMmugrca123d --long long,short,major,minor,micro,git,api-revision,api-current,api-age,hw-major,hw-minor,hw-micro,debian -n "$0" -- "$@"`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 
 # Note the quotes around `$TEMP': they are essential!
@@ -154,6 +164,9 @@ while true ; do
 
         # api-age
         -c|--api-age) api_age ; shift 1 ;;
+
+        # debian
+        -d|--debian) debian ; shift 1 ;;
 
         # ?!
         --) shift ; break ;;
