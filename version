@@ -26,7 +26,7 @@ HW_API_MICRO=0
 # The implementation number of the current interface.
 API_REVISION=0
 # The most recent interface number that this library implements.
-API_CURRENT=${MICRO}
+API_CURRENT=${DEBIAN_RELEASE}
 # The difference between the newest and oldest interfaces that this library
 # implements. In other words, the library implements all the interface numbers
 # in the range from number current - age to current.
