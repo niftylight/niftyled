@@ -9,8 +9,8 @@ MINOR=1
 MICRO=1
 
 ######################
-# debian release
-DEBIAN_RELEASE=0
+# debian revision
+DEBIAN_REVISION=0
 
 ######################
 # hw plugin API version
@@ -26,7 +26,7 @@ HW_API_MICRO=0
 # The implementation number of the current interface.
 API_REVISION=0
 # The most recent interface number that this library implements.
-API_CURRENT=${DEBIAN_RELEASE}
+API_CURRENT=${DEBIAN_REVISION}
 # The difference between the newest and oldest interfaces that this library
 # implements. In other words, the library implements all the interface numbers
 # in the range from number current - age to current.
@@ -38,7 +38,7 @@ API_AGE=0
 # function to print helptext
 function help()
 {
-    echo "$0 --long | --short | --major | --minor | --micro | --hw-major | --hw-minor | --hw-micro | --git | --api-revision | --api-current | --api-age"
+    echo "$0 --long | --short | --major | --minor | --micro | --hw-major | --hw-minor | --hw-micro | --git | --api-revision | --api-current | --api-age | --debian"
 }
 
 # output micro version
@@ -77,10 +77,10 @@ function hw_major()
     echo -n $HW_API_MAJOR
 }
 
-# output debian release
+# output debian revision
 function debian()
 {
-    echo -n $DEBIAN_RELEASE
+    echo -n $DEBIAN_REVISION
 }
 
 # output api revision
@@ -165,7 +165,7 @@ while true ; do
         # api-age
         -c|--api-age) api_age ; shift 1 ;;
 
-        # debian
+        # debian revision
         -d|--debian) debian ; shift 1 ;;
 
         # ?!

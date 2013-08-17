@@ -1,4 +1,4 @@
-@PACKAGE_NAME@ (@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MICRO_VERSION@-@DEBIAN_RELEASE@) unstable; urgency=low
+@PACKAGE_NAME@ (@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MICRO_VERSION@-@DEBIAN_REVISION@) unstable; urgency=low
 
   * s. https://github.com/niftylight/@PACKAGE@/commits/master for all changes
 
