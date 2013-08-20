@@ -686,7 +686,7 @@ void led_chain_print(LedChain * c, NftLoglevel l)
 
         NFT_LOG(l,
                 "Chain: %p\n"
-                "\tLenght: %d\n"
+                "\tLength: %d\n"
                 "\tFormat: %s\n"
                 "\tSource format: %s\n"
                 "\tBuffersize: %d",
