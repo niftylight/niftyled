@@ -182,6 +182,7 @@ AC_CONFIG_FILES([
         debian/control.tmpl 
         debian/rules.tmpl
         debian/changelog
+        debian/watch
         gentoo/media-gfx/niftyled/niftyled-9999.ebuild
 ])
 AC_OUTPUT

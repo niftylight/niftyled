@@ -56,23 +56,24 @@ indent:
 # create .deb package
 # needs dpkg-dev, debhelper
 DEBTMPDIR=$(abs_top_builddir)/deb-tmp
-DEBSRCDIR=$(DEBTMPDIR)/@PACKAGE_NAME@-@PACKAGE_VERSION@-@DEBIAN_REVISION@
+DEBSRCDIR=$(DEBTMPDIR)/@PACKAGE_NAME@-@PACKAGE_VERSION@
+TARGZFILE=$(DEBTMPDIR)/@PACKAGE_NAME@-@PACKAGE_VERSION@.orig.tar.gz
+
 deb: dist-gzip
 	@echo "Building Debian package..."; \
 	rm --recursive --force "$(DEBTMPDIR)" ; \
-	if ! [ -d debian ] ; then \
-	    @echo "The files needed for building a Debian package are not" \
-		"included by default in the distribution. To build a package, check" \
-		"out the project from source control."; \
-	    exit 1; \
-	fi; \
 	mkdir -p "$(DEBTMPDIR)" && \
-	mv "$(top_builddir)/@PACKAGE@-@PACKAGE_VERSION@.tar.gz" "$(DEBTMPDIR)/@PACKAGE_NAME@_@PACKAGE_VERSION@.orig.tar.gz" && \
-	tar --directory "$(DEBTMPDIR)/" --extract --gunzip --file "$(DEBTMPDIR)/@PACKAGE_NAME@_@PACKAGE_VERSION@.orig.tar.gz" && \
+	mv "$(top_builddir)/@PACKAGE@-@PACKAGE_VERSION@.tar.gz" "$(TARGZFILE)" && \
+	tar --directory "$(DEBTMPDIR)/" --extract --gunzip --file "$(TARGZFILE)" && \
 	mv "$(DEBTMPDIR)/@PACKAGE@-@PACKAGE_VERSION@" "$(DEBSRCDIR)" && \
 	cp -r "$(top_builddir)/debian/"* "$(DEBSRCDIR)/debian" && \
-	cp "$(top_builddir)/debian/rules.tmpl" "$(DEBSRCDIR)/debian/rules" && \
-	cp "$(top_builddir)/debian/control.tmpl" "$(DEBSRCDIR)/debian/control" && \
-	cp "$(top_builddir)/debian/docbase" "$(DEBSRCDIR)/debian/@PACKAGE_NAME@-dev.doc-base" && \
+	mv "$(DEBSRCDIR)/debian/rules.tmpl"                 "$(DEBSRCDIR)/debian/rules" && \
+	mv "$(DEBSRCDIR)/debian/control.tmpl"               "$(DEBSRCDIR)/debian/control" && \
+	mv "$(DEBSRCDIR)/debian/docbase"                    "$(DEBSRCDIR)/debian/@PACKAGE_NAME@-dev.doc-base" && \
+	mv "$(DEBSRCDIR)/debian/@PACKAGE_NAME@.install"     "$(DEBSRCDIR)/debian/@PACKAGE_NAME@@PACKAGE_API_REVISION@.install" && \
+	mv "$(DEBSRCDIR)/debian/@PACKAGE_NAME@.dirs"        "$(DEBSRCDIR)/debian/@PACKAGE_NAME@@PACKAGE_API_REVISION@.dirs" && \
+	mv "$(DEBSRCDIR)/debian/@PACKAGE_NAME@-dbg.install" "$(DEBSRCDIR)/debian/@PACKAGE_NAME@@PACKAGE_API_REVISION@-dbg.install" && \
+	mv "$(DEBSRCDIR)/debian/@PACKAGE_NAME@-dbg.dirs"    "$(DEBSRCDIR)/debian/@PACKAGE_NAME@@PACKAGE_API_REVISION@-dbg.dirs" && \
+	mv "$(DEBSRCDIR)/debian/symbols"                    "$(DEBSRCDIR)/debian/@PACKAGE_NAME@@PACKAGE_API_REVISION@.symbols" && \
 	cd "$(DEBSRCDIR)" && \
-	dpkg-buildpackage -D -v"@PACKAGE_VERSION@-@DEBIAN_REVISION@"
+	dpkg-buildpackage -b
