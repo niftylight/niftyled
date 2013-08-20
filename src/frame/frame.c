@@ -88,7 +88,7 @@ struct _LedFrame
         /** 
          * true if framebuffer is big-endian, false otherwise
          * (set after buffer-contents change because flag might 
-         * be changed in frame_convert_endianess()) 
+         * be changed in frame_convert_endianness()) 
          */
         bool is_big_endian;
         /** buffer free-func */
@@ -461,7 +461,7 @@ void led_frame_print(LedFrame * f, NftLoglevel l)
 
 
 /**
- * set endianess-flag of a frame
+ * set endianness-flag of a frame
  *
  * @param f a LedFrame
  * @param is_big_endian true if buffer of frame is big-endian ordered, false otherwise
@@ -478,7 +478,7 @@ void led_frame_set_big_endian(LedFrame * f, bool is_big_endian)
 
 
 /**
- * get endianess-flag of a frame
+ * get endianness-flag of a frame
  *
  * @param f an LedFrame
  * @result is_big_endian true if buffer of frame is big-endian ordered, false otherwise
@@ -500,7 +500,7 @@ bool led_frame_get_big_endian(LedFrame * f)
  *
  * @param f an LedFrame
  */
-void led_frame_convert_endianess(LedFrame * f)
+void led_frame_convert_endianness(LedFrame * f)
 {
         switch (led_pixel_format_get_bytes_per_pixel(f->format))
         {
@@ -563,7 +563,7 @@ void led_frame_convert_endianess(LedFrame * f)
                 default:
                 {
                         NFT_LOG(L_WARNING,
-                                "Change endianess of %d bytes-per-pixel not supported.",
+                                "Change endianness of %d bytes-per-pixel not supported.",
                                 led_pixel_format_get_bytes_per_pixel
                                 (f->format));
                         NFT_TODO();
