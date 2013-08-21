@@ -76,4 +76,4 @@ deb: dist-gzip
 	mv "$(DEBSRCDIR)/debian/@PACKAGE_NAME@-dbg.dirs"    "$(DEBSRCDIR)/debian/@PACKAGE_NAME@@PACKAGE_API_REVISION@-dbg.dirs" && \
 	mv "$(DEBSRCDIR)/debian/symbols"                    "$(DEBSRCDIR)/debian/@PACKAGE_NAME@@PACKAGE_API_REVISION@.symbols" && \
 	cd "$(DEBSRCDIR)" && \
-	dpkg-buildpackage -b
+	dpkg-buildpackage -D
