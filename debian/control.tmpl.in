@@ -31,5 +31,7 @@ Section: libs
 Architecture: any
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: niftyled-plugins
+Suggests: niftyconf, ledcat, ledcap, niftyled-vlc
 Description: @PACKAGE_DESCRIPTION@
  @PACKAGE_DESCRIPTION_LONG@
