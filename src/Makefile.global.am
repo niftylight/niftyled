@@ -34,7 +34,7 @@ COMMON_CFLAGS_N = \
        $(INCLUDE_DIRS) \
        -fno-strict-aliasing \
        -D_BSD_SOURCE \
-       -DPLUGINDIR=\"@PACKAGE@-plugins\" \
+       -DLIBDIR=\"@libdir@\" \
        $(OPT_CFLAGS) \
        $(niftyprefs_CFLAGS) \
        $(niftylog_CFLAGS) \

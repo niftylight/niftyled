@@ -113,6 +113,8 @@
 /** macro to get total amount of siblings of a plugin property */
 #define PLUGIN_PROP_COUNT(p) (_relation_sibling_count(RELATION(p)))
 
+/** plugin subdirectory */
+#define PLUGINDIR	PACKAGE"-plugins"
 
 
 
@@ -178,7 +180,7 @@ struct _LedHardware
 
 
 /* search these paths to try loading the plugin */
-static const char *_prefixes[] = { "/lib", "/usr/lib", "/usr/local/lib" };
+static const char *_prefixes[] = { LIBDIR, "/lib", "/usr/lib", "/usr/local/lib" };
 
 
 /******************************************************************************
@@ -252,8 +254,8 @@ static LedHardware *_load_plugin(const char *name, const char *family)
         }
 
         if(snprintf
-           (libname, LED_HARDWARE_LIBNAME_MAXSIZE, "%s/%s-hardware.so",
-            PLUGINDIR, family) < 0)
+           (libname, LED_HARDWARE_LIBNAME_MAXSIZE, "%s/%s-hardware.so", 
+            	PLUGINDIR, family) < 0)
         {
                 NFT_LOG_PERROR("snprintf");
                 return NULL;
