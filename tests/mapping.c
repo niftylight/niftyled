@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
 
 
         /* check library version */
-        if(!NFT_LED_CHECK_VERSION)
+        if(!LED_CHECK_VERSION)
                 return EXIT_FAILURE;
 
         /* set maximum verbosity */
