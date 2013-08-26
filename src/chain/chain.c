@@ -686,7 +686,7 @@ void led_chain_print(LedChain * c, NftLoglevel l)
 
         NFT_LOG(l,
                 "Chain: %p\n"
-                "\tLenght: %d\n"
+                "\tLength: %d\n"
                 "\tFormat: %s\n"
                 "\tSource format: %s\n"
                 "\tBuffersize: %d",
@@ -1492,7 +1492,7 @@ NftResult led_chain_fill_from_frame(LedChain * c, LedFrame * f)
         /* convert little to big endian? */
         if(!led_frame_get_big_endian(f))
         {
-                led_frame_convert_endianess(f);
+                led_frame_convert_endianness(f);
 
                 /* mark frame as converted */
                 led_frame_set_big_endian(f, true);
@@ -1501,7 +1501,7 @@ NftResult led_chain_fill_from_frame(LedChain * c, LedFrame * f)
         /* convert big to little endian? */
         if(led_frame_get_big_endian(f))
         {
-                led_frame_convert_endianess(f);
+                led_frame_convert_endianness(f);
 
                 /* mark frame as converted */
                 led_frame_set_big_endian(f, false);
@@ -1537,7 +1537,7 @@ NftResult led_chain_fill_from_frame(LedChain * c, LedFrame * f)
                                 return NFT_FAILURE;
                         }
 
-                        /* copy endianess of our frame to tmpframe */
+                        /* copy endianness of our frame to tmpframe */
                         led_frame_set_big_endian(c->tmpframe,
                                                  led_frame_get_big_endian(f));
                 }

@@ -1,5 +1,5 @@
-@PACKAGE_NAME@ (@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MICRO_VERSION@-@DEBIAN_RELEASE@) unstable; urgency=low
+@PACKAGE_NAME@@PACKAGE_API_REVISION@ (@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MICRO_VERSION@-@DEBIAN_REVISION@) unstable; urgency=low
 
   * s. https://github.com/niftylight/@PACKAGE@/commits/master for all changes
 
- -- Daniel Hiepler <daniel-ubuntu@niftylight.de>  Sun, 21 Oct 2012 21:14:42 +0200
+ -- Daniel Hiepler <daniel-ubuntu@niftylight.de>  Mon, 19 Aug 2013 12:27:37 +0200

@@ -319,7 +319,7 @@ void led_pixel_format_convert(LedPixelFormatConverter * converter,
 
 
 /**
- * check for endianess
+ * check for endianness
  *
  * @result true if we run on a big-endian or universal system, false otherwise
  */

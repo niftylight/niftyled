@@ -85,7 +85,7 @@ LedFrame                       *led_frame_new(LedFrameCord width, LedFrameCord h
 void                            led_frame_destroy(LedFrame * f);
 void                            led_frame_print(LedFrame * f, NftLoglevel l);
 void                            led_frame_print_buffer(LedFrame * f);
-void                            led_frame_convert_endianess(LedFrame * f);
+void                            led_frame_convert_endianness(LedFrame * f);
 
 void                            led_frame_set_big_endian(LedFrame * f, bool is_big_endian);
 NftResult                       led_frame_set_buffer(LedFrame * f, void *buffer, size_t buffersize, void (*freebuf) (void *));
