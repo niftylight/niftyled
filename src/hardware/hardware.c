@@ -300,23 +300,23 @@ static LedHardware *_load_plugin(const char *name, const char *family)
 
 
         /* check plugin API major-version */
-        if(plugin->api_major != HW_PLUGIN_API_MAJOR_VERSION)
+        if(plugin->api_major != LED_HW_PLUGIN_API_MAJOR_VERSION)
         {
                 NFT_LOG(L_ERROR,
                         "Plugin has been compiled against major version %d of %s, we are version %d. Not loading plugin.",
                         plugin->api_major, PACKAGE_NAME,
-                        HW_PLUGIN_API_MAJOR_VERSION);
+                        LED_HW_PLUGIN_API_MAJOR_VERSION);
                 dlclose(handle);
                 return NULL;
         }
 
         /* check plugin API minor-version */
-        if(plugin->api_minor != HW_PLUGIN_API_MINOR_VERSION)
+        if(plugin->api_minor != LED_HW_PLUGIN_API_MINOR_VERSION)
         {
                 NFT_LOG(L_WARNING,
                         "Plugin compiled against %d of %s, we are version %d. Continue at own risk.",
                         plugin->api_minor, PACKAGE_NAME,
-                        HW_PLUGIN_API_MINOR_VERSION);
+                        LED_HW_PLUGIN_API_MINOR_VERSION);
         }
 
 

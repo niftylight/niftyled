@@ -307,7 +307,7 @@ int main(int argc, char *argv[])
 	nft_log_level_set(L_NOTICE);
 
 	/* check binary version compatibility */
-	if(!NFT_LED_CHECK_VERSION)
+	if(!LED_CHECK_VERSION)
 		return EXIT_FAILURE;
 
 	/* for preferences context */

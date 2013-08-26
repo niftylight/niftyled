@@ -11,4 +11,4 @@ Libs: -L${libdir} -l@PACKAGE@
 Libs.private: 
 Requires: babl niftyprefs niftylog
 Requires.private:
-Cflags: -I@includedir@/lib@PACKAGE@-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ 
+Cflags: -I@includedir@/@PACKAGE_NAME@-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@

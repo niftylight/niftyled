@@ -69,7 +69,7 @@
 NftResult led_version_check(const char *version)
 {
         /* welcome */
-        NFT_LOG(L_INFO, "%s v%s - %s", PACKAGE_NAME, NFT_LED_LONG_VERSION,
+        NFT_LOG(L_INFO, "%s v%s - %s", PACKAGE_NAME, LED_LONG_VERSION,
                 PACKAGE_URL);
 
         /* check version of dependencies */
@@ -79,12 +79,12 @@ NftResult led_version_check(const char *version)
         if(!NFT_PREFS_CHECK_VERSION)
                 return NFT_FAILURE;
 
-        if(strcmp(version, NFT_LED_GIT_VERSION) == 0)
+        if(strcmp(version, LED_GIT_VERSION) == 0)
                 return NFT_SUCCESS;
 
         NFT_LOG(L_WARNING,
                 "%s compiled against version %s but currently installed is %s.",
-                PACKAGE_NAME, version, NFT_LED_GIT_VERSION);
+                PACKAGE_NAME, version, LED_GIT_VERSION);
 
         return NFT_FAILURE;
 }
@@ -107,7 +107,7 @@ const char *led_version_long()
 {
         static char tmp[128];
         snprintf(tmp, sizeof(tmp), "%s-%s",
-                 "@PACKAGE_VERSION@", NFT_LED_GIT_VERSION);
+                 "@PACKAGE_VERSION@", LED_GIT_VERSION);
 
         return tmp;
 }
