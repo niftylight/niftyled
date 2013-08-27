@@ -205,9 +205,9 @@ static void _rotate(double matrix[3][3], double angle)
 {
         /* tmp matrix for rotation */
         double tmp[3][3] = {
-                {cos(-angle), -sin(-angle), 0},
-                {sin(-angle), cos(-angle), 0},
-                {0, 0, 1},
+                { cos(-angle), -sin(-angle), 0 },
+                { sin(-angle),  cos(-angle), 0 },
+                { 0,            0,           1 },
         };
         _matrix_mul_3(matrix, tmp);
 }
@@ -225,8 +225,8 @@ static void _transformed_pivot(double angle, double *x, double *y)
 
         double vector[3] = { *x, *y, 1 };
         _matrix_mul_1(vector, matrix);
-        *x = fabs(round(vector[0]));
-        *y = fabs(round(vector[1]));
+        *x = fabs(vector[0]);
+        *y = fabs(vector[1]);
 }
 
 /** rotation around pivot */
@@ -257,16 +257,20 @@ static void _transformed_dimensions(LedTile * m,
         // if(*width == *height)
         // return;
 
-        double corners[4][3] = {
-                {0.0, 0.0, 1},
-                {(double) *width, 0.0, 1},
-                {(double) *width, (double) *height, 1},
-                {0.0, (double) *height, 1},
+        double corners[4][3] = 
+		{
+                { 0.0,             0.0,              1 },
+                { (double) *width, 0.0,              1 },
+                { (double) *width, (double) *height, 1 },
+                { 0.0,             (double) *height, 1 },
         };
 
         double matrix[3][3];
         _identity_matrix(matrix);
-        _rotate_pivot(matrix, m->geometry.rotation, m->geometry.pivot_x,
+		
+        _rotate_pivot(matrix, 
+                      m->geometry.rotation, 
+                      m->geometry.pivot_x,
                       m->geometry.pivot_y);
 
         double w_min = 0, h_min = 0, w_max = 0, h_max = 0;
@@ -284,10 +288,6 @@ static void _transformed_dimensions(LedTile * m,
 
         *width = (LedFrameCord) round(w_max - w_min);
         *height = (LedFrameCord) round(h_max - h_min);
-
-
-        // printf("%.0f/%.0f ---> %d/%d %.0f°\n", w, h, *width, *height,
-        // m->geometry.rotation*180/M_PI);
 }
 
 
@@ -345,6 +345,7 @@ static void _dimensions(LedTile * m,
                 *height = MAX(*height, led_chain_get_max_y(m->chain) + 1);
         }
 
+		NFT_LOG(L_NOISY, "%d/%d", *width, *height);
 }
 
 
@@ -672,6 +673,8 @@ double led_tile_get_rotation(LedTile * m)
         if(!m)
                 NFT_LOG_NULL(-1);
 
+		NFT_LOG(L_NOISY, "%.2f°", m->geometry.rotation*180/M_PI);
+				
         return m->geometry.rotation;
 }
 
@@ -707,6 +710,8 @@ double led_tile_get_pivot_x(LedTile * m)
         if(!m)
                 NFT_LOG_NULL(-1);
 
+		NFT_LOG(L_NOISY, "%.2f", m->geometry.pivot_x);
+		
         return m->geometry.pivot_x;
 }
 
@@ -742,6 +747,8 @@ double led_tile_get_pivot_y(LedTile * m)
         if(!m)
                 NFT_LOG_NULL(-1);
 
+		NFT_LOG(L_NOISY, "%.2f", m->geometry.pivot_y);
+		
         return m->geometry.pivot_y;
 }
 
@@ -760,6 +767,8 @@ double led_tile_get_transformed_pivot_x(LedTile * t)
         double x = t->geometry.pivot_x, y = t->geometry.pivot_y;
         _transformed_pivot(t->geometry.rotation, &x, &y);
 
+		NFT_LOG(L_NOISY, "%.2f", x);
+		
         return x;
 }
 
@@ -778,6 +787,8 @@ double led_tile_get_transformed_pivot_y(LedTile * t)
         double x = t->geometry.pivot_x, y = t->geometry.pivot_y;
         _transformed_pivot(t->geometry.rotation, &x, &y);
 
+		NFT_LOG(L_NOISY, "%.2f", y);
+		
         return y;
 }
 
@@ -796,6 +807,8 @@ LedFrameCord led_tile_get_width(LedTile * m)
         LedFrameCord w, h;
         _dimensions(m, &w, &h);
 
+		NFT_LOG(L_NOISY, "%d", w);
+		
         return w;
 }
 
@@ -814,6 +827,8 @@ LedFrameCord led_tile_get_transformed_width(LedTile * t)
         _dimensions(t, &w, &h);
         _transformed_dimensions(t, &w, &h);
 
+		NFT_LOG(L_NOISY, "%d", w);
+
         return w;
 }
 
@@ -831,6 +846,8 @@ LedFrameCord led_tile_get_height(LedTile * m)
         LedFrameCord w, h;
         _dimensions(m, &w, &h);
 
+		NFT_LOG(L_NOISY, "%d", h);
+		
         return h;
 }
 
@@ -848,6 +865,8 @@ LedFrameCord led_tile_get_transformed_height(LedTile * t)
         _dimensions(t, &w, &h);
         _transformed_dimensions(t, &w, &h);
 
+		NFT_LOG(L_NOISY, "%d", h);
+		
         return h;
 }
 
