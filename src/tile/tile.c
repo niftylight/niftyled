@@ -214,20 +214,20 @@ static void _rotate(double matrix[3][3], double angle)
 
 
 /** get transformed version of pivot */
-static void _transformed_pivot(double angle, double *x, double *y)
-{
-        if(*x == *y)
-                return;
+//~ static void _transformed_pivot(double angle, double *x, double *y)
+//~ {
+        //~ if(*x == *y)
+                //~ return;
 
-        double matrix[3][3];
-        _identity_matrix(matrix);
-        _rotate(matrix, angle);
+        //~ double matrix[3][3];
+        //~ _identity_matrix(matrix);
+        //~ _rotate(matrix, angle);
 
-        double vector[3] = { *x, *y, 1 };
-        _matrix_mul_1(vector, matrix);
-        *x = fabs(vector[0]);
-        *y = fabs(vector[1]);
-}
+        //~ double vector[3] = { *x, *y, 1 };
+        //~ _matrix_mul_1(vector, matrix);
+        //~ *x = fabs(vector[0]);
+        //~ *y = fabs(vector[1]);
+//~ }
 
 /** rotation around pivot */
 static void _rotate_pivot(double matrix[3][3], double angle, double x,
@@ -253,34 +253,40 @@ static void _transformed_bounding_box(LedTile * t,
                                       double *x3, double *y3,
                                       double *x4, double *y4)
 {
-        double corners[4][3] = {
+		/* 4 corners of tile (untransformed bounding box) */
+        double corners[4][3] = 
+		{
                 {0.0, 0.0, 1},
                 {(double) *width, 0.0, 1},
                 {(double) *width, (double) *height, 1},
                 {0.0, (double) *height, 1},
         };
 
+		/* result array (bounding box corners) */
+		double *result[4][2] =
+		{
+				{x1,y1}, {x2,y2}, {x3,y3}, {x4,y4}
+		};
+
+		/* temporary matrix */
         double matrix[3][3];
         _identity_matrix(matrix);
 
+		/* matrix for rotate bounding box */
         _rotate_pivot(matrix,
                       t->geometry.rotation,
                       t->geometry.pivot_x, t->geometry.pivot_y);
-        // ~ //_rotate(matrix, 
-        // t->geometry.rotation);
 
-        _matrix_mul_1(corners[0], matrix);
-        *x1 = corners[0][0];
-        *y1 = corners[0][1];
-        _matrix_mul_1(corners[1], matrix);
-        *x2 = corners[1][0];
-        *y2 = corners[1][1];
-        _matrix_mul_1(corners[2], matrix);
-        *x3 = corners[2][0];
-        *y3 = corners[2][1];
-        _matrix_mul_1(corners[3], matrix);
-        *x4 = corners[3][0];
-        *y4 = corners[3][1];
+		/* rotate all 4 corners */
+		for(int i=0; i<4; i++)
+		{
+			/* rotate */
+        	_matrix_mul_1(corners[i], matrix);
+			/* save x */
+			*result[i][0] = corners[i][0];
+			/* save y */
+			*result[i][1] = corners[i][1];
+		}
 
 }
 
@@ -290,32 +296,23 @@ static void _transformed_dimensions(LedTile * t,
                                     LedFrameCord * width,
                                     LedFrameCord * height)
 {
-        double x1, y1, x2, y2, x3, y3, x4, y4;
+        double corners[4][2];
         _transformed_bounding_box(t, width, height,
-                                  &x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4);
+                                  &corners[0][0], &corners[0][1], 
+                                  &corners[1][0], &corners[1][1],
+                                  &corners[2][0], &corners[2][1],
+                                  &corners[3][0], &corners[3][1]);
 
-        /* four corners */
-        double w_min = 0, h_min = 0, w_max = 0, h_max = 0;
-        w_max = MAX(w_max, x1);
-        w_min = MIN(w_min, x1);
-        h_max = MAX(h_max, y1);
-        h_min = MIN(h_min, y1);
-
-        w_max = MAX(w_max, x2);
-        w_min = MIN(w_min, x2);
-        h_max = MAX(h_max, y2);
-        h_min = MIN(h_min, y2);
-
-        w_max = MAX(w_max, x3);
-        w_min = MIN(w_min, x3);
-        h_max = MAX(h_max, y3);
-        h_min = MIN(h_min, y3);
-
-        w_max = MAX(w_max, x4);
-        w_min = MIN(w_min, x4);
-        h_max = MAX(h_max, y4);
-        h_min = MIN(h_min, y4);
-
+        /* walk all four corners and find x/y extrema */
+		double w_min = 0, h_min = 0, w_max = 0, h_max = 0;
+		for(int i=0; i<4; i++)
+		{
+			w_max = MAX(w_max, corners[i][0]);
+			w_min = MIN(w_min, corners[i][0]);
+			h_max = MAX(h_max, corners[i][1]);
+			h_min = MIN(h_min, corners[i][1]);
+		}
+		
         *width = (LedFrameCord) round(w_max - w_min);
         *height = (LedFrameCord) round(h_max - h_min);
 }
@@ -419,13 +416,6 @@ LedTile *led_tile_new()
                 return NULL;
         }
 
-        /* register to current LedConfCtxt */
-        // ~ if(!led_settings_tile_register(m))
-        // ~ {
-        // ~ free(m);
-        // ~ return NULL;
-        // ~ }
-
         return m;
 }
 
@@ -464,10 +454,6 @@ void led_tile_destroy(LedTile * m)
 
         /* unlink from linked-list of siblings */
         TILE_UNLINK(m);
-
-
-        /* unregister from config context */
-        // ~ led_settings_tile_unregister(m);
 
         /* free chain of this tile */
         if(m->chain)
@@ -774,18 +760,18 @@ double led_tile_get_pivot_y(LedTile * m)
  * @param t LedTile descriptor
  * @result x coordinate in pixels
  */
-double led_tile_get_transformed_pivot_x(LedTile * t)
-{
-        if(!t)
-                NFT_LOG_NULL(0);
+//~ double led_tile_get_transformed_pivot_x(LedTile * t)
+//~ {
+        //~ if(!t)
+                //~ NFT_LOG_NULL(0);
 
-        double x = t->geometry.pivot_x, y = t->geometry.pivot_y;
-        _transformed_pivot(t->geometry.rotation, &x, &y);
+        //~ double x = t->geometry.pivot_x, y = t->geometry.pivot_y;
+        //~ _transformed_pivot(t->geometry.rotation, &x, &y);
 
-        NFT_LOG(L_NOISY, "%.2f", x);
+        //~ NFT_LOG(L_NOISY, "%.2f", x);
 
-        return x;
-}
+        //~ return x;
+//~ }
 
 
 /**
@@ -794,18 +780,18 @@ double led_tile_get_transformed_pivot_x(LedTile * t)
  * @param t LedTile descriptor
  * @result y coordinate in pixels
  */
-double led_tile_get_transformed_pivot_y(LedTile * t)
-{
-        if(!t)
-                NFT_LOG_NULL(0);
+//~ double led_tile_get_transformed_pivot_y(LedTile * t)
+//~ {
+        //~ if(!t)
+                //~ NFT_LOG_NULL(0);
 
-        double x = t->geometry.pivot_x, y = t->geometry.pivot_y;
-        _transformed_pivot(t->geometry.rotation, &x, &y);
+        //~ double x = t->geometry.pivot_x, y = t->geometry.pivot_y;
+        //~ _transformed_pivot(t->geometry.rotation, &x, &y);
 
-        NFT_LOG(L_NOISY, "%.2f", y);
+        //~ NFT_LOG(L_NOISY, "%.2f", y);
 
-        return y;
-}
+        //~ return y;
+//~ }
 
 
 /**
