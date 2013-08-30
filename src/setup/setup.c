@@ -185,6 +185,8 @@ LedFrameCord led_setup_get_width(LedSetup * s)
                 }
         }
 
+        NFT_LOG(L_NOISY, "%d", r);
+
         return r;
 }
 
@@ -223,6 +225,8 @@ LedFrameCord led_setup_get_height(LedSetup * s)
                                 r = w;
                 }
         }
+
+        NFT_LOG(L_NOISY, "%d", r);
 
         return r;
 }

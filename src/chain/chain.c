@@ -560,12 +560,12 @@ static int _print_greyscale_value(LedChain * c, long long int *v,
                 unsigned short *t = (unsigned short *) v;
                 return snprintf(buffer, bufsize, "0x%.4hx ", *t);
         }
-		/* u32 */
-    	else if(strcmp(component_type, "u32") == 0)
+        /* u32 */
+        else if(strcmp(component_type, "u32") == 0)
         {
                 unsigned int *t = (unsigned int *) v;
                 return snprintf(buffer, bufsize, "0x%.8x ", *t);
-        }	
+        }
         /* float */
         else if((strcmp(component_type, "float") == 0))
         {
@@ -1378,13 +1378,13 @@ static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
 }
 
 //~ /**
- //~ * fill chain with greyscale values from another chain
- //~ *
- //~ * @param dst The LED chain whose brightness values should be set 
- //~ * @param src chain to take pixels from
- //~ * @param offset start writing dst at this offset
- //~ * @result amount of LEDs copied to dst 
- //~ */
+ // ~ * fill chain with greyscale values from another chain
+ // ~ *
+ // ~ * @param dst The LED chain whose brightness values should be set 
+ // ~ * @param src chain to take pixels from
+ // ~ * @param offset start writing dst at this offset
+ // ~ * @result amount of LEDs copied to dst 
+ // ~ */
 //~ LedCount led_chain_fill_from_chain(LedChain * dst, LedChain * src, LedCount offset)
 //~ {
                 // ~ if(!src || !dst)
@@ -1405,6 +1405,7 @@ static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
                                 // ~ char *srcbuf = src->ledbuffer;
                                 // ~ char *dstbuf =
                                 // dst->ledbuffer+led_pixel_format_get_component_offset(dst->format, 
+                                // 
                                 // 
                                 // 
                                 // offset);
@@ -1441,12 +1442,12 @@ static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
 
 
 //~ /**
- //~ * fill chain with pixels from a tile (and sub tiles/chains)
- //~ *
- //~ * @param c The LED chain whose brightness values should be set
- //~ * @param tile LedTile to take pixels from 
- //~ * @result amount of LEDs processed 
- //~ */
+ // ~ * fill chain with pixels from a tile (and sub tiles/chains)
+ // ~ *
+ // ~ * @param c The LED chain whose brightness values should be set
+ // ~ * @param tile LedTile to take pixels from 
+ // ~ * @result amount of LEDs processed 
+ // ~ */
 //~ LedCount led_chain_fill_from_tile(LedChain * c, LedTile * t, LedCount offset)
 //~ {
                 // ~ if(!c || !t)

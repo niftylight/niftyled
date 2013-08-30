@@ -205,9 +205,9 @@ static void _rotate(double matrix[3][3], double angle)
 {
         /* tmp matrix for rotation */
         double tmp[3][3] = {
-                { cos(-angle), -sin(-angle), 0 },
-                { sin(-angle),  cos(-angle), 0 },
-                { 0,            0,           1 },
+                {cos(-angle), -sin(-angle), 0},
+                {sin(-angle), cos(-angle), 0},
+                {0, 0, 1},
         };
         _matrix_mul_3(matrix, tmp);
 }
@@ -233,11 +233,6 @@ static void _transformed_pivot(double angle, double *x, double *y)
 static void _rotate_pivot(double matrix[3][3], double angle, double x,
                           double y)
 {
-
-        double x2 = x, y2 = y;
-        _transformed_pivot(angle, &x2, &y2);
-
-
         /* translate to pivot */
         _translate(matrix, -x, -y);
 
@@ -245,56 +240,91 @@ static void _rotate_pivot(double matrix[3][3], double angle, double x,
         _rotate(matrix, angle);
 
         /* translate back to rotated pivot */
-        _translate(matrix, x2, y2);
+        _translate(matrix, x, y);
 }
 
 
-/** get dimensions of transformed tile */
-static void _transformed_dimensions(LedTile * m,
-                                    LedFrameCord * width,
-                                    LedFrameCord * height)
+/** get bounding box of transformed tile */
+static void _transformed_bounding_box(LedTile * t,
+                                      LedFrameCord * width,
+                                      LedFrameCord * height,
+                                      double *x1, double *y1,
+                                      double *x2, double *y2,
+                                      double *x3, double *y3,
+                                      double *x4, double *y4)
 {
-        // if(*width == *height)
-        // return;
-
-        double corners[4][3] = 
-		{
-                { 0.0,             0.0,              1 },
-                { (double) *width, 0.0,              1 },
-                { (double) *width, (double) *height, 1 },
-                { 0.0,             (double) *height, 1 },
+        double corners[4][3] = {
+                {0.0, 0.0, 1},
+                {(double) *width, 0.0, 1},
+                {(double) *width, (double) *height, 1},
+                {0.0, (double) *height, 1},
         };
 
         double matrix[3][3];
         _identity_matrix(matrix);
-		
-        _rotate_pivot(matrix, 
-                      m->geometry.rotation, 
-                      m->geometry.pivot_x,
-                      m->geometry.pivot_y);
 
-        double w_min = 0, h_min = 0, w_max = 0, h_max = 0;
+        _rotate_pivot(matrix,
+                      t->geometry.rotation,
+                      t->geometry.pivot_x, t->geometry.pivot_y);
+        // ~ //_rotate(matrix, 
+        // t->geometry.rotation);
+
+        _matrix_mul_1(corners[0], matrix);
+        *x1 = corners[0][0];
+        *y1 = corners[0][1];
+        _matrix_mul_1(corners[1], matrix);
+        *x2 = corners[1][0];
+        *y2 = corners[1][1];
+        _matrix_mul_1(corners[2], matrix);
+        *x3 = corners[2][0];
+        *y3 = corners[2][1];
+        _matrix_mul_1(corners[3], matrix);
+        *x4 = corners[3][0];
+        *y4 = corners[3][1];
+
+}
+
+
+/** get dimensions of transformed tile */
+static void _transformed_dimensions(LedTile * t,
+                                    LedFrameCord * width,
+                                    LedFrameCord * height)
+{
+        double x1, y1, x2, y2, x3, y3, x4, y4;
+        _transformed_bounding_box(t, width, height,
+                                  &x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4);
 
         /* four corners */
-        int i;
-        for(i = 0; i < 4; i++)
-        {
-                _matrix_mul_1(corners[i], matrix);
-                w_max = MAX(w_max, corners[i][0]);
-                h_max = MAX(h_max, corners[i][1]);
-                w_min = MIN(w_min, corners[i][0]);
-                h_min = MIN(h_min, corners[i][1]);
-        }
+        double w_min = 0, h_min = 0, w_max = 0, h_max = 0;
+        w_max = MAX(w_max, x1);
+        w_min = MIN(w_min, x1);
+        h_max = MAX(h_max, y1);
+        h_min = MIN(h_min, y1);
+
+        w_max = MAX(w_max, x2);
+        w_min = MIN(w_min, x2);
+        h_max = MAX(h_max, y2);
+        h_min = MIN(h_min, y2);
+
+        w_max = MAX(w_max, x3);
+        w_min = MIN(w_min, x3);
+        h_max = MAX(h_max, y3);
+        h_min = MIN(h_min, y3);
+
+        w_max = MAX(w_max, x4);
+        w_min = MIN(w_min, x4);
+        h_max = MAX(h_max, y4);
+        h_min = MIN(h_min, y4);
 
         *width = (LedFrameCord) round(w_max - w_min);
         *height = (LedFrameCord) round(h_max - h_min);
 }
 
 
-/** foreach helper to calc dimensions of a tile */
 static void _dimensions(LedTile * m, LedFrameCord * width,
                         LedFrameCord * height);
-static NftResult _calc_dimensions(Relation * r, void *u)
+/** foreach helper to calc dimensions of a tile */
+static NftResult _calc_dimensions_helper(Relation * r, void *u)
 {
         LedTile *t = TILE(r);
         LedFrameCord **dim = u;
@@ -308,19 +338,6 @@ static NftResult _calc_dimensions(Relation * r, void *u)
 
         *width = MAX(*width, w + t->geometry.x);
         *height = MAX(*height, h + t->geometry.y);
-
-        /* walk siblings of child... */
-        // ~ LedTile *sibling;
-        // ~ for(sibling = child->relation.next; sibling;
-        // ~ sibling = sibling->relation.next)
-        // ~ {
-        // ~ LedFrameCord w, h;
-        // ~ _dimensions(sibling, &w, &h);
-        // ~ _transformed_dimensions(sibling, &w, &h);
-
-        // ~ *width = MAX(*width, w + sibling->geometry.x);
-        // ~ *height = MAX(*height, h + sibling->geometry.y);
-        // ~ }
 
         return NFT_SUCCESS;
 }
@@ -336,7 +353,7 @@ static void _dimensions(LedTile * m,
 
         /* walk children */
         LedFrameCord *dim[2] = { width, height };
-        TILE_FOREACH(TILE_CHILD(m), _calc_dimensions, dim);
+        TILE_FOREACH(TILE_CHILD(m), _calc_dimensions_helper, dim);
 
         /* if we have a chain, find dimensions of our own chain */
         if(m->chain)
@@ -344,8 +361,6 @@ static void _dimensions(LedTile * m,
                 *width = MAX(*width, led_chain_get_max_x(m->chain) + 1);
                 *height = MAX(*height, led_chain_get_max_y(m->chain) + 1);
         }
-
-		NFT_LOG(L_NOISY, "%d/%d", *width, *height);
 }
 
 
@@ -673,8 +688,8 @@ double led_tile_get_rotation(LedTile * m)
         if(!m)
                 NFT_LOG_NULL(-1);
 
-		NFT_LOG(L_NOISY, "%.2f°", m->geometry.rotation*180/M_PI);
-				
+        NFT_LOG(L_NOISY, "%.2f°", m->geometry.rotation * 180 / M_PI);
+
         return m->geometry.rotation;
 }
 
@@ -710,8 +725,8 @@ double led_tile_get_pivot_x(LedTile * m)
         if(!m)
                 NFT_LOG_NULL(-1);
 
-		NFT_LOG(L_NOISY, "%.2f", m->geometry.pivot_x);
-		
+        NFT_LOG(L_NOISY, "%.2f", m->geometry.pivot_x);
+
         return m->geometry.pivot_x;
 }
 
@@ -747,8 +762,8 @@ double led_tile_get_pivot_y(LedTile * m)
         if(!m)
                 NFT_LOG_NULL(-1);
 
-		NFT_LOG(L_NOISY, "%.2f", m->geometry.pivot_y);
-		
+        NFT_LOG(L_NOISY, "%.2f", m->geometry.pivot_y);
+
         return m->geometry.pivot_y;
 }
 
@@ -767,8 +782,8 @@ double led_tile_get_transformed_pivot_x(LedTile * t)
         double x = t->geometry.pivot_x, y = t->geometry.pivot_y;
         _transformed_pivot(t->geometry.rotation, &x, &y);
 
-		NFT_LOG(L_NOISY, "%.2f", x);
-		
+        NFT_LOG(L_NOISY, "%.2f", x);
+
         return x;
 }
 
@@ -787,9 +802,36 @@ double led_tile_get_transformed_pivot_y(LedTile * t)
         double x = t->geometry.pivot_x, y = t->geometry.pivot_y;
         _transformed_pivot(t->geometry.rotation, &x, &y);
 
-		NFT_LOG(L_NOISY, "%.2f", y);
-		
+        NFT_LOG(L_NOISY, "%.2f", y);
+
         return y;
+}
+
+
+/**
+ * get bounding box of transformed tile (corners are counted clockwise)
+ *
+ * @param t[in] LedTile descriptor
+ * @param x1[out] x of 1st corner
+ * @param y1[out] y of 1st corner
+ * @param x2[out] x of 2nd corner
+ * @param y2[out] y of 2nd corner
+ * @param x3[out] x of 3rd corner
+ * @param y3[out] y of 3rd corner
+ * @param x4[out] x of 4th corner
+ * @param y4[out] y of 4th corner
+ */
+NftResult led_tile_get_transformed_bounding_box(LedTile * t,
+                                                double *x1, double *y1,
+                                                double *x2, double *y2,
+                                                double *x3, double *y3,
+                                                double *x4, double *y4)
+{
+        LedFrameCord w, h;
+        _dimensions(t, &w, &h);
+        _transformed_bounding_box(t, &w, &h, x1, y1, x2, y2, x3, y3, x4, y4);
+
+        return NFT_SUCCESS;
 }
 
 
@@ -807,8 +849,8 @@ LedFrameCord led_tile_get_width(LedTile * m)
         LedFrameCord w, h;
         _dimensions(m, &w, &h);
 
-		NFT_LOG(L_NOISY, "%d", w);
-		
+        NFT_LOG(L_NOISY, "%d", w);
+
         return w;
 }
 
@@ -827,7 +869,7 @@ LedFrameCord led_tile_get_transformed_width(LedTile * t)
         _dimensions(t, &w, &h);
         _transformed_dimensions(t, &w, &h);
 
-		NFT_LOG(L_NOISY, "%d", w);
+        NFT_LOG(L_NOISY, "%d", w);
 
         return w;
 }
@@ -846,8 +888,8 @@ LedFrameCord led_tile_get_height(LedTile * m)
         LedFrameCord w, h;
         _dimensions(m, &w, &h);
 
-		NFT_LOG(L_NOISY, "%d", h);
-		
+        NFT_LOG(L_NOISY, "%d", h);
+
         return h;
 }
 
@@ -865,8 +907,8 @@ LedFrameCord led_tile_get_transformed_height(LedTile * t)
         _dimensions(t, &w, &h);
         _transformed_dimensions(t, &w, &h);
 
-		NFT_LOG(L_NOISY, "%d", h);
-		
+        NFT_LOG(L_NOISY, "%d", h);
+
         return h;
 }
 

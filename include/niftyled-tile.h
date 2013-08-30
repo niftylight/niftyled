@@ -91,6 +91,7 @@ double                          led_tile_get_transformed_pivot_x(LedTile * t);
 double                          led_tile_get_transformed_pivot_y(LedTile * t);
 LedFrameCord                    led_tile_get_transformed_width(LedTile * t);
 LedFrameCord                    led_tile_get_transformed_height(LedTile * t);
+NftResult                       led_tile_get_transformed_bounding_box(LedTile * t, double *x1, double *y1, double *x2, double *y2, double *x3, double *y3, double *x4, double *y4);
 LedChain                       *led_tile_get_chain(LedTile * t);
 void                           *led_tile_get_privdata(LedTile * t);
 LedCount                        led_tile_get_ledcount(LedTile * t);

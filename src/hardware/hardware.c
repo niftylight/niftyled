@@ -180,7 +180,8 @@ struct _LedHardware
 
 
 /* search these paths to try loading the plugin */
-static const char *_prefixes[] = { LIBDIR, "/lib", "/usr/lib", "/usr/local/lib" };
+static const char *_prefixes[] =
+        { LIBDIR, "/lib", "/usr/lib", "/usr/local/lib" };
 
 
 /******************************************************************************
@@ -254,8 +255,8 @@ static LedHardware *_load_plugin(const char *name, const char *family)
         }
 
         if(snprintf
-           (libname, LED_HARDWARE_LIBNAME_MAXSIZE, "%s/%s-hardware.so", 
-            	PLUGINDIR, family) < 0)
+           (libname, LED_HARDWARE_LIBNAME_MAXSIZE, "%s/%s-hardware.so",
+            PLUGINDIR, family) < 0)
         {
                 NFT_LOG_PERROR("snprintf");
                 return NULL;
@@ -1428,7 +1429,7 @@ void led_hardware_plugin_print_all()
         /* save current loglevel */
         NftLoglevel ll_current = nft_log_level_get();
 
-		/* switch to "info" loglevel */
+        /* switch to "info" loglevel */
         nft_log_level_set(L_INFO);
 
         int i;
@@ -2536,8 +2537,8 @@ NftResult led_hardware_plugin_prop_get_string(LedHardware * h,
                 .custom.type = LED_HW_CUSTOM_PROP_STRING,
         };
 
-        if(h->plugin->
-           get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
+        if(h->
+           plugin->get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
         {
                 /* buffer id from hardware */
                 NFT_LOG(L_DEBUG, "Got \"%s\"=\"%s\" from %s",
@@ -2598,8 +2599,8 @@ NftResult led_hardware_plugin_prop_get_int(LedHardware * h,
                 .custom.type = LED_HW_CUSTOM_PROP_INT,
         };
 
-        if(h->plugin->
-           get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
+        if(h->
+           plugin->get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
         {
                 /* buffer id from hardware */
                 NFT_LOG(L_DEBUG, "Got \"%s\"=\"%d\" from %s",
@@ -2659,8 +2660,8 @@ NftResult led_hardware_plugin_prop_get_float(LedHardware * h,
                 .custom.type = LED_HW_CUSTOM_PROP_FLOAT,
         };
 
-        if(h->plugin->
-           get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
+        if(h->
+           plugin->get(h->plugin_privdata, LED_HW_CUSTOM_PROP, &get_custom))
         {
                 /* buffer id from hardware */
                 NFT_LOG(L_DEBUG, "Got \"%s\"=\"%f\" from %s",

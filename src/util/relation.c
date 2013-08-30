@@ -313,8 +313,8 @@ int _relation_sibling_count(Relation * r)
  * @result NFT_SUCCESS or NFT_FAILURE
  */
 NftResult _relation_foreach(Relation * r,
-                           NftResult(*func) (Relation * r, void *userptr),
-                           void *userptr)
+                            NftResult(*func) (Relation * r, void *userptr),
+                            void *userptr)
 {
         if(!r || !func)
                 return NFT_FAILURE;
@@ -333,5 +333,5 @@ NftResult _relation_foreach(Relation * r,
 
 
 NftResult _relation_foreach_recursive(Relation * r,
-                                     NftResult(*func) (Relation * r,
-                                                       void *userptr));
+                                      NftResult(*func) (Relation * r,
+                                                        void *userptr));
