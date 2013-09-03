@@ -213,22 +213,6 @@ static void _rotate(double matrix[3][3], double angle)
 }
 
 
-/** get transformed version of pivot */
-//~ static void _transformed_pivot(double angle, double *x, double *y)
-//~ {
-        // ~ if(*x == *y)
-                // ~ return;
-
-        // ~ double matrix[3][3];
-        // ~ _identity_matrix(matrix);
-        // ~ _rotate(matrix, angle);
-
-        // ~ double vector[3] = { *x, *y, 1 };
-        // ~ _matrix_mul_1(vector, matrix);
-        // ~ *x = fabs(vector[0]);
-        // ~ *y = fabs(vector[1]);
-//~ }
-
 /** rotation around pivot */
 static void _rotate_pivot(double matrix[3][3], double angle, double x,
                           double y)
@@ -244,22 +228,16 @@ static void _rotate_pivot(double matrix[3][3], double angle, double x,
 }
 
 
-/** get bounding box of transformed tile */
-static void _transformed_bounding_box(LedTile * t,
-                                      LedFrameCord * width,
-                                      LedFrameCord * height,
-                                      double *x1, double *y1,
-                                      double *x2, double *y2)
+/** rotate tile bounding box */
+static void _transform_tile_box(LedTile * t,
+                                LedFrameCord * x1,
+                                LedFrameCord * y1,
+                                LedFrameCord * x2, LedFrameCord * y2)
 {
-        /* corners of tile (untransformed bounding box) */
+        /* corners untransformed bounding box */
         double corners[2][3] = {
-                {0.0, 0.0, 1},
-                {(double) *width, (double) *height, 1},
-        };
-
-        /* result array (bounding box corners) */
-        double *result[2][2] = {
-                {x1, y1}, {x2, y2}
+                {(double) *x1, (double) *y1, 1},
+                {(double) *x2, (double) *y2, 1},
         };
 
         /* temporary matrix */
@@ -272,88 +250,13 @@ static void _transformed_bounding_box(LedTile * t,
                       t->geometry.pivot_x, t->geometry.pivot_y);
 
         /* rotate */
-        for(int i = 0; i < 2; i++)
-        {
-                /* rotate */
-                _matrix_mul_1(corners[i], matrix);
-                /* save x */
-                *result[i][0] = corners[i][0];
-                /* save y */
-                *result[i][1] = corners[i][1];
-        }
+        _matrix_mul_1(corners[0], matrix);
+        *x1 = corners[0][0];
+        *y1 = corners[0][1];
 
-}
-
-
-/** get dimensions of transformed tile */
-static void _transformed_dimensions(LedTile * t,
-                                    LedFrameCord * width,
-                                    LedFrameCord * height)
-{
-        double corners[2][2];
-        _transformed_bounding_box(t, width, height,
-                                  &corners[0][0], &corners[0][1],
-                                  &corners[1][0], &corners[1][1]);
-
-        /* walk corners and find x/y extrema */
-        double w_min = 0, h_min = 0, w_max = 0, h_max = 0;
-        for(int i = 0; i < 2; i++)
-        {
-                w_max = MAX(w_max, corners[i][0]);
-                w_min = MIN(w_min, corners[i][0]);
-                h_max = MAX(h_max, corners[i][1]);
-                h_min = MIN(h_min, corners[i][1]);
-        }
-
-        *width = (LedFrameCord) round(w_max - w_min);
-        *height = (LedFrameCord) round(h_max - h_min);
-}
-
-
-static void _dimensions(LedTile * m, LedFrameCord * width,
-                        LedFrameCord * height);
-/** foreach helper to calc dimensions of a tile */
-static NftResult _calc_dimensions_helper(Relation * r, void *u)
-{
-        LedTile *t = TILE(r);
-        LedFrameCord **dim = u;
-        LedFrameCord *width = dim[0];
-        LedFrameCord *height = dim[1];
-
-        /* recalc dimensions of this child */
-        LedFrameCord w, h;
-        _dimensions(t, &w, &h);
-        _transformed_dimensions(t, &w, &h);
-
-        *width = MAX(*width, w + t->geometry.x);
-        *height = MAX(*height, h + t->geometry.y);
-
-        return NFT_SUCCESS;
-}
-
-
-/** recalc total dimension of tile */
-static void _dimensions(LedTile * m,
-                        LedFrameCord * width, LedFrameCord * height)
-{
-        *width = 0;
-        *height = 0;
-
-
-        /* walk children */
-        LedFrameCord *dim[2] = { width, height };
-        TILE_FOREACH(TILE_CHILD(m), _calc_dimensions_helper, dim);
-
-        /* if we have a chain, find dimensions of our own chain */
-        if(m->chain)
-        {
-                LedFrameCord maxX, maxY;
-                if(!(led_chain_get_max_pos(m->chain, &maxX, &maxY)))
-                        return;
-
-                *width = MAX(*width, maxX + 1);
-                *height = MAX(*height, maxY + 1);
-        }
+        _matrix_mul_1(corners[1], matrix);
+        *x2 = corners[1][0];
+        *y2 = corners[1][1];
 }
 
 
@@ -710,44 +613,153 @@ NftResult led_tile_get_dim(LedTile * t, LedFrameCord * width,
         if(!t)
                 NFT_LOG_NULL(NFT_FAILURE);
 
+        if(width)
+                *width = 0;
+        if(height)
+                *height = 0;
+
+        LedFrameCord x1, y1, x2, y2;
+        if(!led_tile_get_bounding_box(t, &x1, &y1, &x2, &y2))
+                return NFT_FAILURE;
+
+        /* return 0x0 ? */
+        if(!x1 && !y1 && !x2 && !y2)
+                return NFT_SUCCESS;
+
         LedFrameCord w, h;
-        _dimensions(t, &w, &h);
+        w = abs(x2 - x1) + 1;
+        h = abs(y2 - y1) + 1;
 
         if(width)
                 *width = w;
+
         if(height)
                 *height = h;
 
         NFT_LOG(L_NOISY, "%dx%d", w, h);
+
 
         return NFT_SUCCESS;
 }
 
 
 /**
- * get total dimensions of transformed tile and its children
+ * get total dimensions of rotated tile and its children 
  *
  * @param[in] t LedTile
  * @param[out] width pointer to width in pixels or NULL
  * @param[out] height pointer to height in pixels or NULL		 
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult led_tile_get_transformed_dim(LedTile * t, LedFrameCord * width,
+NftResult led_tile_get_transformed_dim(LedTile * t,
+                                       LedFrameCord * width,
                                        LedFrameCord * height)
 {
         if(!t)
                 NFT_LOG_NULL(NFT_FAILURE);
 
+        if(width)
+                *width = 0;
+        if(height)
+                *height = 0;
+
+        /* get untransformed bounding box */
+        LedFrameCord x1, y1, x2, y2;
+        if(!led_tile_get_bounding_box(t, &x1, &y1, &x2, &y2))
+                return NFT_FAILURE;
+
+        /* return 0x0 ? */
+        if(!x1 && !y1 && !x2 && !y2)
+                return NFT_SUCCESS;
+
+        /* rotate */
+        _transform_tile_box(t, &x1, &y1, &x2, &y2);
+
+        /* calc width/height */
         LedFrameCord w, h;
-        _dimensions(t, &w, &h);
-        _transformed_dimensions(t, &w, &h);
+        w = abs(x2 - x1) + 1;
+        h = abs(y2 - y1) + 1;
 
         if(width)
                 *width = w;
         if(height)
                 *height = h;
 
+
         NFT_LOG(L_NOISY, "%d/%d", w, h);
+
+        return NFT_SUCCESS;
+}
+
+
+/** foreach helper */
+static NftResult _bounding_box_helper(Relation * r, void *u)
+{
+        LedTile *t = TILE(r);
+        LedFrameCord **dim = u;
+        LedFrameCord *x1 = dim[0];
+        LedFrameCord *y1 = dim[1];
+        LedFrameCord *x2 = dim[2];
+        LedFrameCord *y2 = dim[3];
+
+
+        LedFrameCord xt1, yt1, xt2, yt2;
+        if(!led_tile_get_bounding_box(t, &xt1, &yt1, &xt2, &yt2))
+                return NFT_FAILURE;
+
+        /* transform children bounding box */
+        _transform_tile_box(t, &xt1, &yt1, &xt2, &yt2);
+
+        /* add child offset */
+        xt1 += t->geometry.x;
+        yt1 += t->geometry.y;
+        xt2 += t->geometry.x;
+        yt2 += t->geometry.y;
+
+        *x1 = MIN(*x1, MIN(*x2, MIN(xt2, xt1)));
+        *y1 = MIN(*y1, MIN(*y2, MIN(yt2, yt1)));
+        *x2 = MAX(*x1, MAX(*x2, MAX(xt2, xt1)));
+        *y2 = MAX(*y1, MAX(*y2, MAX(yt2, yt1)));
+
+        return NFT_SUCCESS;
+}
+
+
+/**
+ * get bounding box of tile including child tiles
+ *
+ * @param[in] t LedTile
+ * @param[out] x1 x coordinate of bounding box corner
+ * @param[out] y1 y coordinate of bounding box corner
+ * @param[out] x2 x coordinate of opposite bounding box corner
+ * @param[out] y2 y coordinate of opposite bounding box corner
+ * @result NFT_SUCCESS or NFT_FAILURE
+ */
+NftResult led_tile_get_bounding_box(LedTile * t,
+                                    LedFrameCord * x1,
+                                    LedFrameCord * y1,
+                                    LedFrameCord * x2, LedFrameCord * y2)
+{
+        if(!t || !x1 || !y1 || !x2 || !y2)
+                NFT_LOG_NULL(NFT_FAILURE);
+
+
+        *x1 = *y1 = *x2 = *y2 = 0;
+
+
+        /* find bounding box of our chain */
+        if(t->chain)
+        {
+                if(!led_chain_get_min_pos(t->chain, x1, y1))
+                        return NFT_FAILURE;
+                if(!led_chain_get_max_pos(t->chain, x2, y2))
+                        return NFT_FAILURE;
+        }
+
+
+        /* process all children */
+        LedFrameCord *dim[4] = { x1, y1, x2, y2 };
+        TILE_FOREACH(TILE_CHILD(t), _bounding_box_helper, dim);
 
         return NFT_SUCCESS;
 }

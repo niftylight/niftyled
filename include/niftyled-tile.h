@@ -85,6 +85,7 @@ LedCount                        led_tile_to_chain(LedTile * t, LedChain * dst, L
 NftResult                       led_tile_get_pos(LedTile * t, LedFrameCord * x, LedFrameCord * y);
 NftResult                       led_tile_get_dim(LedTile * t, LedFrameCord * width, LedFrameCord * height);
 NftResult                       led_tile_get_transformed_dim(LedTile * t, LedFrameCord * width, LedFrameCord * height);
+NftResult                       led_tile_get_bounding_box(LedTile * t, LedFrameCord * x1, LedFrameCord * y1, LedFrameCord * x2, LedFrameCord * y2);
 NftResult                       led_tile_get_pivot(LedTile * t, double *x, double *y);
 double                          led_tile_get_rotation(LedTile * t);
 LedChain                       *led_tile_get_chain(LedTile * t);

@@ -159,8 +159,8 @@ LedHardware *led_setup_get_hardware(LedSetup * s)
  * get total dimensions of the current setup in pixels
  *
  * @param[in] s LedSetup descriptor
- * @param[out] total width of setup in pixels or NULL
- * @param[out] total height of setup in pixels or NULL		
+ * @param[out] width total width of setup in pixels or NULL
+ * @param[out] height total height of setup in pixels or NULL		
  * @result NFT_SUCCESS or NFT_FAILURE
  */
 NftResult led_setup_get_dim(LedSetup * s, LedFrameCord * width,

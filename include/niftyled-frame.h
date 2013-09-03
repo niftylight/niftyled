@@ -65,7 +65,7 @@
 /** type used to address a LedFrameComponent */
 #define LED_T_COMPONENT		short
 /** type used for frame coordinates (x/y) */
-#define LED_T_COORDINATE 	int
+#define LED_T_COORDINATE 		int
 
 
 /** model of one pixelframe */

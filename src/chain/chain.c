@@ -750,8 +750,8 @@ void led_chain_print(LedChain * c, NftLoglevel l)
  * get smallest x/y-coordinate of all LEDs in chain
  *
  * @param[in] c LedChain descriptor
- * @param[out] pointer to x coordinate in pixels or NULL
- * @param[out] pointer to x coordinate in pixels or NULL
+ * @param[out] x pointer to x coordinate in pixels or NULL
+ * @param[out] y pointer to x coordinate in pixels or NULL
  * @result NFT_SUCCESS or NFT_FAILURE		 
  */
 NftResult led_chain_get_min_pos(LedChain * c, LedFrameCord * x,
@@ -790,8 +790,8 @@ NftResult led_chain_get_min_pos(LedChain * c, LedFrameCord * x,
  * get largest x/y-coordinate of all LEDs in chain
  *
  * @param[in] c LedChain descriptor
- * @param[out] pointer to x coordinate in pixels or NULL
- * @param[out] pointer to x coordinate in pixels or NULL
+ * @param[out] x pointer to x coordinate in pixels or NULL
+ * @param[out] y pointer to x coordinate in pixels or NULL
  * @result NFT_SUCCESS or NFT_FAILURE		 
  */
 NftResult led_chain_get_max_pos(LedChain * c, LedFrameCord * x,
@@ -988,8 +988,8 @@ NftResult led_set_pos(Led * l, LedFrameCord x, LedFrameCord y)
  * get position of a LED inside a pixel-frame for mapping
  *
  * @param[in] l @ref Led descriptor
- * @param[out] pointer to X coordinate of LED or NULL
- * @param[out] pointer to Y coordinate of LED or NULL
+ * @param[out] x pointer to X coordinate of LED or NULL
+ * @param[out] y pointer to Y coordinate of LED or NULL
  * @result NFT_SUCCESS or NFT_FAILURE
  */
 NftResult led_get_pos(Led * l, LedFrameCord * x, LedFrameCord * y)
@@ -1362,6 +1362,7 @@ static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
                                 // ~ char *srcbuf = src->ledbuffer;
                                 // ~ char *dstbuf =
                                 // dst->ledbuffer+led_pixel_format_get_component_offset(dst->format, 
+                                // 
                                 // 
                                 // 
                                 // 
