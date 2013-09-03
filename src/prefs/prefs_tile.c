@@ -92,34 +92,43 @@ static NftResult _prefs_from_tile(NftPrefs * p, NftPrefsNode * n, void *obj,
         LedTile *t = obj;
 
 
+        /* get x/y offset */
+        LedFrameCord x, y;
+        if(!led_tile_get_pos(t, &x, &y))
+                return NFT_FAILURE;
+
         /* x offset */
-        if(!nft_prefs_node_prop_int_set
-           (n, LED_TILE_PROP_X, led_tile_get_x(t)))
+        if(!nft_prefs_node_prop_int_set(n, LED_TILE_PROP_X, x))
                 return NFT_FAILURE;
 
         /* y offset */
-        if(!nft_prefs_node_prop_int_set
-           (n, LED_TILE_PROP_Y, led_tile_get_y(t)))
+        if(!nft_prefs_node_prop_int_set(n, LED_TILE_PROP_Y, y))
+                return NFT_FAILURE;
+
+        /* get width/height */
+        LedFrameCord width, height;
+        if(!led_tile_get_dim(t, &width, &height))
                 return NFT_FAILURE;
 
         /* mapping width */
-        if(!nft_prefs_node_prop_int_set
-           (n, LED_TILE_PROP_WIDTH, led_tile_get_width(t)))
+        if(!nft_prefs_node_prop_int_set(n, LED_TILE_PROP_WIDTH, width))
                 return NFT_FAILURE;
 
         /* mapping height */
-        if(!nft_prefs_node_prop_int_set
-           (n, LED_TILE_PROP_HEIGHT, led_tile_get_height(t)))
+        if(!nft_prefs_node_prop_int_set(n, LED_TILE_PROP_HEIGHT, height))
+                return NFT_FAILURE;
+
+        /* get pivot */
+        double pX, pY;
+        if(!led_tile_get_pivot(t, &pX, &pY))
                 return NFT_FAILURE;
 
         /* rotation center x */
-        if(!nft_prefs_node_prop_double_set
-           (n, LED_TILE_PROP_ROT_X, led_tile_get_pivot_x(t)))
+        if(!nft_prefs_node_prop_double_set(n, LED_TILE_PROP_ROT_X, pX))
                 return NFT_FAILURE;
 
         /* rotation center y */
-        if(!nft_prefs_node_prop_double_set
-           (n, LED_TILE_PROP_ROT_Y, led_tile_get_pivot_y(t)))
+        if(!nft_prefs_node_prop_double_set(n, LED_TILE_PROP_ROT_Y, pY))
                 return NFT_FAILURE;
 
         /* rotation angle (radians -> degrees) */
@@ -238,10 +247,8 @@ static NftResult _prefs_to_tile(LedPrefs * p, void **newObj, NftPrefsNode * n,
                 return NFT_FAILURE;
 
         /* set correct attributes */
-        led_tile_set_x(t, x);
-        led_tile_set_y(t, y);
-        led_tile_set_pivot_x(t, rot_x);
-        led_tile_set_pivot_y(t, rot_y);
+        led_tile_set_pos(t, x, y);
+        led_tile_set_pivot(t, rot_x, rot_y);
         led_tile_set_rotation(t, rotation);
 
 

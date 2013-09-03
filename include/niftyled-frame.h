@@ -91,8 +91,7 @@ void                            led_frame_set_big_endian(LedFrame * f, bool is_b
 NftResult                       led_frame_set_buffer(LedFrame * f, void *buffer, size_t buffersize, void (*freebuf) (void *));
 
 bool                            led_frame_get_big_endian(LedFrame * f);
-LedFrameCord                    led_frame_get_width(LedFrame * f);
-LedFrameCord                    led_frame_get_height(LedFrame * f);
+NftResult                       led_frame_get_dim(LedFrame * f, LedFrameCord * width, LedFrameCord * height);
 LedPixelFormat                 *led_frame_get_format(LedFrame * f);
 void                           *led_frame_get_buffer(LedFrame * f);
 size_t                          led_frame_get_buffersize(LedFrame * f);

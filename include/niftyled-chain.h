@@ -124,10 +124,8 @@ Led                            *led_chain_get_nth(LedChain * c, LedCount n);
 LedPixelFormat                 *led_chain_get_format(LedChain * c);
 void                           *led_chain_get_buffer(LedChain * c);
 size_t                          led_chain_get_buffer_size(LedChain * c);
-LedFrameCord                    led_chain_get_min_x(LedChain * c);
-LedFrameCord                    led_chain_get_min_y(LedChain * c);
-LedFrameCord                    led_chain_get_max_x(LedChain * c);
-LedFrameCord                    led_chain_get_max_y(LedChain * c);
+NftResult                       led_chain_get_min_pos(LedChain * c, LedFrameCord * x, LedFrameCord * y);
+NftResult                       led_chain_get_max_pos(LedChain * c, LedFrameCord * x, LedFrameCord * y);
 LedFrameComponent               led_chain_get_max_component(LedChain * c);
 LedGain                         led_chain_get_max_gain(LedChain * c);
 LedHardware                    *led_chain_get_parent_hardware(LedChain * c);
@@ -135,14 +133,12 @@ LedTile                        *led_chain_get_parent_tile(LedChain * c);
 
 
 /* Led API */
-LedFrameCord                    led_get_x(Led * l);
-LedFrameCord                    led_get_y(Led * l);
+NftResult                       led_get_pos(Led * l, LedFrameCord * x, LedFrameCord * y);
 LedFrameComponent               led_get_component(Led * l);
 LedGain                         led_get_gain(Led * l);
 void                           *led_get_privdata(Led * l);
 
-NftResult                       led_set_x(Led * l, LedFrameCord x);
-NftResult                       led_set_y(Led * l, LedFrameCord y);
+NftResult                       led_set_pos(Led * l, LedFrameCord x, LedFrameCord y);
 NftResult                       led_set_component(Led * l, LedFrameComponent component);
 NftResult                       led_set_gain(Led * l, LedGain gain);
 NftResult                       led_set_privdata(Led * l, void *privdata);

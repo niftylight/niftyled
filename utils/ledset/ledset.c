@@ -521,8 +521,7 @@ int main(int argc, char *argv[])
 
 				/* update X/Y-values in config */
 				Led *led = led_chain_get_nth(chain, l);
-				led_set_x(led, (LedFrameCord) x);
-				led_set_y(led, (LedFrameCord) y);
+				led_set_pos(led, (LedFrameCord) x, (LedFrameCord) y);
 				led_set_component(led, (LedFrameComponent) component);
 			}
 
@@ -539,8 +538,9 @@ int main(int argc, char *argv[])
 			for(l = 0; l < _c.ledcount; l++)
 			{
 				/* find 0 coordinate */
-				if(led_get_x(led_chain_get_nth(chain, l)) == 0 ||
-				   led_get_y(led_chain_get_nth(chain, l)) == 0)
+				LedFrameCord x,y;
+				led_get_pos(led_chain_get_nth(chain, l), &x, &y);
+				if(x == 0 || y == 0)
 				{
 					user_can_count = true;
 					break;
@@ -553,8 +553,9 @@ int main(int argc, char *argv[])
 				NFT_LOG(L_NOTICE, "It seems you started counting from 1 instead of 0. Trying to correct that error...");
 				for(l=0; l < _c.ledcount; l++)
 				{
-					led_set_x(led_chain_get_nth(chain, l), led_get_x(led_chain_get_nth(chain, l))-1);
-					led_set_y(led_chain_get_nth(chain, l), led_get_y(led_chain_get_nth(chain, l))-1);
+					LedFrameCord x,y;
+					led_get_pos(led_chain_get_nth(chain, l), &x, &y);						
+					led_set_pos(led_chain_get_nth(chain, l), x-1, y-1);
 				}
 				NFT_LOG(L_NOTICE, "corrected... Please doublecheck the result.");
 			}
@@ -569,8 +570,10 @@ int main(int argc, char *argv[])
 			/* write config file */
 			led_prefs_node_to_file(pnode, _c.outputfile, false);
 
+			LedFrameCord w,h;
+			led_tile_get_dim(tile, &w, &h);
 			NFT_LOG(L_NOTICE, "Written config file for %dx%d tile.",
-			        led_tile_get_width(tile), led_tile_get_height(tile));
+			        w,h);
 			break;
 		}
 	}

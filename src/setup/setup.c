@@ -55,6 +55,11 @@
 #include "_hardware.h"
 
 
+/** helper macro */
+#define MIN(a,b) (((a)<(b))?(a):(b))
+/** helper macro */
+#define MAX(a,b) (((a)>(b))?(a):(b))
+
 
 
 /**
@@ -151,85 +156,63 @@ LedHardware *led_setup_get_hardware(LedSetup * s)
 
 
 /**
- * get total width of the current setup in pixels
+ * get total dimensions of the current setup in pixels
  *
- * @param s LedSetup descriptor
- * @result total width of setup in pixels or -1 upon error
+ * @param[in] s LedSetup descriptor
+ * @param[out] total width of setup in pixels or NULL
+ * @param[out] total height of setup in pixels or NULL		
+ * @result NFT_SUCCESS or NFT_FAILURE
  */
-LedFrameCord led_setup_get_width(LedSetup * s)
+NftResult led_setup_get_dim(LedSetup * s, LedFrameCord * width,
+                            LedFrameCord * height)
 {
         if(!s)
-                NFT_LOG_NULL(-1);
+                NFT_LOG_NULL(NFT_FAILURE);
 
-        /* result */
-        LedFrameCord r = 0;
+        /* start at 0 */
+        if(width)
+                *width = 0;
+        if(height)
+                *height = 0;
 
         /* no hardware registered? */
         if(!s->firstHw)
-                return r;
+                return NFT_SUCCESS;
 
         /* walk all registered Hardware descriptors */
         LedHardware *h;
         for(h = s->firstHw; h; h = led_hardware_list_get_next(h))
         {
                 /* walk all tiles registered to this hardware */
-                LedTile *tile;
-                for(tile = led_hardware_get_tile(h); tile;
-                    tile = led_tile_list_get_next(tile))
+                LedTile *t;
+                for(t = led_hardware_get_tile(h); t;
+                    t = led_tile_list_get_next(t))
                 {
-                        LedFrameCord w =
-                                led_tile_get_transformed_width(tile) +
-                                led_tile_get_x(tile);
-                        if(w > r)
-                                r = w;
+                        /* get position of tile */
+                        LedFrameCord x, y;
+                        if(!led_tile_get_pos(t, &x, &y))
+                                return NFT_FAILURE;
+
+                        /* get dimensions of tile */
+                        LedFrameCord w, h;
+                        if(!led_tile_get_transformed_dim(t, &w, &h))
+                                return NFT_FAILURE;
+
+                        /* if this tile is wider/higher than the current
+                         * dimensions, take as new width/height */
+                        if(width)
+                                *width = MAX(*width, w + x);
+                        if(height)
+                                *height = MAX(*height, h + y);
                 }
         }
 
-        NFT_LOG(L_NOISY, "%d", r);
+        NFT_LOG(L_NOISY, "%dx%d", *width, *height);
 
-        return r;
+        return NFT_SUCCESS;
 }
 
 
-/**
- * get total height of the current setup in pixels
- *
- * @param s LedSetup descriptor
- * @result total width of setup in pixels or -1 upon error
- */
-LedFrameCord led_setup_get_height(LedSetup * s)
-{
-        if(!s)
-                NFT_LOG_NULL(-1);
-
-        /* result */
-        LedFrameCord r = 0;
-
-        /* no hardware registered? */
-        if(!s->firstHw)
-                return r;
-
-        /* walk all registered Hardware descriptors */
-        LedHardware *h;
-        for(h = s->firstHw; h; h = led_hardware_list_get_next(h))
-        {
-                /* walk all tiles registered to this hardware */
-                LedTile *tile;
-                for(tile = led_hardware_get_tile(h); tile;
-                    tile = led_tile_list_get_next(tile))
-                {
-                        LedFrameCord w =
-                                led_tile_get_transformed_height(tile) +
-                                led_tile_get_y(tile);
-                        if(w > r)
-                                r = w;
-                }
-        }
-
-        NFT_LOG(L_NOISY, "%d", r);
-
-        return r;
-}
 
 
 /**

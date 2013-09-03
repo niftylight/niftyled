@@ -76,8 +76,8 @@ void                            led_setup_destroy(LedSetup * s);
 void                            led_setup_set_hardware(LedSetup * s, LedHardware * h);
 LedHardware                    *led_setup_get_hardware(LedSetup * s);
 
-LedFrameCord                    led_setup_get_width(LedSetup * s);
-LedFrameCord                    led_setup_get_height(LedSetup * s);
+NftResult                       led_setup_get_dim(LedSetup * s, LedFrameCord * width, LedFrameCord * height);
+
 
 
 

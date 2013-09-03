@@ -183,17 +183,25 @@ void led_frame_destroy(LedFrame * f)
 
 
 /**
- * get width of frame in pixels
+ * get dimensions of frame in pixels
  *
- * @param f an LedFrame
- * @result width of frame or 0 upon error
+ * @param[in] f an LedFrame
+ * @param[out] width pointer to width of frame in pixels or NULL
+ * @param[out] height pointer to height of frame in pixels or NULL
+ * @result NFT_SUCCESS or NFT_FAILURE
  */
-LedFrameCord led_frame_get_width(LedFrame * f)
+NftResult led_frame_get_dim(LedFrame * f, LedFrameCord * width,
+                            LedFrameCord * height)
 {
         if(!f)
-                NFT_LOG_NULL(0);
+                NFT_LOG_NULL(NFT_FAILURE);
 
-        return f->width;
+        if(width)
+                *width = f->width;
+        if(height)
+                *height = f->height;
+
+        return NFT_SUCCESS;
 }
 
 

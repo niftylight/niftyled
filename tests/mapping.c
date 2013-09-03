@@ -63,10 +63,9 @@ static LedTile *_create_subsubmodule(LedPrefs * c, LedFrameCord x,
                 return NULL;
 
         /* set LED positions */
-        led_set_x(led_chain_get_nth(chain, 1), 1);
-        led_set_y(led_chain_get_nth(chain, 3), 1);
-        led_set_x(led_chain_get_nth(chain, 2), 1);
-        led_set_y(led_chain_get_nth(chain, 2), 1);
+        led_set_pos(led_chain_get_nth(chain, 1), 1, 0);
+        led_set_pos(led_chain_get_nth(chain, 3), 0, 1);
+        led_set_pos(led_chain_get_nth(chain, 2), 1, 1);
 
         /* create new module */
         LedTile *m;
@@ -78,11 +77,9 @@ static LedTile *_create_subsubmodule(LedPrefs * c, LedFrameCord x,
 
         /* set module attributes */
         led_tile_set_chain(m, chain);
-        led_tile_set_x(m, x);
-        led_tile_set_y(m, y);
+        led_tile_set_pos(m, x, y);
         led_tile_set_rotation(m, angle);
-        led_tile_set_pivot_x(m, 1);
-        led_tile_set_pivot_y(m, 1);
+        led_tile_set_pivot(m, 1, 1);
         return m;
 
 _cs_error:
@@ -152,15 +149,11 @@ int main(int argc, char *argv[])
                 goto m_deinit;
 
         /* adjust rotation & offset */
-        if(!led_tile_set_x(msub2, 4))
-                goto m_deinit;
-        if(!led_tile_set_y(msub2, 0))
+        if(!led_tile_set_pos(msub2, 4, 0))
                 goto m_deinit;
         if(!led_tile_set_rotation(msub2, (90 * M_PI) / 180))
                 goto m_deinit;
-        if(!led_tile_set_pivot_x(msub2, 2))
-                goto m_deinit;
-        if(!led_tile_set_pivot_y(msub2, 2))
+        if(!led_tile_set_pivot(msub2, 2, 2))
                 goto m_deinit;
 
         /* append submodules to parent */
@@ -202,7 +195,7 @@ int main(int argc, char *argv[])
                 goto m_deinit;
 
         /* dump node to file */
-        if(!(led_prefs_node_to_file(n, "test.xml", false)))
+        if(!(led_prefs_node_to_file(n, "test.xml", true)))
                 goto m_deinit;
 
         /* free node */

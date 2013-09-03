@@ -142,12 +142,17 @@ static NftResult _prefs_from_led(NftPrefs * p, NftPrefsNode * n, void *obj,
         /* Led to generate preferences from */
         Led *led = obj;
 
+        /* get position of LED */
+        LedFrameCord x, y;
+        if(!led_get_pos(led, &x, &y))
+                return NFT_FAILURE;
+
         /* x-position */
-        if(!nft_prefs_node_prop_int_set(n, LED_LED_PROP_X, led_get_x(led)))
+        if(!nft_prefs_node_prop_int_set(n, LED_LED_PROP_X, x))
                 return NFT_FAILURE;
 
         /* y-position */
-        if(!nft_prefs_node_prop_int_set(n, LED_LED_PROP_Y, led_get_y(led)))
+        if(!nft_prefs_node_prop_int_set(n, LED_LED_PROP_Y, y))
                 return NFT_FAILURE;
 
         /* gain */
@@ -285,55 +290,53 @@ static NftResult _prefs_to_led(LedPrefs * c, void **newObj, NftPrefsNode * n,
         Led *led = userptr;
 
         /* led x-pos */
-        int t;
-        if(!(nft_prefs_node_prop_int_get(n, LED_LED_PROP_X, &t)))
+        int x = 0, y = 0;
+        if(!(nft_prefs_node_prop_int_get(n, LED_LED_PROP_X, &x)))
         {
-                t = 0;
                 NFT_LOG(L_WARNING,
                         "\"led\" has no \"%s\" prop. Using %d as default.",
-                        LED_LED_PROP_X, t);
+                        LED_LED_PROP_X, x);
         }
-        led_set_x(led, (LedFrameCord) t);
-
 
         /* led y-pos */
-        if(!(nft_prefs_node_prop_int_get(n, LED_LED_PROP_Y, &t)))
+        if(!(nft_prefs_node_prop_int_get(n, LED_LED_PROP_Y, &y)))
         {
-                t = 0;
                 NFT_LOG(L_WARNING,
                         "\"led\" has no \"%s\" prop. Using %d as default.",
-                        LED_LED_PROP_Y, t);
+                        LED_LED_PROP_Y, y);
         }
-        led_set_y(led, (LedFrameCord) t);
+
+        if(!led_set_pos(led, x, y))
+                return NFT_FAILURE;
 
 
         /* led gain */
-        if(!(nft_prefs_node_prop_int_get(n, LED_LED_PROP_GAIN, &t)))
+        int g = 0;
+        if(!(nft_prefs_node_prop_int_get(n, LED_LED_PROP_GAIN, &g)))
         {
-                t = 0;
                 NFT_LOG(L_WARNING,
                         "\"led\" has no \"%s\" prop. Using %d as default.",
-                        LED_LED_PROP_GAIN, t);
+                        LED_LED_PROP_GAIN, g);
         }
-        if(t < LED_GAIN_MIN || t > LED_GAIN_MAX)
+        if(g < LED_GAIN_MIN || g > LED_GAIN_MAX)
         {
                 NFT_LOG(L_WARNING,
                         "<led> config has invalid gain: %d Using 0 instead.",
-                        t);
-                t = 0;
+                        g);
+                g = 0;
         }
-        led_set_gain(led, (LedGain) t);
+        led_set_gain(led, (LedGain) g);
 
 
         /* led component */
-        if(!(nft_prefs_node_prop_int_get(n, LED_LED_PROP_COMPONENT, &t)))
+        int comp = 0;
+        if(!(nft_prefs_node_prop_int_get(n, LED_LED_PROP_COMPONENT, &comp)))
         {
-                t = 0;
                 NFT_LOG(L_WARNING,
                         "\"led\" has no \"%s\" prop. Using %d as default.",
-                        LED_LED_PROP_COMPONENT, t);
+                        LED_LED_PROP_COMPONENT, comp);
         }
-        led_set_component(led, (LedFrameComponent) t);
+        led_set_component(led, (LedFrameComponent) comp);
 
 
         /* save new chain-object to "newObj" pointer (just a dummy in this case 
