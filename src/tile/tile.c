@@ -636,9 +636,7 @@ NftResult led_tile_get_dim(LedTile * t, LedFrameCord * width,
         if(height)
                 *height = h;
 
-        NFT_LOG(L_NOISY, "%dx%d", w, h);
-
-
+		
         return NFT_SUCCESS;
 }
 
@@ -685,8 +683,6 @@ NftResult led_tile_get_transformed_dim(LedTile * t,
         if(height)
                 *height = h;
 
-
-        NFT_LOG(L_NOISY, "%d/%d", w, h);
 
         return NFT_SUCCESS;
 }
@@ -761,6 +757,35 @@ NftResult led_tile_get_bounding_box(LedTile * t,
         LedFrameCord *dim[4] = { x1, y1, x2, y2 };
         TILE_FOREACH(TILE_CHILD(t), _bounding_box_helper, dim);
 
+        return NFT_SUCCESS;
+}
+
+
+/**
+ * get bounding box of rotated tile including child tiles
+ *
+ * @param[in] t LedTile
+ * @param[out] x1 x coordinate of bounding box corner
+ * @param[out] y1 y coordinate of bounding box corner
+ * @param[out] x2 x coordinate of opposite bounding box corner
+ * @param[out] y2 y coordinate of opposite bounding box corner
+ * @result NFT_SUCCESS or NFT_FAILURE
+ */
+NftResult led_tile_get_transformed_bounding_box(LedTile * t,
+                                    LedFrameCord * x1,
+                                    LedFrameCord * y1,
+                                    LedFrameCord * x2, LedFrameCord * y2)
+{
+        if(!t || !x1 || !y1 || !x2 || !y2)
+                NFT_LOG_NULL(NFT_FAILURE);
+
+		/* get bounding box */
+		if(!led_tile_get_bounding_box(t, x1, y1, x2, y2))
+				return NFT_FAILURE;
+
+		/* transform bounding box */
+        _transform_tile_box(t, x1, y1, x2, y2);
+		
         return NFT_SUCCESS;
 }
 
