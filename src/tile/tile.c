@@ -234,10 +234,12 @@ static void _transform_tile_box(LedTile * t,
                                 LedFrameCord * y1,
                                 LedFrameCord * x2, LedFrameCord * y2)
 {
+		NFT_LOG(L_INFO, "%d/%d,%d/%d ->", *x1, *y1, *x2, *y2);
+		
         /* corners untransformed bounding box */
         double corners[2][3] = {
-                {(double) *x1, (double) *y1, 1},
-                {(double) *x2, (double) *y2, 1},
+                {(double) (*x1), (double) (*y1), 1},
+                {(double) (*x2), (double) (*y2), 1},
         };
 
         /* temporary matrix */
@@ -251,12 +253,14 @@ static void _transform_tile_box(LedTile * t,
 
         /* rotate */
         _matrix_mul_1(corners[0], matrix);
-        *x1 = corners[0][0];
-        *y1 = corners[0][1];
+        *x1 = (LedFrameCord) round(corners[0][0]);
+        *y1 = (LedFrameCord) round(corners[0][1]);
 
         _matrix_mul_1(corners[1], matrix);
-        *x2 = corners[1][0];
-        *y2 = corners[1][1];
+        *x2 = (LedFrameCord) round(corners[1][0]);
+        *y2 = (LedFrameCord) round(corners[1][1]);
+		
+		NFT_LOG(L_INFO, "-> %d/%d,%d/%d", *x1, *y1, *x2, *y2);
 }
 
 
@@ -621,11 +625,7 @@ NftResult led_tile_get_dim(LedTile * t, LedFrameCord * width,
         LedFrameCord x1, y1, x2, y2;
         if(!led_tile_get_bounding_box(t, &x1, &y1, &x2, &y2))
                 return NFT_FAILURE;
-
-        /* return 0x0 ? */
-        if(!x1 && !y1 && !x2 && !y2)
-                return NFT_SUCCESS;
-
+        
         LedFrameCord w, h;
         w = abs(x2 - x1) + 1;
         h = abs(y2 - y1) + 1;
@@ -665,10 +665,6 @@ NftResult led_tile_get_transformed_dim(LedTile * t,
         LedFrameCord x1, y1, x2, y2;
         if(!led_tile_get_bounding_box(t, &x1, &y1, &x2, &y2))
                 return NFT_FAILURE;
-
-        /* return 0x0 ? */
-        if(!x1 && !y1 && !x2 && !y2)
-                return NFT_SUCCESS;
 
         /* rotate */
         _transform_tile_box(t, &x1, &y1, &x2, &y2);
@@ -757,6 +753,8 @@ NftResult led_tile_get_bounding_box(LedTile * t,
         LedFrameCord *dim[4] = { x1, y1, x2, y2 };
         TILE_FOREACH(TILE_CHILD(t), _bounding_box_helper, dim);
 
+
+		
         return NFT_SUCCESS;
 }
 

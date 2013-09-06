@@ -207,8 +207,6 @@ NftResult led_setup_get_dim(LedSetup * s, LedFrameCord * width,
                 }
         }
 
-        NFT_LOG(L_NOISY, "%dx%d", *width, *height);
-
         return NFT_SUCCESS;
 }
 
