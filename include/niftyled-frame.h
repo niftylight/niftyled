@@ -57,16 +57,22 @@
 #ifndef _LED_FRAME_H
 #define _LED_FRAME_H
 
+#include <limits.h>
 #include <niftylog.h>
 #include "nifty-primitives.h"
 #include "niftyled-pixel_format.h"
 
 
 /** type used to address a LedFrameComponent */
-#define LED_T_COMPONENT		short
+#define LED_T_COMPONENT         short
 /** type used for frame coordinates (x/y) */
-#define LED_T_COORDINATE 		int
-
+#define LED_T_COORDINATE        int
+/** minimum */
+#define LED_FRAME_CORD_MIN      INT_MIN;
+#define LED_FRAME_COMPONENT_MIN SHRT_MIN;
+/** maximum */
+#define LED_FRAME_CORD_MAX      INT_MAX;
+#define LED_FRAME_COMPONENT_MAX SHRT_MAX;
 
 /** model of one pixelframe */
 typedef struct _LedFrame        LedFrame;
