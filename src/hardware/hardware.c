@@ -96,7 +96,7 @@
 /** macro to get nth sibling of a hardware */
 #define HARDWARE_NTH(h, n) (HARDWARE(_relation_nth(RELATION(h), n)))
 /** macro to get total amount of siblings of a hardware */
-#define HARDWARE_COUNT(h) (_relation_sibling_count(RELATION(h)))
+#define HARDWARE_COUNT(h) (_relation_sibling_count(RELATION(h))+1)
 
 /** casting macro @todo add type validty check */
 #define PLUGIN_PROP(p) ((LedPluginCustomProp *) p)
@@ -111,17 +111,17 @@
 /** macro to get nth sibling of a plugin property */
 #define PLUGIN_PROP_NTH(p, n) (PLUGIN_PROP(_relation_nth(RELATION(p), n)))
 /** macro to get total amount of siblings of a plugin property */
-#define PLUGIN_PROP_COUNT(p) (_relation_sibling_count(RELATION(p)))
+#define PLUGIN_PROP_COUNT(p) (_relation_sibling_count(RELATION(p))+1)
 
 /** plugin subdirectory */
-#define PLUGINDIR	PACKAGE"-plugins"
+#define PLUGINDIR			PACKAGE"-plugins"
 
 
 
 /** dynamic runtime plugin property */
 struct _LedPluginCustomProp
 {
-        /** relations of this property */
+        /** relations of this property (must stay first entry in struct) */
         Relation relation;
         /** name of this property */
         char name[64];
@@ -133,7 +133,7 @@ struct _LedPluginCustomProp
 /** model of LED-hardware to interface with LEDs */
 struct _LedHardware
 {
-        /** relations of this hardware (must stay first entry in struct)*/
+        /** relations of this hardware (must stay first entry in struct) */
         Relation relation;
         /** chain of this hardware-plugin (holds all currently configured
 			LEDs this plugin can control) */

@@ -78,7 +78,7 @@
 /** macro to get nth sibling of a tile */
 #define TILE_NTH(t, n) (TILE(_relation_nth(RELATION(t), n)))
 /** macro to get total amount of siblings of a tile */
-#define TILE_COUNT(t) (_relation_sibling_count(RELATION(t)))
+#define TILE_COUNT(t) (_relation_sibling_count(RELATION(t))+1)
 /** macro to get first child of this tile */
 #define TILE_CHILD(t) (TILE(_relation_child(RELATION(t))))
 /** macro to get parent of this tile */

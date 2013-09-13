@@ -68,11 +68,11 @@
 #define     LED_HARDWARE_PROP_NAME              "name"
 #define     LED_HARDWARE_PROP_PLUGIN            "plugin"
 #define     LED_HARDWARE_PROP_ID                "id"
-#define		LED_HARDWARE_PROP_STRIDE            "stride"
+#define     LED_HARDWARE_PROP_STRIDE           "stride"
 
-#define		LED_HARDWARE_PROPERTY_PROP_NAME		"name"
-#define		LED_HARDWARE_PROPERTY_PROP_TYPE		"type"
-#define		LED_HARDWARE_PROPERTY_PROP_VALUE	"value"
+#define     LED_HARDWARE_PROPERTY_PROP_NAME    "name"
+#define     LED_HARDWARE_PROPERTY_PROP_TYPE     "type"
+#define     LED_HARDWARE_PROPERTY_PROP_VALUE   "value"
 
 
 
@@ -128,17 +128,10 @@ static NftResult _prefs_from_hardware(NftPrefs * p, NftPrefsNode * n,
                 return NFT_FAILURE;
 
         /* handle custom plugin properties */
-        int i, a = led_hardware_plugin_prop_get_count(h);
-        for(i = 0; i < a; i++)
+        for(LedPluginCustomProp * prop =
+            led_hardware_plugin_prop_get_nth(h, 0); prop;
+            prop = led_hardware_plugin_prop_get_next(prop))
         {
-                LedPluginCustomProp *prop;
-                if(!(prop = led_hardware_plugin_prop_get_nth(h, i)))
-                {
-                        NFT_LOG(L_ERROR,
-                                "Could not get property %d (but %d registered). This is a bug!",
-                                i, a);
-                        break;
-                }
 
                 /* create new node for property */
                 NftPrefsNode *pnode;
@@ -381,10 +374,6 @@ static NftResult _prefs_to_hardware(LedPrefs * p, void **newObj,
         }
 
 
-                /** @todo handle custom properties */
-
-
-
         /* process child nodes */
         LedPrefsNode *child;
         for(child = nft_prefs_node_get_first_child(n);
@@ -403,6 +392,7 @@ static NftResult _prefs_to_hardware(LedPrefs * p, void **newObj,
                         }
                         continue;
                 }
+
                 /* is child a chain node? */
                 else if(led_prefs_is_chain_node(child))
                 {
@@ -427,6 +417,7 @@ static NftResult _prefs_to_hardware(LedPrefs * p, void **newObj,
 
                         led_chain_destroy(c);
                 }
+
                 /* is child a plugin-property node? */
                 else if(strcmp
                         (nft_prefs_node_get_name(child),
@@ -475,6 +466,7 @@ static NftResult _prefs_to_hardware(LedPrefs * p, void **newObj,
                                         LED_HARDWARE_PROPERTY_PROP_VALUE);
                                 goto _pthp_end;
                         }
+
 
                         /* decide about type */
                         switch (led_hardware_plugin_prop_type_from_string
@@ -546,7 +538,7 @@ static NftResult _prefs_to_hardware(LedPrefs * p, void **newObj,
                                 default:
                                 {
                                         NFT_LOG(L_ERROR,
-                                                "Invalid plugin-property type: \"%s\"",
+                                                "Invalid plugin property type: \"%s\"",
                                                 type);
                                         break;
                                 }
