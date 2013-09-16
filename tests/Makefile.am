@@ -2,6 +2,9 @@
 # libniftyled Makefile.am
 # v0.4 - Daniel Hiepler <daniel@niftylight.de>
 
+DISTCLEANFILES = \
+        test.xml
+
 EXTRA_DIST = \
 	tests.env
 
