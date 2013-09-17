@@ -1,4 +1,13 @@
-niftyled for Debian
--------------------
+Niftyled LED display framework (Debian package)
+===============================================
 
-niftyled source package. More information at http://wiki.niftylight.de/libniftyled
+libniftyled source package.
+
+
+------------------------------------------------------------------------------
+
+Project page:	http://wiki.niftylight.de/libniftyled  
+Sourcecode:	http://github.com/niftylight/niftyled  
+Issue tracker:	http://github.com/niftylight/niftyled/issues  
+Mailinglist:	niftyled@googlegroups.com  
+IRC chat:	irc://irc.freenode.net/niftylight   

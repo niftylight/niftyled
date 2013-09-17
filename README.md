@@ -15,9 +15,10 @@ framework to...
 * ...minimize the needed firmware complexity
 
 
+------------------------------------------------------------------------------
 
 Project page:	http://wiki.niftylight.de/libniftyled  
-Repository:	http://github.com/niftylight/niftyled  
+Sourcecode:	http://github.com/niftylight/niftyled  
 Issue tracker:	http://github.com/niftylight/niftyled/issues  
 Mailinglist:	niftyled@googlegroups.com  
 IRC chat:	irc://irc.freenode.net/niftylight   
