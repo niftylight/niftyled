@@ -9,7 +9,7 @@ framework to...
 * ...create new light setups quickly
 * ...scale - so big setups can be created with least hardware effort
 * ...support a wide range of hardware
-* ...combine different hardware in the same setup
+* ...combine different LED hardware and different interfaces (USB, RS232, ...) in the same setup
 * ...provide maximum freedom for software developers when integrating niftyled with other lighting applications
 * ...provide maximum freedom for hardware developers by using a versatile abstraction design
 * ...minimize the needed firmware complexity
