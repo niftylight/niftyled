@@ -771,7 +771,7 @@ NftResult led_chain_get_min_pos(LedChain * c, LedFrameCord * x,
 
         for(LedCount i = 0; i < c->ledcount; i++)
         {
-                LedFrameCord xL, yL;
+                LedFrameCord xL=0, yL=0;
                 if(!led_get_pos(led_chain_get_nth(c, i), &xL, &yL))
                         return NFT_FAILURE;
 
@@ -811,7 +811,7 @@ NftResult led_chain_get_max_pos(LedChain * c, LedFrameCord * x,
 
         for(LedCount i = 0; i < c->ledcount; i++)
         {
-                LedFrameCord xL, yL;
+                LedFrameCord xL=0, yL=0;
                 if(!led_get_pos(led_chain_get_nth(c, i), &xL, &yL))
                         return NFT_FAILURE;
 
