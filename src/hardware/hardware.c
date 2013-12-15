@@ -19,7 +19,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *sibling
+ *
  * Alternatively, the contents of this file may be used under the
  * GNU Lesser General Public License Version 2.1 (the "LGPL"), in
  * which case the following provisions apply instead of the ones
@@ -179,9 +179,6 @@ struct _LedHardware
 };
 
 
-/* search these paths to try loading the plugin */
-static const char *_prefixes[] =
-        { LIBDIR, "/lib", "/usr/lib", "/usr/local/lib" };
 
 
 /******************************************************************************
@@ -209,7 +206,7 @@ static const char *_familyname_from_filename(const char *filename)
                  * LED_HARDWARE_FILE_SUFFIX); */
                 return NULL;
         }
-
+        
         /* copy filename */
         static char name[LED_HARDWARE_LIBNAME_MAXSIZE];
         strncpy(name, filename, suffix - filename);
@@ -254,42 +251,24 @@ static LedHardware *_load_plugin(const char *name, const char *family)
                 return NULL;
         }
 
-        if(snprintf
-           (libname, LED_HARDWARE_LIBNAME_MAXSIZE, "%s/%s-hardware.so",
-            PLUGINDIR, family) < 0)
+        if(snprintf(libname, 
+                    LED_HARDWARE_LIBNAME_MAXSIZE, 
+                    "%s/%s-hardware.so",
+                    _lib_path(LIBDIR, PLUGINDIR), family) < 0)
         {
                 NFT_LOG_PERROR("snprintf");
                 return NULL;
         }
-
-
-        /* search all prefixes for plugin library */
-        void *handle;
-        unsigned int i;
-        for(i = 0; i < sizeof(_prefixes) / sizeof(char *); i++)
+        
+        NFT_LOG(L_NOISY, "\tTrying to load \"%s\"", libname);
+    
+        void *handle;   
+        if(!(handle = dlopen(libname, RTLD_LAZY)))
         {
-                NFT_LOG(L_NOISY, "\tTrying to load \"%s\"",
-                        _lib_path(_prefixes[i], libname));
-                if((handle =
-                    dlopen(_lib_path(_prefixes[i], libname), RTLD_LAZY)))
-                        break;
+                NFT_LOG(L_ERROR, "Failed to load \"%s\"", libname);
+                return NULL;      
         }
-
-        /* check for LD_LIBRARY_PATH override */
-        if(!handle)
-        {
-                snprintf(libname, LED_HARDWARE_LIBNAME_MAXSIZE,
-                         "%s-hardware.so", family);
-                NFT_LOG(L_NOISY, "\tTrying to load \"%s\"", libname);
-                if(!(handle = dlopen(libname, RTLD_LAZY)))
-                {
-                        NFT_LOG(L_ERROR, "Failed to find libfile \"%s\"",
-                                libname);
-                        return NULL;
-                }
-        }
-
-
+    
         /* get plugin descriptor from newly loaded library */
         LedHardwarePlugin *plugin;
         if(!(plugin = dlsym(handle, LED_HARDWARE_DESCRIPTOR)))
@@ -1468,37 +1447,38 @@ int led_hardware_plugin_total_count()
         int amount = 0;
 
 
-        /* count plugins in all possible dirs */
-        unsigned int i;
-        for(i = 0; i < sizeof(_prefixes) / sizeof(char *); i++)
+        NFT_LOG(L_DEBUG, "Counting installed plugins...");
+    
+        /* count plugins in LIBDIR */      
+        DIR *dir;
+        if(!(dir = opendir(_lib_path(LIBDIR, PLUGINDIR))))
         {
-                DIR *dir;
-                if(!(dir = opendir(_lib_path(_prefixes[i], PLUGINDIR))))
-                {
-                        NFT_LOG(L_DEBUG, "Failed to open dir \"%s\" (%s)",
-                                _lib_path(_prefixes[i], PLUGINDIR),
-                                strerror(errno));
-                        continue;
-                }
-
-                struct dirent *entry;
-                while((entry = readdir(dir)))
-                {
-                        /* extract pluginname from filename */
-                        const char *familyname;
-                        if(!
-                           (familyname =
-                            _familyname_from_filename(entry->d_name)))
-                                continue;
-
-                        NFT_LOG(L_DEBUG, "Found \"%s\"", familyname);
-                        amount++;
-                }
-
-                closedir(dir);
+                NFT_LOG(L_DEBUG, "Failed to open dir \"%s\" (%s)",
+                        _lib_path(LIBDIR, PLUGINDIR),
+                        strerror(errno));
+                return 0;
         }
 
+        struct dirent *entry;
+        while((entry = readdir(dir)))
+        {
+                /* extract pluginname from filename */
+                const char *familyname;
+                if(!
+                   (familyname =
+                    _familyname_from_filename(entry->d_name)))
+                        continue;
+
+                NFT_LOG(L_DEBUG, "Found \"%s\" (%s)", familyname, entry->d_name);
+                amount++;
+        }
+
+        closedir(dir);
+        
+
         /* return amount of found files */
+        NFT_LOG(L_DEBUG, "Found \"%d\" plugins", amount);
+    
         return amount;
 }
 
@@ -1561,35 +1541,34 @@ const char *led_hardware_plugin_get_family_by_n(unsigned int num)
 
 
         /* search all possible dirs */
-        unsigned int i, amount = 0;
-        for(i = 0; i < sizeof(_prefixes) / sizeof(char *); i++)
+        unsigned int amount = 0;
+
+        DIR *dir;
+        if(!(dir = opendir(_lib_path(LIBDIR, PLUGINDIR))))
         {
-                DIR *dir;
-                if(!(dir = opendir(_lib_path(_prefixes[i], PLUGINDIR))))
-                {
-                        NFT_LOG(L_DEBUG, "Failed to open dir \"%s\" (%s)",
-                                _lib_path(_prefixes[i], PLUGINDIR),
-                                strerror(errno));
-                        continue;
-                }
-
-                struct dirent *entry;
-                while((entry = readdir(dir)))
-                {
-                        /* extract pluginname from filename */
-                        /** @todo maybe load plugin and try to get hardware_descriptor->family */
-                        const char *familyname;
-                        if(!
-                           (familyname =
-                            _familyname_from_filename(entry->d_name)))
-                                continue;
-
-                        if(num == amount++)
-                                return familyname;
-                }
-
-                closedir(dir);
+                NFT_LOG(L_DEBUG, "Failed to open dir \"%s\" (%s)",
+                        _lib_path(LIBDIR, PLUGINDIR),
+                        strerror(errno));
+                return NULL;
         }
+
+        struct dirent *entry;
+        while((entry = readdir(dir)))
+        {
+                /* extract pluginname from filename */
+                /** @todo maybe load plugin and try to get hardware_descriptor->family */
+                const char *familyname;
+                if(!
+                   (familyname =
+                    _familyname_from_filename(entry->d_name)))
+                        continue;
+
+                if(num == amount++)
+                        return familyname;
+        }
+
+        closedir(dir);
+        
 
         NFT_LOG(L_WARNING,
                 "invalid index %d. Only %d installed hardware-plugins found.",
