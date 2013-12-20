@@ -71,7 +71,7 @@
 /** model of one single LED  */
 struct _Led
 {
-        /** position of LED inside map */
+        /** position of LED inside pixmap */
         LedFrameCord x, y;
         /** component-number this LED has in a pixel
 		    (red, green, blue, cyan, ...) For example, in a RGB system, a red

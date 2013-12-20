@@ -65,6 +65,7 @@
 #include "config.h"
 
 
+
 /** printable type names (must match order of _type_name_types!) */
 const char *_type_name_strings[] = {
         LED_SETUP_NAME,
@@ -363,7 +364,6 @@ const char *led_prefs_type_to_string(NIFTYLED_TYPE type)
 
         return "invalid";
 }
-
 
 /**
  * @}

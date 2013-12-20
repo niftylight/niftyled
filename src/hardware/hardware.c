@@ -1792,7 +1792,7 @@ NftResult led_hardware_refresh_mapping(LedHardware * h)
 
 
         /* output mapped raw chain (for debugging) */
-        led_chain_print(h->chain, L_NOISY);
+        led_chain_print(h->chain, L_DEBUG);
 
         return NFT_SUCCESS;
 }
