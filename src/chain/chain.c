@@ -1278,7 +1278,7 @@ _lhs_exit:
 /**
  * copy one greyscale value from one buffer to another
  */
-static inline void _set_greyscale_value(size_t bpc, void *srcbuf,
+static inline void _copy_greyscale_value(size_t bpc, void *srcbuf,
                                         void *dstbuf)
 {
         /* handle different bytes-per-component for different LedPixelFormats */
@@ -1459,7 +1459,7 @@ NftResult led_chain_fill_from_frame(LedChain * c, LedFrame * f)
         for(i = 0; i < c->ledcount; i++)
         {
                 /* copy one greyscale value */
-                _set_greyscale_value(bpc, srcbuf + c->mapoffsets[i], dstbuf);
+                _copy_greyscale_value(bpc, srcbuf + c->mapoffsets[i], dstbuf);
 
                 /* move pointer to destbuffer to next component */
                 dstbuf += offset;
@@ -1551,7 +1551,7 @@ NftResult led_chain_set_greyscale(LedChain * c, LedCount pos,
                 led_pixel_format_get_n_components(c->format);
 
         /* copy one greyscale value */
-        _set_greyscale_value(bpc, src, dst);
+        _copy_greyscale_value(bpc, src, dst);
 
         return NFT_SUCCESS;
 }
@@ -1589,7 +1589,7 @@ NftResult led_chain_get_greyscale(LedChain * c, LedCount pos,
                 led_pixel_format_get_n_components(c->format);
 
         /* copy one greyscale value */
-        _set_greyscale_value(bpc, src, dst);
+        _copy_greyscale_value(bpc, src, dst);
 
         return NFT_SUCCESS;
 }
