@@ -59,6 +59,7 @@ AC_SUBST([DEBIAN_REVISION], m4_esyscmd([./version --debian]), [debian revision])
 # -----------------------------------------------
 #    libtool stuff
 # -----------------------------------------------
+AM_PROG_AR
 LT_INIT
 AC_LIBTOOL_DLOPEN
 AC_LIBTOOL_WIN32_DLL
