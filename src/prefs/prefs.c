@@ -197,12 +197,12 @@ NftResult led_prefs_default_filename(char *dst, size_t size,
 
 
 /**
- * get URL of the origin of this node or NULL
+ * get URI of the origin of this node or NULL
  *
  * @param n LedPrefsNode node
  * @result filename of current preferences or NULL
  */
-const char *led_prefs_node_get_filename(LedPrefsNode * n)
+const char *led_prefs_node_get_uri(LedPrefsNode * n)
 {
         return nft_prefs_node_get_filename(n);
 }
