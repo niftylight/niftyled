@@ -204,7 +204,7 @@ NftResult led_prefs_default_filename(char *dst, size_t size,
  */
 const char *led_prefs_node_get_uri(LedPrefsNode * n)
 {
-        return nft_prefs_node_get_filename(n);
+        return nft_prefs_node_get_uri(n);
 }
 
 
