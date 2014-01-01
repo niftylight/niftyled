@@ -69,6 +69,10 @@ typedef enum
 #endif
 
 
+/** array offsets for tuples */
+#define LED_X 0
+#define LED_Y 1
+
 
 #endif /** _NFT_PRIMITIVES */
 
