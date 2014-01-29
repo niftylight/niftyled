@@ -36,7 +36,8 @@ TESTLDADD = \
 
 check_PROGRAMS = mapping
 TESTS = $(check_PROGRAMS)
-TESTS_ENVIRONMENT = $(srcdir)/tests.env
+
+AM_TESTS_ENVIRONMENT = $(srcdir)/tests.env;
 
 
 mapping_SOURCES = mapping.c
