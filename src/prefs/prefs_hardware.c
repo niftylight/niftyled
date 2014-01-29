@@ -80,7 +80,6 @@
 /**************************** STATIC FUNCTIONS ********************************/
 /******************************************************************************/
 
-
 /**
  * Object-to-Config function.
  * Creates a config-node (and subnodes) from a LedHardware model
