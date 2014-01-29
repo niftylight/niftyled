@@ -87,6 +87,7 @@
 #include "niftyled-prefs.h"
 #include "niftyled-prefs_setup.h"
 #include "niftyled-prefs_hardware.h"
+#include "niftyled-prefs_led.h"
 #include "niftyled-prefs_chain.h"
 #include "niftyled-prefs_tile.h"
 

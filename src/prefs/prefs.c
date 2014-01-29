@@ -55,6 +55,7 @@
 #include <errno.h>
 #include <malloc.h>
 #include "niftyled-hardware.h"
+#include "niftyled-led.h"
 #include "niftyled-chain.h"
 #include "niftyled-tile.h"
 #include "niftyled-prefs.h"
@@ -62,6 +63,7 @@
 #include "_prefs_hardware.h"
 #include "_prefs_tile.h"
 #include "_prefs_chain.h"
+#include "_prefs_led.h"
 #include "config.h"
 
 
