@@ -65,6 +65,57 @@
 
 
 
+/** libbabl internal API */
+typedef int (*BablEachFunction) (Babl * entry, void *data);
+void babl_format_class_for_each(BablEachFunction each_fun, void *user_data);
+
+/* structure to pass argument to BablEachFunction */
+struct _foreach_arg
+{
+        LedPixelFormat *format;
+        size_t n;
+};
+
+
+
+/******************************************************************************/
+/**************************** STATIC FUNCTIONS ********************************/
+/******************************************************************************/
+
+/** foreach function to count all formats supported by babl */
+static int _count_format(LedPixelFormat * f, void *udata)
+{
+        struct _foreach_arg *arg = udata;
+
+        arg->n++;
+        return 0;
+}
+
+
+/** foreach function to get nth format supported by babl */
+static int _get_format(LedPixelFormat * f, void *udata)
+{
+        struct _foreach_arg *arg = udata;
+
+        if(arg->n > 0)
+        {
+                arg->n--;
+                return false;
+        }
+
+        arg->format = f;
+        return true;
+}
+
+
+/******************************************************************************/
+/************************ "private" API FUNCTIONS *****************************/
+/******************************************************************************/
+
+
+/******************************************************************************/
+/**************************** API FUNCTIONS ***********************************/
+/******************************************************************************/
 
 /**
  * initialize babl instance
@@ -375,44 +426,6 @@ size_t led_pixel_format_get_component_offset(LedPixelFormat * f, size_t n)
 
 
 
-
-
-/** libbabl internal API */
-typedef int (*BablEachFunction) (Babl * entry, void *data);
-void babl_format_class_for_each(BablEachFunction each_fun, void *user_data);
-
-/* structure to pass argument to BablEachFunction */
-struct _foreach_arg
-{
-        LedPixelFormat *format;
-        size_t n;
-};
-
-
-/** foreach function to count all formats supported by babl */
-static int _count_format(LedPixelFormat * f, void *udata)
-{
-        struct _foreach_arg *arg = udata;
-
-        arg->n++;
-        return 0;
-}
-
-
-/** foreach function to get nth format supported by babl */
-static int _get_format(LedPixelFormat * f, void *udata)
-{
-        struct _foreach_arg *arg = udata;
-
-        if(arg->n > 0)
-        {
-                arg->n--;
-                return false;
-        }
-
-        arg->format = f;
-        return true;
-}
 
 
 /**

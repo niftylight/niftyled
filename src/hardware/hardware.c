@@ -357,8 +357,9 @@ static void _reinitialize(LedHardware * h)
 }
 
 
-
-/**************************** INTERNAL FUNCTIONS ******************************/
+/******************************************************************************/
+/************************ "private" API FUNCTIONS *****************************/
+/******************************************************************************/
 
 /** set parent setup of this hardware */
 void hardware_set_parent_setup(LedHardware * h, LedSetup * s)
