@@ -61,34 +61,15 @@
 
 #include <stdlib.h>
 #include "nifty-primitives.h"
-#include "niftyled-frame.h"
 #include "niftyled-pixel_format.h"
+#include "niftyled-led.h"
 
-
-
-
-
-/** type used for LedGain */
-#define LED_T_GAIN unsigned short
-
-
-/** model of one single LED */
-typedef struct _Led             Led;
 
 /** model of one chain of @ref Led's */
 typedef struct _LedChain        LedChain;
 
 /** type to count LEDs */
 typedef long int                LedCount;
-
-/** type to define the gain-setting of an LED-driver (0 = turned off, 65535 = full brightness) */
-typedef LED_T_GAIN              LedGain;
-
-
-/** minimum value for LedGain type (LED is turned off) */
-#define LED_GAIN_MIN    (0)
-/** maximum value for LedGain type (LED at full brightness) */
-#define LED_GAIN_MAX    ((LED_T_GAIN)((1<<(sizeof(LedGain)*8))-1))
 
 
 #include "niftyled-tile.h"
@@ -132,18 +113,6 @@ LedHardware                    *led_chain_get_parent_hardware(LedChain * c);
 LedTile                        *led_chain_get_parent_tile(LedChain * c);
 
 
-/* Led API */
-NftResult                       led_get_pos(Led * l, LedFrameCord * x, LedFrameCord * y);
-LedFrameComponent               led_get_component(Led * l);
-LedGain                         led_get_gain(Led * l);
-void                           *led_get_privdata(Led * l);
-
-NftResult                       led_set_pos(Led * l, LedFrameCord x, LedFrameCord y);
-NftResult                       led_set_component(Led * l, LedFrameComponent component);
-NftResult                       led_set_gain(Led * l, LedGain gain);
-NftResult                       led_set_privdata(Led * l, void *privdata);
-
-NftResult                       led_copy(Led * dst, Led * src);
 
 
 #endif /* _LED_CHAIN_H */

@@ -1,7 +1,7 @@
 /*
  * libniftyled - Interface library for LED interfaces
  * Copyright (C) 2006-2013 Daniel Hiepler <daniel@niftylight.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -42,59 +42,29 @@
  */
 
 
-#ifndef _NIFTYLED
-#define _NIFTYLED
-
-/**
- * @mainpage <a href="http://wiki.niftylight.de/libniftyled">library designed to provide an abstract interface for LED/lighting hardware to easily control it using pixel data.</a>
- *
- * <h2>library designed to provide an abstract interface for LED/lighting hardware.</h2>
- *
- * For hardware-plugin developers - Use your LED device with libniftyled:
- * - check the dummy plugin as example
- * - check documentation of a @ref LedHardwarePlugin
- *
- * For LED-controlling application developers:
- * - check ledcat/ledcap sources as example 
- * - check @ref LedChain to define a chain of serially arranged @ref Led's
- * - check @ref LedTile to see how to associate a @ref LedChain to a tile and build larger tiles from groups of tiles
- * - check @ref LedHardware for interfacing with hardware
- * - check @ref LedPrefs for loading, saving & handling LED-Setup configurations
- *
- * @todo check if all loglevels are appropriate to message
- */
-
-/**
- * @file niftyled.h
- * @brief niftyled API toplevel include file
- */
+#ifndef _LED__LED_H
+#define _LED__LED_H
 
 
-#include <niftylog.h>
-#include <niftyprefs.h>
-#include "nifty-primitives.h"
-
-#include "niftyled-version.h"
-#include "niftyled-pixel_format.h"
-#include "niftyled-led.h"
-#include "niftyled-chain.h"
-#include "niftyled-frame.h"
-#include "niftyled-hardware.h"
-#include "niftyled-setup.h"
-#include "niftyled-tile.h"
-#include "niftyled-fps.h"
-
-#include "niftyled-prefs.h"
-#include "niftyled-prefs_setup.h"
-#include "niftyled-prefs_hardware.h"
-#include "niftyled-prefs_chain.h"
-#include "niftyled-prefs_tile.h"
+/** model of one single LED  */
+struct _Led
+{
+        /** position of LED inside pixmap */
+        LedFrameCord x, y;
+        /** component-number this LED has in a pixel
+		    (red, green, blue, cyan, ...) For example, in a RGB system, a red
+			LED would have component number 0, a green one has 1 and a blue one
+			has 2 */
+        LedFrameComponent component;
+        /** 32 bit gain value of this LED - use this to define brightness 
+		    for LED hardware that supports it. The hardware plugin has to 
+		    scale the 32 bit value so it can be used by the hardware.
+		    0 should be lowest brightness, UINT32_MAX should be maximum brightness */
+        LedGain gain;
+        /** private userdata */
+        void *privdata;
+};
 
 
 
-
-#endif /* _NIFTYLED */
-
-/**
- * @}
- */
+#endif /* _LED__LED_H */

@@ -41,60 +41,61 @@
  * Boston, MA 02111-1307, USA.
  */
 
-
-#ifndef _NIFTYLED
-#define _NIFTYLED
-
 /**
- * @mainpage <a href="http://wiki.niftylight.de/libniftyled">library designed to provide an abstract interface for LED/lighting hardware to easily control it using pixel data.</a>
- *
- * <h2>library designed to provide an abstract interface for LED/lighting hardware.</h2>
- *
- * For hardware-plugin developers - Use your LED device with libniftyled:
- * - check the dummy plugin as example
- * - check documentation of a @ref LedHardwarePlugin
- *
- * For LED-controlling application developers:
- * - check ledcat/ledcap sources as example 
- * - check @ref LedChain to define a chain of serially arranged @ref Led's
- * - check @ref LedTile to see how to associate a @ref LedChain to a tile and build larger tiles from groups of tiles
- * - check @ref LedHardware for interfacing with hardware
- * - check @ref LedPrefs for loading, saving & handling LED-Setup configurations
- *
- * @todo check if all loglevels are appropriate to message
+ * @file niftyled-led.h
+ * @brief Led API for LED model
  */
 
 /**
- * @file niftyled.h
- * @brief niftyled API toplevel include file
+ * @addtogroup chain
+ * @{
+ * @defgroup led Led
+ * @brief LED model
+ * @{
  */
 
+#ifndef _LED_H
+#define _LED_H
 
-#include <niftylog.h>
-#include <niftyprefs.h>
 #include "nifty-primitives.h"
-
-#include "niftyled-version.h"
-#include "niftyled-pixel_format.h"
-#include "niftyled-led.h"
-#include "niftyled-chain.h"
 #include "niftyled-frame.h"
-#include "niftyled-hardware.h"
-#include "niftyled-setup.h"
-#include "niftyled-tile.h"
-#include "niftyled-fps.h"
-
-#include "niftyled-prefs.h"
-#include "niftyled-prefs_setup.h"
-#include "niftyled-prefs_hardware.h"
-#include "niftyled-prefs_chain.h"
-#include "niftyled-prefs_tile.h"
 
 
 
+/** type used for LedGain */
+#define LED_T_GAIN unsigned short
 
-#endif /* _NIFTYLED */
+/** model of one single LED */
+typedef struct _Led             Led;
+
+/** type to define the gain-setting of an LED-driver (0 = turned off, 65535 = full brightness) */
+typedef LED_T_GAIN              LedGain;
+
+/** minimum value for LedGain type (LED is turned off) */
+#define LED_GAIN_MIN    (0)
+/** maximum value for LedGain type (LED at full brightness) */
+#define LED_GAIN_MAX    ((LED_T_GAIN)((1<<(sizeof(LedGain)*8))-1))
+
+
+
+
+NftResult                       led_get_pos(Led * l, LedFrameCord * x, LedFrameCord * y);
+LedFrameComponent               led_get_component(Led * l);
+LedGain                         led_get_gain(Led * l);
+void                           *led_get_privdata(Led * l);
+
+NftResult                       led_set_pos(Led * l, LedFrameCord x, LedFrameCord y);
+NftResult                       led_set_component(Led * l, LedFrameComponent component);
+NftResult                       led_set_gain(Led * l, LedGain gain);
+NftResult                       led_set_privdata(Led * l, void *privdata);
+
+NftResult                       led_copy(Led * dst, Led * src);
+
+
+
+#endif /* _LED_H */
 
 /**
+ * @}
  * @}
  */

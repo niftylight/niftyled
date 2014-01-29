@@ -58,7 +58,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "niftyled-chain.h"
-#include "niftyled-frame.h"
+#include "led/_led.h"
 
 
 
@@ -68,24 +68,7 @@
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
 
-/** model of one single LED  */
-struct _Led
-{
-        /** position of LED inside pixmap */
-        LedFrameCord x, y;
-        /** component-number this LED has in a pixel
-		    (red, green, blue, cyan, ...) For example, in a RGB system, a red
-			LED would have component number 0, a green one has 1 and a blue one
-			has 2 */
-        LedFrameComponent component;
-        /** 32 bit gain value of this LED - use this to define brightness 
-		    for LED hardware that supports it. The hardware plugin has to 
-		    scale the 32 bit value so it can be used by the hardware.
-		    0 should be lowest brightness, UINT32_MAX should be maximum brightness */
-        LedGain gain;
-        /** private userdata */
-        void *privdata;
-};
+
 
 /** model of one serial chain of LEDs */
 struct _LedChain
@@ -961,172 +944,6 @@ Led *led_chain_get_nth(LedChain * c, LedCount n)
         }
 
         return &c->leds[n];
-}
-
-
-/**
- * set position of a LED inside a pixel-frame for mapping
- *
- * @param[in] l @ref Led descriptor
- * @param[in] x new X coordinate of LED
- * @param[in] y new Y coordinate of LED		 
- * @result NFT_SUCCESS or NFT_FAILURE
- */
-NftResult led_set_pos(Led * l, LedFrameCord x, LedFrameCord y)
-{
-        if(!l)
-                NFT_LOG_NULL(NFT_FAILURE);
-
-        l->x = x;
-        l->y = y;
-
-        return NFT_SUCCESS;
-}
-
-
-/**
- * get position of a LED inside a pixel-frame for mapping
- *
- * @param[in] l @ref Led descriptor
- * @param[out] x pointer to X coordinate of LED or NULL
- * @param[out] y pointer to Y coordinate of LED or NULL
- * @result NFT_SUCCESS or NFT_FAILURE
- */
-NftResult led_get_pos(Led * l, LedFrameCord * x, LedFrameCord * y)
-{
-        if(!l)
-                NFT_LOG_NULL(NFT_FAILURE);
-
-        if(x)
-                *x = l->x;
-        if(y)
-                *y = l->y;
-
-        return NFT_SUCCESS;
-}
-
-
-/**
- * set pixel component (e.g. Red, Green, Blue, Cyan, ...) of a LED for mapping
- * this defines the LEDs color
- *
- * @param l @ref Led descriptor
- * @param component The component-number according to the definition of the pixel-frame this LED belongs to
- */
-NftResult led_set_component(Led * l, LedFrameComponent component)
-{
-        if(!l)
-                NFT_LOG_NULL(NFT_FAILURE);
-
-        l->component = component;
-
-        return NFT_SUCCESS;
-}
-
-
-/**
- * get component number of a LED
- *
- * @param l @ref Led descriptor
- * @result The component-number according to the definition of the pixel-frame this LED belongs to
- */
-LedFrameComponent led_get_component(Led * l)
-{
-        if(!l)
-                NFT_LOG_NULL(0);
-
-        return l->component;
-}
-
-
-/**
- * set driver-hardware gain of this LED
- *
- * @param l @ref Led descriptor
- * @param gain Gain setting of this LED (only has effect if hardware-plugin supports it)
- */
-NftResult led_set_gain(Led * l, LedGain gain)
-{
-        if(!l)
-                NFT_LOG_NULL(NFT_FAILURE);
-
-        l->gain = gain;
-
-        return NFT_SUCCESS;
-}
-
-
-/**
- * get driver-hardware gain of this LED
- *
- * @param l @ref Led descriptor
- * @result current gain setting of this LED
- */
-LedGain led_get_gain(Led * l)
-{
-        if(!l)
-                NFT_LOG_NULL(0);
-
-        return l->gain;
-}
-
-
-/**
- * get private userdata previously set by led_set_privdata()
- *
- * @param l Led descriptor
- * @result private userdata
- */
-void *led_get_privdata(Led * l)
-{
-        if(!l)
-                NFT_LOG_NULL(NULL);
-
-        return l->privdata;
-}
-
-
-/**
- * associate private userdata pointer with LED
- *
- * @param l Led descriptor
- * @param privdata pointer to private userdata
- * @result NFT_SUCCESS or NFT_FAILURE upon error
- */
-NftResult led_set_privdata(Led * l, void *privdata)
-{
-        if(!l)
-                NFT_LOG_NULL(NFT_FAILURE);
-
-        l->privdata = privdata;
-
-        return NFT_SUCCESS;
-}
-
-
-/**
- * copy a single LED of one chain to another
- *
- * @param dst - destination chain
- * @param src - source chain
- * @result NFT_SUCCESS or NFT_FAILURE
- * @note if you set a private pointer using led_set_privdata(), it will NOT be copied
- */
-NftResult led_copy(Led * dst, Led * src)
-{
-        if(!dst || !src)
-                NFT_LOG_NULL(NFT_FAILURE);
-
-        /* save private pointer */
-        void *ptr = dst->privdata;
-
-        /* copy structure */
-        memcpy(dst, src, sizeof(Led));
-
-        /* copy private pointer back so it will be kept */
-        dst->privdata = ptr;
-
-        return NFT_SUCCESS;
 }
 
 

@@ -9,8 +9,9 @@ library_includedir = $(includedir)/lib$(PACKAGE)-$(PACKAGE_MAJOR_VERSION).$(PACK
 library_include_HEADERS = \
 	niftyled.h \
 	niftyled-version.h \
-	niftyled-tile.h \
+	niftyled-led.h \
 	niftyled-chain.h \
+	niftyled-tile.h \
 	niftyled-hardware.h \
 	niftyled-setup.h \
 	niftyled-frame.h \
