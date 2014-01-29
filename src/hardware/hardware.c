@@ -357,6 +357,72 @@ static void _reinitialize(LedHardware * h)
 }
 
 
+/** foreach helper to register setup */
+static NftResult _register_setup(Relation * r, void *u)
+{
+        LedHardware *h = HARDWARE(r);
+        LedSetup *s = u;
+
+        h->setup = s;
+
+        return NFT_SUCCESS;
+}
+
+
+/** foreach helper to refresh mapping of a hardware */
+static NftResult _refresh_mapping(Relation * r, void *u)
+{
+        if(!led_hardware_refresh_mapping(HARDWARE(r)))
+                return NFT_FAILURE;
+
+        return NFT_SUCCESS;
+}
+
+
+/** foreach helper to refresh gain of a hardware */
+static NftResult _refresh_gain(Relation * r, void *u)
+{
+        return led_hardware_refresh_gain(HARDWARE(r));
+}
+
+
+/** foreach helper to show hardware */
+static NftResult _show(Relation * r, void *u)
+{
+        if(!led_hardware_show(HARDWARE(r)))
+        {
+                NFT_LOG(L_ERROR, "Failed to latch \"%s\"",
+                        HARDWARE(r)->params.name);
+        }
+
+        return NFT_SUCCESS;
+}
+
+
+/** foreach helper to send data of hardware */
+static NftResult _send(Relation * r, void *u)
+{
+        return led_hardware_send(HARDWARE(r));
+}
+
+
+/** find plugin custom property by its name */
+static LedPluginCustomProp *_prop_get_by_name(LedPluginCustomProp * p,
+                                              const char *name)
+{
+        if(!name)
+                NFT_LOG_NULL(NULL);
+
+        if(!p)
+                return NULL;
+
+        if(strcmp(p->name, name) == 0)
+                return p;
+
+        return _prop_get_by_name(PLUGIN_PROP_NEXT(p), name);
+}
+
+
 /******************************************************************************/
 /************************ "private" API FUNCTIONS *****************************/
 /******************************************************************************/
@@ -1287,18 +1353,6 @@ void led_hardware_print(LedHardware * h, NftLoglevel l)
 }
 
 
-/** foreach helper to register setup */
-static NftResult _register_setup(Relation * r, void *u)
-{
-        LedHardware *h = HARDWARE(r);
-        LedSetup *s = u;
-
-        h->setup = s;
-
-        return NFT_SUCCESS;
-}
-
-
 /**
  * append hardware to last sibling of head
  * @param h a LedHardware
@@ -1799,16 +1853,6 @@ NftResult led_hardware_refresh_mapping(LedHardware * h)
 }
 
 
-/** foreach helper to refresh mapping of a hardware */
-static NftResult _refresh_mapping(Relation * r, void *u)
-{
-        if(!led_hardware_refresh_mapping(HARDWARE(r)))
-                return NFT_FAILURE;
-
-        return NFT_SUCCESS;
-}
-
-
 /**
  * wrapper to apply led_hardware_refresh_mapping() to a list of tiles
  *
@@ -1847,13 +1891,6 @@ NftResult led_hardware_refresh_gain(LedHardware * h)
         }
 
         return NFT_SUCCESS;
-}
-
-
-/** foreach helper to refresh gain of a hardware */
-static NftResult _refresh_gain(Relation * r, void *u)
-{
-        return led_hardware_refresh_gain(HARDWARE(r));
 }
 
 
@@ -1928,19 +1965,6 @@ NftResult led_hardware_show(LedHardware * h)
 }
 
 
-/** foreach helper to show hardware */
-static NftResult _show(Relation * r, void *u)
-{
-        if(!led_hardware_show(HARDWARE(r)))
-        {
-                NFT_LOG(L_ERROR, "Failed to latch \"%s\"",
-                        HARDWARE(r)->params.name);
-        }
-
-        return NFT_SUCCESS;
-}
-
-
 /**
  * latch a hardware and all siblings sequentially
  *
@@ -2006,13 +2030,6 @@ NftResult led_hardware_send(LedHardware * h)
         }
 
         return NFT_SUCCESS;
-}
-
-
-/** foreach helper to send data of hardware */
-static NftResult _send(Relation * r, void *u)
-{
-        return led_hardware_send(HARDWARE(r));
 }
 
 
@@ -2201,23 +2218,6 @@ LedPluginCustomProp *led_hardware_plugin_prop_get_nth(LedHardware * h, int n)
                 NFT_LOG_NULL(NULL);
 
         return PLUGIN_PROP_NTH(h->first_prop, n);
-}
-
-
-/** find plugin custom property by its name */
-static LedPluginCustomProp *_prop_get_by_name(LedPluginCustomProp * p,
-                                              const char *name)
-{
-        if(!name)
-                NFT_LOG_NULL(NULL);
-
-        if(!p)
-                return NULL;
-
-        if(strcmp(p->name, name) == 0)
-                return p;
-
-        return _prop_get_by_name(PLUGIN_PROP_NEXT(p), name);
 }
 
 

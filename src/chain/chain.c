@@ -108,6 +108,56 @@ struct _LedChain
  **************************** STATIC FUNCTIONS ********************************
  ******************************************************************************/
 
+/* print textual value of raw chain buffer to string buffer */
+static int _print_greyscale_value(LedChain * c, long long int *v,
+                                  char *buffer, size_t bufsize)
+{
+        /* select output format according to component type */
+        const char *component_type =
+                led_pixel_format_get_component_type(led_chain_get_format(c),
+                                                    0);
+
+        /* u8 */
+        if(strcmp(component_type, "u8") == 0)
+        {
+                unsigned char *t = (unsigned char *) v;
+                return snprintf(buffer, bufsize, "0x%.2hhx ", *t);
+        }
+        /* u16 */
+        else if(strcmp(component_type, "u16") == 0)
+        {
+                unsigned short *t = (unsigned short *) v;
+                return snprintf(buffer, bufsize, "0x%.4hx ", *t);
+        }
+        /* u32 */
+        else if(strcmp(component_type, "u32") == 0)
+        {
+                unsigned int *t = (unsigned int *) v;
+                return snprintf(buffer, bufsize, "0x%.8x ", *t);
+        }
+        /* float */
+        else if((strcmp(component_type, "float") == 0))
+        {
+                float *t = (float *) v;
+                return snprintf(buffer, bufsize, "%f ", *t);
+        }
+        /* double */
+        else if((strcmp(component_type, "double") == 0))
+        {
+                double *t = (double *) v;
+                return snprintf(buffer, bufsize, "%lf ", *t);
+        }
+        /* huh? */
+        else
+        {
+                NFT_LOG(L_ERROR,
+                        "Attempt to print value of unsupported component type: \"%s\"",
+                        component_type);
+        }
+
+        return -1;
+}
+
 
 /******************************************************************************/
 /************************ "private" API FUNCTIONS *****************************/
@@ -267,6 +317,66 @@ NftResult _chain_set_ledcount(LedChain * c, LedCount ledcount)
         c->mapoffsets = mapoffsets;
 
         return NFT_SUCCESS;
+}
+
+
+/**
+ * copy one greyscale value from one buffer to another
+ */
+static inline void _copy_greyscale_value(size_t bpc, void *srcbuf,
+                                        void *dstbuf)
+{
+        /* handle different bytes-per-component for different LedPixelFormats */
+        switch (bpc)
+        {
+                case 1:
+                {
+                        uint8_t *s = srcbuf;
+                        uint8_t *d = dstbuf;
+                        *d = *s;
+                        break;
+                }
+
+                case 2:
+                {
+                        uint16_t *s = srcbuf;
+                        uint16_t *d = dstbuf;
+                        *d = *s;
+                        break;
+                }
+
+                case 3:
+                {
+                        char *s = srcbuf;
+                        char *d = dstbuf;
+                        *d = s[0];
+                        *d = s[1];
+                        *d = s[2];
+                        break;
+                }
+
+                case 4:
+                {
+                        int *s = srcbuf;
+                        int *d = dstbuf;
+                        *d = *s;
+                        break;
+                }
+
+                case 8:
+                {
+                        double *s = srcbuf;
+                        double *d = dstbuf;
+                        *d = *s;
+                        break;
+                }
+
+                default:
+                {
+                        NFT_LOG(L_ERROR, "Unsupported component-size: %d",
+                                bpc);
+                }
+        }
 }
 
 
@@ -522,57 +632,6 @@ LedPixelFormat *led_chain_get_format(LedChain * c)
         return c->format;
 }
 
-
-
-/* print textual value of raw chain buffer to string buffer */
-static int _print_greyscale_value(LedChain * c, long long int *v,
-                                  char *buffer, size_t bufsize)
-{
-        /* select output format according to component type */
-        const char *component_type =
-                led_pixel_format_get_component_type(led_chain_get_format(c),
-                                                    0);
-
-        /* u8 */
-        if(strcmp(component_type, "u8") == 0)
-        {
-                unsigned char *t = (unsigned char *) v;
-                return snprintf(buffer, bufsize, "0x%.2hhx ", *t);
-        }
-        /* u16 */
-        else if(strcmp(component_type, "u16") == 0)
-        {
-                unsigned short *t = (unsigned short *) v;
-                return snprintf(buffer, bufsize, "0x%.4hx ", *t);
-        }
-        /* u32 */
-        else if(strcmp(component_type, "u32") == 0)
-        {
-                unsigned int *t = (unsigned int *) v;
-                return snprintf(buffer, bufsize, "0x%.8x ", *t);
-        }
-        /* float */
-        else if((strcmp(component_type, "float") == 0))
-        {
-                float *t = (float *) v;
-                return snprintf(buffer, bufsize, "%f ", *t);
-        }
-        /* double */
-        else if((strcmp(component_type, "double") == 0))
-        {
-                double *t = (double *) v;
-                return snprintf(buffer, bufsize, "%lf ", *t);
-        }
-        /* huh? */
-        else
-        {
-                NFT_LOG(L_ERROR,
-                        "Attempt to print value of unsupported component type: \"%s\"",
-                        component_type);
-        }
-
-        return -1;
-}
 
 /**
  * print the raw buffer of a chain
@@ -1091,66 +1150,6 @@ _lhs_exit:
         /* free temporary chain */
         led_chain_destroy(tmp);
         return i;
-}
-
-
-/**
- * copy one greyscale value from one buffer to another
- */
-static inline void _copy_greyscale_value(size_t bpc, void *srcbuf,
-                                        void *dstbuf)
-{
-        /* handle different bytes-per-component for different LedPixelFormats */
-        switch (bpc)
-        {
-                case 1:
-                {
-                        uint8_t *s = srcbuf;
-                        uint8_t *d = dstbuf;
-                        *d = *s;
-                        break;
-                }
-
-                case 2:
-                {
-                        uint16_t *s = srcbuf;
-                        uint16_t *d = dstbuf;
-                        *d = *s;
-                        break;
-                }
-
-                case 3:
-                {
-                        char *s = srcbuf;
-                        char *d = dstbuf;
-                        *d = s[0];
-                        *d = s[1];
-                        *d = s[2];
-                        break;
-                }
-
-                case 4:
-                {
-                        int *s = srcbuf;
-                        int *d = dstbuf;
-                        *d = *s;
-                        break;
-                }
-
-                case 8:
-                {
-                        double *s = srcbuf;
-                        double *d = dstbuf;
-                        *d = *s;
-                        break;
-                }
-
-                default:
-                {
-                        NFT_LOG(L_ERROR, "Unsupported component-size: %d",
-                                bpc);
-                }
-        }
 }
 
 

@@ -129,9 +129,9 @@ struct _LedTile
 
 
 
-/******************************************************************************
- **************************** STATIC FUNCTIONS ********************************
- ******************************************************************************/
+/******************************************************************************/
+/**************************** STATIC FUNCTIONS ********************************/
+/******************************************************************************/
 
 /**
  * multiply two 3x3 matrices
@@ -279,6 +279,80 @@ static void _map_matrix(LedTile * m)
 }
 
 
+/** foreach helper to destroy tiles */
+static NftResult _destroy(Relation * r, void *u)
+{
+        led_tile_destroy(TILE(r));
+
+        return NFT_SUCCESS;
+}
+
+
+/** foreach helper to destroy tile */
+static NftResult _destroy_list(Relation * r, void *u)
+{
+        led_tile_destroy(TILE(r));
+        return NFT_SUCCESS;
+}
+
+
+/** foreach helper to append child */
+static NftResult _append_child(Relation * r, void *u)
+{
+        return led_tile_list_append_child(TILE(u), led_tile_dup(TILE(r)));
+}
+
+
+/** foreach helper */
+static NftResult _bounding_box_helper(Relation * r, void *u)
+{
+        LedTile *t = TILE(r);
+        LedFrameCord **dim = u;
+        LedFrameCord *x1 = dim[0];
+        LedFrameCord *y1 = dim[1];
+        LedFrameCord *x2 = dim[2];
+        LedFrameCord *y2 = dim[3];
+
+
+        LedFrameCord xt1, yt1, xt2, yt2;
+        if(!led_tile_get_transformed_bounding_box(t, &xt1, &yt1, &xt2, &yt2))
+                return NFT_FAILURE;
+
+        /* add child offset */
+        xt1 += t->geometry.x;
+        yt1 += t->geometry.y;
+        xt2 += t->geometry.x;
+        yt2 += t->geometry.y;
+
+        *x1 = MIN(*x1, MIN(*x2, MIN(xt2, xt1)));
+        *y1 = MIN(*y1, MIN(*y2, MIN(yt2, yt1)));
+        *x2 = MAX(*x1, MAX(*x2, MAX(xt2, xt1)));
+        *y2 = MAX(*y1, MAX(*y2, MAX(yt2, yt1)));
+
+        return NFT_SUCCESS;
+}
+
+
+/** foreach helper to set parent hardware */
+static NftResult _set_parent_hw(Relation * r, void *u)
+{
+        TILE(r)->parent_hw = u;
+        return NFT_SUCCESS;
+}
+
+
+/** foreach helper to count LEDs of tile */
+static NftResult _ledcount(Relation * r, void *u)
+{
+        LedCount *c = u;
+        LedCount t;
+        t = led_tile_get_ledcount(TILE(r));
+        *c += t;
+
+        return NFT_SUCCESS;
+}
+
+
 /******************************************************************************/
 /************************ "private" API FUNCTIONS *****************************/
 /******************************************************************************/
@@ -308,9 +382,9 @@ NftResult _tile_set_parent_hardware(LedTile * t, LedHardware * h)
 }
 
 
-/******************************************************************************
- ****************************** API FUNCTIONS *********************************
- ******************************************************************************/
+/******************************************************************************/
+/****************************** API FUNCTIONS *********************************/
+/******************************************************************************/
 
 /**
  * create new (empty) LedTile object
@@ -329,14 +403,6 @@ LedTile *led_tile_new()
         return m;
 }
 
-
-/** foreach helper to destroy tiles */
-static NftResult _destroy(Relation * r, void *u)
-{
-        led_tile_destroy(TILE(r));
-
-        return NFT_SUCCESS;
-}
 
 /**
  * destroy LedTile & all child tiles
@@ -379,14 +445,6 @@ void led_tile_destroy(LedTile * m)
 }
 
 
-/** foreach helper to destroy tile */
-static NftResult _destroy_list(Relation * r, void *u)
-{
-        led_tile_destroy(TILE(r));
-        return NFT_SUCCESS;
-}
-
-
 /**
  * destroy tile and all siblings recursively
  *
@@ -398,13 +456,6 @@ void led_tile_list_destroy(LedTile * first)
                 return;
 
         TILE_FOREACH(first, _destroy_list, NULL);
-}
-
-
-/** foreach helper to append child */
-static NftResult _append_child(Relation * r, void *u)
-{
-        return led_tile_list_append_child(TILE(u), led_tile_dup(TILE(r)));
 }
 
 
@@ -686,36 +737,6 @@ NftResult led_tile_get_transformed_dim(LedTile * t,
 }
 
 
-/** foreach helper */
-static NftResult _bounding_box_helper(Relation * r, void *u)
-{
-        LedTile *t = TILE(r);
-        LedFrameCord **dim = u;
-        LedFrameCord *x1 = dim[0];
-        LedFrameCord *y1 = dim[1];
-        LedFrameCord *x2 = dim[2];
-        LedFrameCord *y2 = dim[3];
-
-
-        LedFrameCord xt1, yt1, xt2, yt2;
-        if(!led_tile_get_transformed_bounding_box(t, &xt1, &yt1, &xt2, &yt2))
-                return NFT_FAILURE;
-
-        /* add child offset */
-        xt1 += t->geometry.x;
-        yt1 += t->geometry.y;
-        xt2 += t->geometry.x;
-        yt2 += t->geometry.y;
-
-        *x1 = MIN(*x1, MIN(*x2, MIN(xt2, xt1)));
-        *y1 = MIN(*y1, MIN(*y2, MIN(yt2, yt1)));
-        *x2 = MAX(*x1, MAX(*x2, MAX(xt2, xt1)));
-        *y2 = MAX(*y1, MAX(*y2, MAX(yt2, yt1)));
-
-        return NFT_SUCCESS;
-}
-
-
 /**
  * get bounding box of tile including child tiles
  *
@@ -862,18 +883,6 @@ NftResult led_tile_set_privdata(LedTile * t, void *privdata)
 }
 
 
-/** foreach helper to count LEDs of tile */
-static NftResult _ledcount(Relation * r, void *u)
-{
-        LedCount *c = u;
-        LedCount t;
-        t = led_tile_get_ledcount(TILE(r));
-        *c += t;
-
-        return NFT_SUCCESS;
-}
-
-
 /**
  * return the total amount of LEDs registered in a tile and it's children
  *
@@ -896,14 +905,6 @@ LedCount led_tile_get_ledcount(LedTile * m)
         }
 
         return r;
-}
-
-
-/** foreach helper to set parent hardware */
-static NftResult _set_parent_hw(Relation * r, void *u)
-{
-        TILE(r)->parent_hw = u;
-        return NFT_SUCCESS;
 }
 
 
