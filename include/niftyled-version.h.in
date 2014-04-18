@@ -64,6 +64,8 @@
 #define LED_MINOR_VERSION  (@PACKAGE_MINOR_VERSION@)
 /** micro version */
 #define LED_MICRO_VERSION  (@PACKAGE_MICRO_VERSION@)
+/** preference file version */
+#define LED_PREFS_VERSION  (@PACKAGE_PREFS_VERSION@)
 /** API revision (libtool) */
 #define LED_API_REVISION   (@PACKAGE_API_REVISION@)
 /** current API version (libtool) */

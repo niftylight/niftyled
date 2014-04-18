@@ -6,11 +6,13 @@
 # release version
 MAJOR=0
 MINOR=1
-MICRO=1
+MICRO=2
+
 
 ######################
-# debian revision
-DEBIAN_REVISION=1
+# preferences version
+PREFS=0
+
 
 ######################
 # hw plugin API version
@@ -18,19 +20,26 @@ HW_API_MAJOR=0
 HW_API_MINOR=0
 HW_API_MICRO=0
 
+
 ######################
 # libtool/API version
 
 # updating: http://www.gnu.org/software/libtool/manual/libtool.html#Versioning
 
 # The implementation number of the current interface.
-API_REVISION=0
+API_REVISION=1
 # The most recent interface number that this library implements.
-API_CURRENT=0
+API_CURRENT=1
 # The difference between the newest and oldest interfaces that this library
 # implements. In other words, the library implements all the interface numbers
 # in the range from number current - age to current.
 API_AGE=0
+
+
+######################
+# debian revision
+DEBIAN_REVISION=1
+
 
 
 # ----------------------------------------------
@@ -38,7 +47,7 @@ API_AGE=0
 # function to print helptext
 function help()
 {
-    echo "$0 --long | --short | --major | --minor | --micro | --hw-major | --hw-minor | --hw-micro | --git | --api-revision | --api-current | --api-age | --debian"
+    echo "$0 --long | --short | --major | --minor | --micro | --prefs | --hw-major | --hw-minor | --hw-micro | --git | --api-revision | --api-current | --api-age | --debian"
 }
 
 # output micro version
@@ -57,6 +66,12 @@ function minor()
 function major()
 {
     echo -n $MAJOR
+}
+
+# output preferences version
+function prefs()
+{
+    echo -n $PREFS
 }
 
 # output micro version
@@ -121,7 +136,7 @@ function output_long()
 }
 
 # parse cmdline arguments
-TEMP=`getopt -o lsMmugrca123d --long long,short,major,minor,micro,git,api-revision,api-current,api-age,hw-major,hw-minor,hw-micro,debian -n "$0" -- "$@"`
+TEMP=`getopt -o lsMmupgrca123d --long long,short,major,minor,micro,prefs,git,api-revision,api-current,api-age,hw-major,hw-minor,hw-micro,debian -n "$0" -- "$@"`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 
 # Note the quotes around `$TEMP': they are essential!
@@ -147,6 +162,9 @@ while true ; do
         # micro
         -u|--micro) micro ; shift 1 ;;
 
+	# prefs
+	-p|--prefs) prefs ; shift 1 ;;
+	
         # hw-major
         -1|--hw-major) hw_major ; shift 1 ;;
 

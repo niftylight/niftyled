@@ -47,13 +47,13 @@ AC_DEFINE_UNQUOTED(PACKAGE_HW_PLUGIN_API_MICRO_VERSION, "${PACKAGE_HW_PLUGIN_API
 AC_SUBST([PACKAGE_MAJOR_VERSION], m4_esyscmd([./version --major]), [major version])
 AC_SUBST([PACKAGE_MINOR_VERSION], m4_esyscmd([./version --minor]), [minor version])
 AC_SUBST([PACKAGE_MICRO_VERSION], m4_esyscmd([./version --micro]), [micro version])
+AC_SUBST([PACKAGE_PREFS_VERSION], m4_esyscmd([./version --prefs]), [preferences version])
 AC_SUBST([PACKAGE_API_REVISION], m4_esyscmd([./version --api-revision]), [api revision])
 AC_SUBST([PACKAGE_API_CURRENT], m4_esyscmd([./version --api-current]), [api current])
 AC_SUBST([PACKAGE_API_AGE], m4_esyscmd([./version --api-age]), [api age])
 AC_SUBST([PACKAGE_GIT_VERSION], m4_esyscmd([./version --git]), [git version])
 AC_SUBST([DEBIAN_REVISION], m4_esyscmd([./version --debian]), [debian revision])
 
-#AC_DEFINE(GENERIC_SETTINGS_FILE_VERSION, SETTINGS_FILE_VERSION, [version of config-files])
 
 
 # -----------------------------------------------
@@ -196,6 +196,7 @@ Configure report:
 \tPackage.....................:  ${PACKAGE_STRING}
 \tDescription.................:  ${PACKAGE_DESCRIPTION}
 \tRevision....................:  ${PACKAGE_GIT_VERSION}
+\tPreferences version.........:  ${PACKAGE_PREFS_VERSION}
 \tLibtool version.............:  ${PACKAGE_API_CURRENT}:${PACKAGE_API_REVISION}:${PACKAGE_API_AGE}
 \tURL.........................:  ${PACKAGE_URL}
 \tBugreports..................:  ${PACKAGE_BUGREPORT}
