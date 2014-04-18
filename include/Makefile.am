@@ -18,6 +18,7 @@ library_include_HEADERS = \
 	niftyled-pixel_format.h \
 	niftyled-fps.h \
 	niftyled-prefs.h \
+	niftyled-prefs_led.h \
 	niftyled-prefs_tile.h \
 	niftyled-prefs_chain.h \
 	niftyled-prefs_hardware.h \
