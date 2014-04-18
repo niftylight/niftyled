@@ -59,6 +59,7 @@
 #include "niftyled-chain.h"
 #include "niftyled-tile.h"
 #include "niftyled-prefs.h"
+#include "niftyled-version.h"
 #include "_prefs_setup.h"
 #include "_prefs_hardware.h"
 #include "_prefs_tile.h"
@@ -113,7 +114,7 @@ LedPrefs *led_prefs_init()
 {
         /* initialize libniftyprefs */
         LedPrefs *p;
-        if(!(p = nft_prefs_init()))
+        if(!(p = nft_prefs_init(LED_PREFS_VERSION)))
                 return NULL;
 
 
@@ -218,40 +219,43 @@ const char *led_prefs_node_get_uri(LedPrefsNode * n)
 /**
  * dump LedPrefsNode and all children to a printable buffer
  *
+ * @param p LedPrefs descriptor 
  * @param n LedPrefsNode to dump
  * @result newly allocated buffer. (use free() to deallocate)
  */
-char *led_prefs_node_to_buffer_light(LedPrefsNode * n)
+char *led_prefs_node_to_buffer_minimal(LedPrefs *p, LedPrefsNode * n)
 {
-        return nft_prefs_node_to_buffer_light(n);
+        return nft_prefs_node_to_buffer_minimal(p, n);
 }
 
 
 /**
  * dump fully encapsulated LedPrefsNode and all children to a printable buffer
  *
+ * @param p LedPrefs descriptor 
  * @param n LedPrefsNode to dump
  * @result newly allocated buffer. (use free() to deallocate)
  */
-char *led_prefs_node_to_buffer(LedPrefsNode * n)
+char *led_prefs_node_to_buffer(LedPrefs *p, LedPrefsNode * n)
 {
-        return nft_prefs_node_to_buffer(n);
+        return nft_prefs_node_to_buffer(p, n);
 }
 
 
 /**
  * dump LedPrefsNode and all children to a file
  *
+ * @param p LedPrefs descriptor 
  * @param n LedPrefsNode to dump
  * @param filename full path of file to be written
  * @param overwrite if a file called "filename" already exists, it.
  * will be overwritten if this is "true", otherwise NFT_FAILURE will be returned 
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult led_prefs_node_to_file_light(LedPrefsNode * n, const char *filename,
-                                       bool overwrite)
+NftResult led_prefs_node_to_file_minimal(LedPrefs *p, LedPrefsNode * n, 
+                                         const char *filename, bool overwrite)
 {
-        return nft_prefs_node_to_file_light(n, filename, overwrite);
+        return nft_prefs_node_to_file_minimal(p, n, filename, overwrite);
 }
 
 
@@ -259,41 +263,45 @@ NftResult led_prefs_node_to_file_light(LedPrefsNode * n, const char *filename,
  * dump LedPrefsNode and all children to a file
  * fully encapsulated by the underlying prefs mechanism
  *
+ * @param p LedPrefs descriptor 
  * @param n LedPrefsNode to dump
  * @param filename full path of file to be written
  * @param overwrite if a file called "filename" already exists, it.
  * will be overwritten if this is "true", otherwise NFT_FAILURE will be returned 
  * @result NFT_SUCCESS or NFT_FAILURE
  */
-NftResult led_prefs_node_to_file(LedPrefsNode * n, const char *filename,
-                                 bool overwrite)
+NftResult led_prefs_node_to_file(LedPrefs *p, LedPrefsNode * n, 
+                                 const char *filename, bool overwrite)
 {
-        return nft_prefs_node_to_file(n, filename, overwrite);
+        return nft_prefs_node_to_file(p, n, filename, overwrite);
 }
 
 
 /**
  * parse buffer and create LedPrefsNode accordingly
  *
+ * @param p LedPrefs descriptor 
  * @param buffer src buffer to parse
  * @param bufsize size of buffer in bytes
  * @result newly created LedPrefsNode (use led_prefs_node_free() to deallocate)
  */
-LedPrefsNode *led_prefs_node_from_buffer(char *buffer, size_t bufsize)
+LedPrefsNode *led_prefs_node_from_buffer(LedPrefs *p, char *buffer, 
+                                         size_t bufsize)
 {
-        return nft_prefs_node_from_buffer(buffer, bufsize);
+        return nft_prefs_node_from_buffer(p, buffer, bufsize);
 }
 
 
 /**
  * parse file and create LedPrefsNode accordingly
  *
+ * @param p LedPrefs descriptor 
  * @param filename full path of file to parse
  * @result newly created LedPrefsNode (use led_prefs_node_free() to deallocate)
  */
-LedPrefsNode *led_prefs_node_from_file(const char *filename)
+LedPrefsNode *led_prefs_node_from_file(LedPrefs *p, const char *filename)
 {
-        return nft_prefs_node_from_file(filename);
+        return nft_prefs_node_from_file(p, filename);
 }
 
 

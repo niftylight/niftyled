@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
                 goto m_deinit;
 
         /* dump node to file */
-        if(!(led_prefs_node_to_file(n, "-", false)))
+        if(!(led_prefs_node_to_file(conf, n, "-", false)))
                 goto m_deinit;
 
         /* free node */
@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
                 goto m_deinit;
 
         /* dump node to file */
-        if(!(led_prefs_node_to_file(n, "test.xml", true)))
+        if(!(led_prefs_node_to_file(conf, n, "test.xml", true)))
                 goto m_deinit;
 
         /* free node */

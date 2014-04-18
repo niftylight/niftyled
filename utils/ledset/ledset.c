@@ -349,7 +349,7 @@ int main(int argc, char *argv[])
 
 	/* parse prefs-file */
 	LedPrefsNode *pnode;
-	if(!(pnode = led_prefs_node_from_file(_c.configfile)))
+	if(!(pnode = led_prefs_node_from_file(p, _c.configfile)))
 	{
 		NFT_LOG(L_ERROR, "Failed to open configfile \"%s\"", _c.configfile);
 		goto m_exit;
@@ -568,7 +568,7 @@ int main(int argc, char *argv[])
 			}
 
 			/* write config file */
-			led_prefs_node_to_file(pnode, _c.outputfile, false);
+			led_prefs_node_to_file(p, pnode, _c.outputfile, false);
 
 			LedFrameCord w,h;
 			led_tile_get_dim(tile, &w, &h);
