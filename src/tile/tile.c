@@ -66,7 +66,7 @@
 /** macro to get next tile */
 #define TILE_NEXT(t) (TILE(_relation_next(RELATION(t))))
 /** macro to get previous tile */
-#define TILE_PREV(t) (TILE(_relation_next(RELATION(t))))
+#define TILE_PREV(t) (TILE(_relation_prev(RELATION(t))))
 /** macro to unlink tile from any relations */
 #define TILE_UNLINK(t) (_relation_unlink(RELATION(t)))
 /** macro to run a function on each tile */

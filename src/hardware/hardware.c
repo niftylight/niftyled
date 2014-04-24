@@ -86,7 +86,7 @@
 /** macro to get next hardware */
 #define HARDWARE_NEXT(h) (HARDWARE(_relation_next(RELATION(h))))
 /** macro to get previous hardware */
-#define HARDWARE_PREV(h) (HARDWARE(_relation_next(RELATION(h))))
+#define HARDWARE_PREV(h) (HARDWARE(_relation_prev(RELATION(h))))
 /** macro to unlink hardware from any relations */
 #define HARDWARE_UNLINK(h) (_relation_unlink(RELATION(h)))
 /** macro to run a function on each hardware */
