@@ -1,6 +1,6 @@
 #############
 # niftyled Makefile.am
-# v0.4 - (c) Daniel Hiepler (2010-2013)
+# v0.4 - (c) Daniel Hiepler (2010-2014)
 
 examplesdir = $(pkgdatadir)/examples
 
