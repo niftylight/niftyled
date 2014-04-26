@@ -463,17 +463,18 @@ static NftResult _prefs_to_hardware(LedPrefs * p, void **newObj,
                         {
                                         /* int */
                                 case LED_HW_CUSTOM_PROP_INT:
-                                {
-                                        int integer;
-                                        if(sscanf(value, "%32d", &integer) !=
-                                           1)
+                                {                                        
+                                        long int parsed_int = strtol(value, NULL, 10);
+                                        if(parsed_int == LONG_MAX ||
+                                           parsed_int == LONG_MIN ||
+                                           parsed_int < INT_MIN ||
+                                           parsed_int > INT_MAX)
                                         {
-                                                NFT_LOG(L_ERROR,
-                                                        "Failed to parse integer from \"%s\" property (\"%s\")",
-                                                        LED_HARDWARE_PROPERTY_PROP_VALUE,
-                                                        value);
+                                                NFT_LOG(L_ERROR, "int-type property \"%s\" out of range.", LED_HARDWARE_PROPERTY_PROP_VALUE);
                                                 goto _pthp_end;
                                         }
+                                        
+                                        int integer = (int) parsed_int;   
 
                                         if(!led_hardware_plugin_prop_set_int
                                            (h, name, integer))
@@ -489,8 +490,9 @@ static NftResult _prefs_to_hardware(LedPrefs * p, void **newObj,
                                         /* float */
                                 case LED_HW_CUSTOM_PROP_FLOAT:
                                 {
-                                        float f;
-                                        if(sscanf(value, "%64f", &f) != 1)
+                                        char *endptr = NULL;
+                                        double parsed_val = strtod(value, &endptr);
+                                        if(endptr == value)
                                         {
                                                 NFT_LOG(L_ERROR,
                                                         "Failed to parse float from \"%s\" property (\"%s\")",
@@ -499,6 +501,9 @@ static NftResult _prefs_to_hardware(LedPrefs * p, void **newObj,
                                                 goto _pthp_end;
                                         }
 
+                                        float f = (float) parsed_val;
+                                                                              
+                                        
                                         if(!led_hardware_plugin_prop_set_float
                                            (h, name, f))
                                         {
