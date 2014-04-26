@@ -336,38 +336,25 @@ void led_frame_print_buffer(LedFrame * f)
                 return;
 
 
-        char *num;
-        if(!(num = alloca(P_NUMSIZE)))
-        {
-                NFT_LOG_PERROR("alloca()");
-                return;
-        }
-
-
-        char *tmp;
-        if(!(tmp = alloca(P_BUFSIZE)))
-        {
-                NFT_LOG_PERROR("alloca()");
-                return;
-        }
-
-        tmp[0] = '\0';
+        char num[P_NUMSIZE];
+        char buf[P_BUFSIZE];
+        buf[0] = '\0';
 
 
         int h, hm = MIN(P_PRINT_ROW, f->height);
         for(h = 0; h < hm; h++)
         {
-                strncat(tmp, "\n ", P_BUFSIZE - strlen(tmp));
+                strncat(buf, "\n ", P_BUFSIZE - strlen(buf));
 
                 if(hm < f->height && h == P_PRINT_ROW - 1)
-                        strncat(tmp, "...\n ", P_BUFSIZE - strlen(tmp));
+                        strncat(buf, "...\n ", P_BUFSIZE - strlen(buf));
 
                 int w, wm = MIN(P_PRINT_COL, f->width);
                 for(w = 0; w < wm; w++)
                 {
                         /* print ... if wm = 64 */
                         if(wm < f->width && w == P_PRINT_COL - 1)
-                                strncat(tmp, "... ", P_BUFSIZE - strlen(tmp));
+                                strncat(buf, "... ", P_BUFSIZE - strlen(buf));
 
                         // strncat(tmp, "0x", P_BUFSIZE-strlen(tmp));
                         unsigned int c;
@@ -442,15 +429,15 @@ void led_frame_print_buffer(LedFrame * f)
                                         return;
                                 }
 
-                                strncat(tmp, num, P_BUFSIZE - strlen(tmp));
+                                strncat(buf, num, P_BUFSIZE - strlen(buf));
                         }
-                        strncat(tmp, " ", P_BUFSIZE - strlen(tmp));
+                        strncat(buf, " ", P_BUFSIZE - strlen(buf));
                 }
 
         }
 
 
-        NFT_LOG(P_LOGLEVEL, "%s", tmp);
+        NFT_LOG(P_LOGLEVEL, "%s", buf);
 
 }
 
