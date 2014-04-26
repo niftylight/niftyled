@@ -342,7 +342,7 @@ NIFTYLED_TYPE led_prefs_node_get_type(LedPrefsNode * n)
 NIFTYLED_TYPE led_prefs_type_from_string(const char *name)
 {
         /* we don't need much space */
-        char *tmp = alloca(256);
+        char tmp[256];
         size_t i;
         for(i = 0; i < 255 && name[i]; i++)
         {
