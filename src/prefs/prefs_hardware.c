@@ -192,13 +192,8 @@ static NftResult _prefs_from_hardware(NftPrefs * p, NftPrefsNode * n,
                                         return NFT_FAILURE;
 
                                 /* convert to string */
-                                char *string;
-                                if(!(string = alloca(64)))
-                                {
-                                        NFT_LOG_PERROR("alloca");
-                                        return NFT_FAILURE;
-                                }
-                                snprintf(string, 64, "%d", integer);
+                                char string[64];                                
+                                snprintf(string, sizeof(string), "%d", integer);
 
                                 /* save value */
                                 if(!nft_prefs_node_prop_string_set
@@ -225,13 +220,8 @@ static NftResult _prefs_from_hardware(NftPrefs * p, NftPrefsNode * n,
                                         return NFT_FAILURE;
 
                                 /* convert to string */
-                                char *string;
-                                if(!(string = alloca(64)))
-                                {
-                                        NFT_LOG_PERROR("alloca");
-                                        return NFT_FAILURE;
-                                }
-                                snprintf(string, 64, "%f", fp);
+                                char string[64];                                
+                                snprintf(string, sizeof(string), "%f", fp);
 
                                 /* save value */
                                 if(!nft_prefs_node_prop_string_set
