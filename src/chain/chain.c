@@ -526,7 +526,7 @@ LedChain *led_chain_dup(LedChain * c)
 
         /* copy LEDs */
         if(!c->leds || !r->leds)
-                NFT_LOG_NULL(NFT_FAILURE);
+                NFT_LOG_NULL(NULL);
 
         /* copy LED descriptors */
         memcpy(r->leds, c->leds, r->ledcount * sizeof(Led));
@@ -627,7 +627,7 @@ NftResult led_chain_set_privdata(LedChain * c, void *privdata)
 LedPixelFormat *led_chain_get_format(LedChain * c)
 {
         if(!c)
-                NFT_LOG_NULL(NFT_FAILURE);
+                NFT_LOG_NULL(NULL);
 
         return c->format;
 }
