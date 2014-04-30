@@ -174,7 +174,7 @@ static NftResult _prefs_to_chain(LedPrefs * p, void **newObj,
         else
         {
                 /* new chain */
-                if(!(c = led_chain_new(count, format)))
+                if(!(c = led_chain_new(ledcount, format)))
                 {
                         NFT_LOG(L_ERROR,
                                 "Failed to create new LedSetup object");
