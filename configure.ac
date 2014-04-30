@@ -16,6 +16,7 @@ AC_CANONICAL_SYSTEM
 
 # autotools initialization
 AC_LANG(C)
+AC_CONFIG_AUX_DIR([.])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([color-tests dist-bzip2 parallel-tests silent-rules subdir-objects -Wno-portability -Wall])
 
