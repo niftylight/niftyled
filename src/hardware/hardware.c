@@ -244,13 +244,7 @@ static LedHardware *_load_plugin(const char *name, const char *family)
 
 
         /* build library-name from hardware-family */
-        char *libname;
-        if(!(libname = alloca(LED_HARDWARE_LIBNAME_MAXSIZE)))
-        {
-                NFT_LOG_PERROR("alloca");
-                return NULL;
-        }
-
+        char libname[LED_HARDWARE_LIBNAME_MAXSIZE];
         if(snprintf(libname, 
                     LED_HARDWARE_LIBNAME_MAXSIZE, 
                     "%s/%s-hardware.so",
