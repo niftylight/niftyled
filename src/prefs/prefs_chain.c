@@ -135,15 +135,13 @@ static NftResult _prefs_to_chain(LedPrefs * p, void **newObj,
 
 
         /* LedCount of chain */
-        LedCount count;
+        int ledcount = 0;
         if(!nft_prefs_node_prop_int_get
-           (n, LED_CHAIN_PROP_LEDCOUNT, (int *) &count))
+           (n, LED_CHAIN_PROP_LEDCOUNT, &ledcount))
         {
-                count = 0;
-
                 NFT_LOG(L_WARNING,
                         "chain has no \"%s\" property. Using %d as default.",
-                        LED_CHAIN_PROP_LEDCOUNT, count);
+                        LED_CHAIN_PROP_LEDCOUNT, ledcount);
         }
 
         /* new chain */
@@ -162,7 +160,7 @@ static NftResult _prefs_to_chain(LedPrefs * p, void **newObj,
                         LED_CHAIN_PROP_FORMAT, LED_CHAIN_DEFAULT_FORMAT);
 
                 /* new chain (with default format) */
-                if(!(c = led_chain_new(count, LED_CHAIN_DEFAULT_FORMAT)))
+                if(!(c = led_chain_new((LedCount) ledcount, LED_CHAIN_DEFAULT_FORMAT)))
                 {
                         NFT_LOG(L_ERROR,
                                 "Failed to create new LedSetup object");
