@@ -136,7 +136,7 @@ struct _LedHardware
         /** relations of this hardware (must stay first entry in struct) */
         Relation relation;
         /** chain of this hardware-plugin (holds all currently configured
-			LEDs this plugin can control) */
+            LEDs this plugin can control) */
         LedChain *chain;
         /** first LedTile registered to this hardware */
         LedTile *first_tile;
@@ -148,9 +148,9 @@ struct _LedHardware
         LedHardwarePlugin *plugin;
         /** first runtime registered dynamic plugin property */
         LedPluginCustomProp *first_prop;
-                /** if true, hardware is in initialized state */
+        /** if true, hardware is in initialized state */
         bool hw_initialized;
-            /** if true, plugin is in initialized state */
+        /** if true, plugin is in initialized state */
         bool plugin_initialized;
         /**
          * space for private data used by the plugin internally
