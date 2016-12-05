@@ -9,7 +9,7 @@ include Makefile.global.am
 # module-subdirs to include
 SUBDIRS = \
         util \
-		led \
+        led \
         chain \
         frame \
         hardware \
@@ -50,7 +50,7 @@ lib@PACKAGE@_la_LIBADD = \
         $(niftyprefs_LIBS) \
         $(babl_LIBS) \
         util/libutil.la \
-		led/libled.la \
+        led/libled.la \
         chain/libchain.la \
         frame/libframe.la \
         hardware/libhardware.la \
