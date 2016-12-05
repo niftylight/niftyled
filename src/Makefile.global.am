@@ -33,7 +33,7 @@ WARN_CFLAGS = -Wall -Wextra -Werror -Wno-unused-parameter -Wno-missing-field-ini
 COMMON_CFLAGS_N = \
        $(INCLUDE_DIRS) \
        -fno-strict-aliasing \
-       -D_BSD_SOURCE \
+       -D_DEFAULT_SOURCE \
        -DLIBDIR=\"@libdir@\" \
        $(OPT_CFLAGS) \
        $(niftyprefs_CFLAGS) \
