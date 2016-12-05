@@ -471,12 +471,15 @@ LedHardware *led_hardware_new(const char *name, const char *plugin_name)
 
 
         LedHardware *h;
-        if(!(h = _load_plugin(name, plugin_name)))
+        if(!(h = _load_plugin(name, plugin_name))) {
+                NFT_LOG(L_ERROR, "Failed to load plugin.");
                 return NULL;
-
+        }
+        
         /* allocate mutex */
         if(!(h->mutex = _thread_mutex_new()))
         {
+                NFT_LOG(L_ERROR, "Failed to create mutex.");
                 _unload_plugin(h);
                 return NULL;
         }
