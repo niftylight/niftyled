@@ -1,7 +1,7 @@
 /*
  * libniftyled - Interface library for LED interfaces
  * Copyright (C) 2006-2014 Daniel Hiepler <daniel@niftylight.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -68,6 +68,9 @@
 /** libbabl internal API */
 typedef int (*BablEachFunction) (Babl * entry, void *data);
 void babl_format_class_for_each(BablEachFunction each_fun, void *user_data);
+typedef struct _BablDb BablDb;
+BablDb * babl_format_db();
+Babl *babl_db_find (BablDb *db, const char *name);
 
 /* structure to pass argument to BablEachFunction */
 struct _foreach_arg
@@ -266,7 +269,9 @@ LedPixelFormat *led_pixel_format_from_string(const char *s)
         if(!s)
                 NFT_LOG_NULL(NULL);
 
-        return (LedPixelFormat *) babl_format(s);
+        /* our own version of babl_format(s) that doesn't
+           die on invalid formats but returns instead */
+        return (LedPixelFormat *) babl_db_find(babl_format_db(), s);
 }
 
 
@@ -326,8 +331,8 @@ size_t led_pixel_format_get_n_components(LedPixelFormat * f)
 }
 
 
-/** 
- * calculate raw buffer size 
+/**
+ * calculate raw buffer size
  * @param f LedPixelFormat descriptor
  * @param n amount of pixels
  * @result amount of bytes needed to store n pixels (or 0)
