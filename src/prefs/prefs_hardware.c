@@ -68,11 +68,11 @@
 #define     LED_HARDWARE_PROP_NAME              "name"
 #define     LED_HARDWARE_PROP_PLUGIN            "plugin"
 #define     LED_HARDWARE_PROP_ID                "id"
-#define     LED_HARDWARE_PROP_STRIDE           "stride"
+#define     LED_HARDWARE_PROP_STRIDE            "stride"
 
-#define     LED_HARDWARE_PROPERTY_PROP_NAME    "name"
+#define     LED_HARDWARE_PROPERTY_PROP_NAME     "name"
 #define     LED_HARDWARE_PROPERTY_PROP_TYPE     "type"
-#define     LED_HARDWARE_PROPERTY_PROP_VALUE   "value"
+#define     LED_HARDWARE_PROPERTY_PROP_VALUE    "value"
 
 
 
@@ -122,7 +122,7 @@ static NftResult _prefs_from_hardware(NftPrefs * p, NftPrefsNode * n,
 
 
         /* LED stride */
-        if(!nft_prefs_node_prop_int_set(n, LED_HARDWARE_PROP_STRIDE,
+        if(!nft_prefs_node_prop_long_int_set(n, LED_HARDWARE_PROP_STRIDE,
                                         led_hardware_get_stride(h)))
                 return NFT_FAILURE;
 
@@ -192,7 +192,7 @@ static NftResult _prefs_from_hardware(NftPrefs * p, NftPrefsNode * n,
                                         return NFT_FAILURE;
 
                                 /* convert to string */
-                                char string[64];                                
+                                char string[64];
                                 snprintf(string, sizeof(string), "%d", integer);
 
                                 /* save value */
@@ -220,7 +220,7 @@ static NftResult _prefs_from_hardware(NftPrefs * p, NftPrefsNode * n,
                                         return NFT_FAILURE;
 
                                 /* convert to string */
-                                char string[64];                                
+                                char string[64];
                                 snprintf(string, sizeof(string), "%f", fp);
 
                                 /* save value */
@@ -328,8 +328,8 @@ static NftResult _prefs_to_hardware(LedPrefs * p, void **newObj,
         /* get stride */
         LedCount stride;
         if(!
-           (nft_prefs_node_prop_int_get
-            (n, LED_HARDWARE_PROP_STRIDE, (int *) &stride)))
+           (nft_prefs_node_prop_long_int_get
+            (n, LED_HARDWARE_PROP_STRIDE, (LedCount *) &stride)))
         {
                 NFT_LOG(L_WARNING,
                         "\"hardware\" has no \"stride\". Using 0 as default.");
@@ -461,9 +461,9 @@ static NftResult _prefs_to_hardware(LedPrefs * p, void **newObj,
                         switch (led_hardware_plugin_prop_type_from_string
                                 (type))
                         {
-                                        /* int */
+                                /* int */
                                 case LED_HW_CUSTOM_PROP_INT:
-                                {                                        
+                                {
                                         long int parsed_int = strtol(value, NULL, 10);
                                         if(parsed_int == LONG_MAX ||
                                            parsed_int == LONG_MIN ||
@@ -473,8 +473,8 @@ static NftResult _prefs_to_hardware(LedPrefs * p, void **newObj,
                                                 NFT_LOG(L_ERROR, "int-type property \"%s\" out of range.", LED_HARDWARE_PROPERTY_PROP_VALUE);
                                                 goto _pthp_end;
                                         }
-                                        
-                                        int integer = (int) parsed_int;   
+
+                                        int integer = (int) parsed_int;
 
                                         if(!led_hardware_plugin_prop_set_int
                                            (h, name, integer))
@@ -502,8 +502,8 @@ static NftResult _prefs_to_hardware(LedPrefs * p, void **newObj,
                                         }
 
                                         float f = (float) parsed_val;
-                                                                              
-                                        
+
+
                                         if(!led_hardware_plugin_prop_set_float
                                            (h, name, f))
                                         {

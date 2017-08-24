@@ -801,7 +801,7 @@ void led_chain_print(LedChain * c, NftLoglevel l)
  * @param[in] c LedChain descriptor
  * @param[out] x pointer to x coordinate in pixels or NULL
  * @param[out] y pointer to x coordinate in pixels or NULL
- * @result NFT_SUCCESS or NFT_FAILURE		 
+ * @result NFT_SUCCESS or NFT_FAILURE
  */
 NftResult led_chain_get_min_pos(LedChain * c, LedFrameCord * x,
                                 LedFrameCord * y)
@@ -841,7 +841,7 @@ NftResult led_chain_get_min_pos(LedChain * c, LedFrameCord * x,
  * @param[in] c LedChain descriptor
  * @param[out] x pointer to x coordinate in pixels or NULL
  * @param[out] y pointer to x coordinate in pixels or NULL
- * @result NFT_SUCCESS or NFT_FAILURE		 
+ * @result NFT_SUCCESS or NFT_FAILURE
  */
 NftResult led_chain_get_max_pos(LedChain * c, LedFrameCord * x,
                                 LedFrameCord * y)
@@ -1070,7 +1070,8 @@ LedCount led_chain_stride_map(LedChain * c, LedCount stride, LedCount offset)
                 led_chain_get_greyscale(src, offset + pos, &greyscale);
                 led_chain_set_greyscale(dst, offset + i, greyscale);
 
-                if((pos += stride) >= c->ledcount)
+                pos += stride;
+                if(pos >= c->ledcount)
                 {
                         off++;
                         pos = off;
@@ -1208,7 +1209,7 @@ NftResult led_chain_fill_from_frame(LedChain * c, LedFrame * f)
                                 return NFT_FAILURE;
                         if((wT != width) || (hT != height))
                         {
-                                /* free tmpframe for we will allocate a new one 
+                                /* free tmpframe for we will allocate a new one
                                  * below */
                                 led_frame_destroy(c->tmpframe);
                                 c->tmpframe = NULL;
