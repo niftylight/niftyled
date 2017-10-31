@@ -68,9 +68,6 @@
 /** libbabl internal API */
 typedef int (*BablEachFunction) (Babl * entry, void *data);
 void babl_format_class_for_each(BablEachFunction each_fun, void *user_data);
-typedef struct _BablDb BablDb;
-BablDb * babl_format_db();
-Babl *babl_db_find (BablDb *db, const char *name);
 
 /* structure to pass argument to BablEachFunction */
 struct _foreach_arg
@@ -269,9 +266,13 @@ LedPixelFormat *led_pixel_format_from_string(const char *s)
         if(!s)
                 NFT_LOG_NULL(NULL);
 
+        /* valid format ? */
+        if(!babl_format_exists(s)) {
+            return NULL;
+        }
         /* our own version of babl_format(s) that doesn't
            die on invalid formats but returns instead */
-        return (LedPixelFormat *) babl_db_find(babl_format_db(), s);
+        return (LedPixelFormat *) babl_format(s);
 }
 
 
