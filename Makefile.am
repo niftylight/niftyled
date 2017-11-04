@@ -18,7 +18,7 @@ endif
 
 # files to include in archive
 EXTRA_DIST = \
-	debian \
+	dist \
 	version \
 	$(PACKAGE).pc.in
 
