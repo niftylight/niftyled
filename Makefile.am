@@ -66,7 +66,7 @@ deb: dist-gzip
 	mv "$(top_builddir)/@PACKAGE@-@PACKAGE_VERSION@.tar.gz" "$(TARGZFILE)" && \
 	tar --directory "$(DEBTMPDIR)/" --extract --gunzip --file "$(TARGZFILE)" && \
 	mv "$(DEBTMPDIR)/@PACKAGE@-@PACKAGE_VERSION@" "$(DEBSRCDIR)" && \
-	cp -r "$(top_builddir)/debian/"* "$(DEBSRCDIR)/debian" && \
+	cp -r "$(top_builddir)/dist/debian/"* "$(DEBSRCDIR)/debian" && \
 	mv "$(DEBSRCDIR)/debian/rules.tmpl"                 "$(DEBSRCDIR)/debian/rules" && \
 	mv "$(DEBSRCDIR)/debian/control.tmpl"               "$(DEBSRCDIR)/debian/control" && \
 	mv "$(DEBSRCDIR)/debian/docbase"                    "$(DEBSRCDIR)/debian/@PACKAGE_NAME@-dev.doc-base" && \
